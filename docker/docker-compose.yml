@@ -26,10 +26,7 @@ services:
     environment:
       - KONG_DATABASE=postgres
       - KONG_PG_HOST=kong-database
-    secrets:
-        - source: kong-migrations
-          target: /migrations.sh
-          mode: 0740
+      - CONSUL_URL=http://consul:8500
     entrypoint: "/docker-entrypoint.sh"
     command: "/migrations.sh"
 
@@ -47,6 +44,7 @@ services:
       - KONG_PG_DATABASE=kong
       - KONG_DNS_SERVER_NAME=consul
       - KONG_DNS_SERVER_PORT=8600
+      - CONSUL_URL=http://consul:8500
     deploy:
       restart_policy:
         condition: any
@@ -84,6 +82,3 @@ volumes:
   postgres-data:
   consul-data:
 
-secrets:
-  kong-migrations:
-    file: ./migrations.sh

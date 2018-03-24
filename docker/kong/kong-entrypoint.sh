@@ -5,8 +5,13 @@ function enable_kong_plugins(){
     is_kong_up=`curl -sSf http://localhost:8001/plugins 2>/dev/null || echo "false"` 
     if [ "$is_kong_up" != "false"  ]; then 
       # register plugin
-      curl "http://localhost:8001/plugins" -d "name=prometheus"
-      echo "Prometheus plugin enabled for all APIs"
+      prometheus_registered=`(curl -sSf http://localhost:8001/plugins 2>/dev/null | grep -i prometheus) || echo "false"`
+      if [ "$prometheus_registered" == "false" ]; then
+        curl "http://localhost:8001/plugins" -d "name=prometheus"
+        echo "Prometheus plugin enabled for all APIs. Restarting Kong"
+        kong stop
+      fi
+      echo "Prometheus plugin already registered."
       break
     fi
     echo "Kong not up yet"
