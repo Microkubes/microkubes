@@ -5,8 +5,6 @@ RUN apk --no-cache add --update git lua luarocks zip
 #RUN git clone https://github.com/Microkubes/kong-plugin-prometheus.git
 COPY ./kong-plugin-prometheus kong-plugin-prometheus
 RUN cd kong-plugin-prometheus &&\
-    sed 's,git://github.com/Mashape/kong_plugin,https://github.com/Kong/kong-plugin,g' kong-plugin-prometheus-0.0.2-1.rockspec &&\ 
-    sed 's/tag = "0.1.0"/-- tag = "0.1.0"/g' kong-plugin-prometheus-0.0.2-1.rockspec &&\
     luarocks make && \
     luarocks pack kong-plugin-prometheus 0.0.2-1
 
