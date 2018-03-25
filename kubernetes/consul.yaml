@@ -4,6 +4,7 @@ metadata:
   name: consul
   labels:
     name: consul
+    platform: microkubes
 spec:
   type: ClusterIP
   ports:
@@ -46,6 +47,8 @@ apiVersion: apps/v1beta1
 kind: StatefulSet
 metadata:
   name: consul
+  labels:
+    platform: microkubes
 spec:
   serviceName: consul
   replicas: 1
