@@ -1,0 +1,60 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: microservice-user
+  labels:
+    app: microservice-user
+    platform: microkubes
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: microservice-user
+      labels:
+        app: microservice-user
+        platform: microkubes
+    spec:
+      containers:
+        - name: microservice-user
+          image: microkubes/microservice-user:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: microkubes-secrets 
+              mountPath: /run/secrets
+      volumes:
+        - name: microkubes-secrets 
+          secret:
+            secretName: microkubes-secrets
+
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: identity-provider
+  labels:
+    app: identity-provider
+    platform: microkubes
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: identity-provider
+      labels:
+        app: identity-provider
+        platform: microkubes
+    spec:
+      containers:
+        - name: identity-provider
+          image: microkubes/identity-provider:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: microkubes-secrets 
+              mountPath: /run/secrets
+      volumes:
+        - name: microkubes-secrets 
+          secret:
+            secretName: microkubes-secrets

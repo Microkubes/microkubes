@@ -1,0 +1,79 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo
+  labels:
+    platform: microkubes
+spec:
+  type: ClusterIP
+  ports:
+  - name: mongo
+    port: 27017
+    targetPort: 27017
+    protocol: TCP
+  selector:
+    app: mongo-cluster
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mongo-env
+  labels:
+    platform: microkubes
+data:
+  MONGO_INITDB_ROOT_USERNAME: admin
+  MONGO_INITDB_ROOT_PASSWORD: admin
+  MS_USER_DB: users
+  MS_USER_USER: restapi
+  MS_USER_PWD: restapi
+  MS_USERPROFILE_DB: user-profiles
+  MS_USERPROFILE_USER: restapi
+  MS_USERPROFILE_PWD: restapi
+  MS_APPS_MNG_DB: apps-management
+  MS_APPS_MNG_USER: restapi
+  MS_APPS_MNG_PWD: restapi
+  MS_IDP_DB: identity-provider
+  MS_IDP_USER: restapi
+  MS_IDP_PWD: restapi
+  MS_AUTH_SERVER_DB: oauth2
+  MS_AUTH_SERVER_USER: authserver
+  MS_AUTH_SERVER_PWD: authserver
+
+
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: mongo-cluster-deployment
+  labels:
+    platform: microkubes
+spec:
+  replicas: 1 # this should always be 1
+  template:
+    metadata:
+      labels:
+        app: mongo-cluster
+    spec:
+      containers:
+      - name: mongodb
+        image: mongo:3.4.9
+        args: ["--dbpath", "/data/mongodb"] # put your own path if it is different from a regular path
+        ports:          
+        - name: mongo
+          containerPort: 27017
+          hostPort: 27017
+        envFrom:
+          - configMapRef:
+              name: mongo-env
+        volumeMounts:
+            - name: mongo-init-db 
+              mountPath: /docker-entrypoint-initdb.d
+            - mountPath: /data/mongodb
+              name: mongo-data
+      volumes:
+        - name: mongo-data
+          emptyDir: {}
+        - name: mongo-init-db
+          secret:
+            secretName: mongo-init-db

@@ -1,0 +1,146 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: kong-migration
+  labels:
+    platform: microkubes
+spec:
+  template:
+    metadata:
+      name: kong-migration
+    spec:
+      containers:
+      - name: kong-migration
+        image: microkubes/kong:latest
+        env:
+          - name: KONG_NGINX_DAEMON
+            value: 'off'
+          - name: KONG_PG_PASSWORD
+            value: kong
+          - name: KONG_PG_HOST
+            value: postgres
+          - name: CONSUL_URL
+            value: 'http://consul:8500'
+        command: [ "/bin/sh", "-c", "kong migrations up" ]
+      restartPolicy: Never
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+  labels:
+    platform: microkubes
+spec:
+  ports:
+  - name: pgql
+    port: 5432
+    targetPort: 5432
+    protocol: TCP
+  selector:
+    app: postgres
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kong
+  labels:
+    platform: microkubes
+spec:
+  type: ClusterIP
+  ports:
+  - name: kong-admin
+    port: 8001
+    targetPort: 8001
+    protocol: TCP
+  - name: kong-proxy
+    port: 8000
+    targetPort: 8000
+    protocol: TCP
+  selector:
+    app: kong
+
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: postgres
+  labels:
+    platform: microkubes
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:9.5
+          env:
+            - name: POSTGRES_USER
+              value: kong
+            - name: POSTGRES_PASSWORD
+              value: kong
+            - name: POSTGRES_DB
+              value: kong
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: pg-data
+      volumes:
+        - name: pg-data
+          emptyDir: {}
+
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: kong
+  labels:
+    platform: microkubes
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: kong
+        app: kong
+    spec:
+      containers:
+      - name: kong
+        image: microkubes/kong:latest
+        env:
+          - name: KONG_ADMIN_LISTEN
+            value: 0.0.0.0:8001
+          - name: KONG_ADMIN_LISTEN_SSL
+            value: 0.0.0.0:8444
+          - name: KONG_PG_PASSWORD
+            value: kong
+          - name: KONG_PG_HOST
+            value: postgres
+          - name: KONG_PROXY_ACCESS_LOG
+            value: "/dev/stdout"
+          - name: KONG_ADMIN_ACCESS_LOG
+            value: "/dev/stdout"
+          - name: KONG_PROXY_ERROR_LOG
+            value: "/dev/stderr"
+          - name: KONG_ADMIN_ERROR_LOG
+            value: "/dev/stderr"
+          - name: KONG_DNS_SERVER_NAME
+            value: consul
+          - name: KONG_DNS_SERVER_PORT
+            value: '8600'
+          - name: CONSUL_URL
+            value: 'http://consul:8500'
+        ports:
+        - name: admin
+          containerPort: 8001
+          protocol: TCP
+        - name: proxy
+          containerPort: 8000
+          protocol: TCP
