@@ -1,0 +1,25 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: registrator
+  labels:
+    platform: microkubes
+spec:
+  replicas: 1 # this should always be 1
+  template:
+    metadata:
+      labels:
+        app: registrator
+    spec:
+      containers:
+      - name: registrator
+        image: gliderlabs/registrator:v7
+        args: ["--internal=true", "consul://consul:8500"] # put your own path if it is different from a regular path
+        volumeMounts:
+        - mountPath: /tmp/docker.sock
+          name: docker-sock-volume
+      volumes:
+      - name: docker-sock-volume
+        hostPath:
+          path: /var/run/docker.sock
+          type: File

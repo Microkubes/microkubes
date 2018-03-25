@@ -12,6 +12,7 @@ spec:
       containers:
       - name: kong-migration
         image: microkubes/kong:latest
+        imagePullPolicy: Always
         env:
           - name: KONG_NGINX_DAEMON
             value: 'off'
@@ -114,6 +115,7 @@ spec:
       containers:
       - name: kong
         image: microkubes/kong:latest
+        imagePullPolicy: Always
         env:
           - name: KONG_ADMIN_LISTEN
             value: 0.0.0.0:8001
