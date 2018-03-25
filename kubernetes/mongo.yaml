@@ -57,7 +57,7 @@ spec:
     spec:
       containers:
       - name: mongodb
-        image: mongo:3.4.9
+        image: mongo:3.6.3
         args: ["--dbpath", "/data/mongodb"] # put your own path if it is different from a regular path
         ports:          
         - name: mongo
