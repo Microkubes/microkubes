@@ -37,6 +37,7 @@ spec:
       port: 8300
       targetPort: 8300
     - name: consuldns
+      protocol: "UDP"
       port: 8600
       targetPort: 8600
   selector:
@@ -74,16 +75,25 @@ spec:
         - name: consul
           image: "consul:1.0.1"
           env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
             - name: NAMESPACE
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
           args:
             - "agent"
-            - "-dev"
-            - "-ui"
+            - "-advertise=$(POD_IP)"
+            - "-bind=0.0.0.0"
+            - "-bootstrap"
             - "-client=0.0.0.0"
-            - "-recursor=127.0.0.11"
+            - "-data-dir=/consul/data"
+            - "-domain=microkubes.local"
+            - "-server"
+            - "-ui"
+            - "-disable-host-node-id"
           volumeMounts:
             - name: data
               mountPath: /consul/data
