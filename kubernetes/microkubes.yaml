@@ -13,11 +13,16 @@ spec:
       labels:
         app: microservice-user
         platform: microkubes
+      annotations:
+        consul.register/enabled: "true"
     spec:
       containers:
         - name: microservice-user
           image: microkubes/microservice-user:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
+          env:
+            - name: SERVICE_CONFIG_FILE
+              value: /config.json
           ports:
             - containerPort: 8080
           volumeMounts:
@@ -44,11 +49,16 @@ spec:
       labels:
         app: identity-provider
         platform: microkubes
+      annotations:
+        consul.register/enabled: "true"
     spec:
       containers:
         - name: identity-provider
           image: microkubes/identity-provider:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
+          env:
+            - name: SERVICE_CONFIG_FILE
+              value: /config.json
           ports:
             - containerPort: 8080
           volumeMounts:
