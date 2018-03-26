@@ -22,7 +22,7 @@ spec:
             value: postgres
           - name: CONSUL_URL
             value: 'http://consul:8500'
-        command: [ "/bin/sh", "-c", "kong migrations up" ]
+        command: [ "./migrations.sh" ]
       restartPolicy: Never
 
 ---
@@ -117,10 +117,6 @@ spec:
         image: microkubes/kong:latest
         imagePullPolicy: Always
         env:
-          - name: KONG_ADMIN_LISTEN
-            value: 0.0.0.0:8001
-          - name: KONG_ADMIN_LISTEN_SSL
-            value: 0.0.0.0:8444
           - name: KONG_PG_PASSWORD
             value: kong
           - name: KONG_PG_HOST
