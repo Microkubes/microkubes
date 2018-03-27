@@ -117,6 +117,8 @@ spec:
         image: microkubes/kong:latest
         imagePullPolicy: Always
         env:
+          - name: KONG_ADMIN_LISTEN
+            value: 0.0.0.0:8001
           - name: KONG_PG_PASSWORD
             value: kong
           - name: KONG_PG_HOST
