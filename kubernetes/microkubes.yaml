@@ -15,6 +15,7 @@ spec:
         platform: microkubes
       annotations:
         consul.register/enabled: "true"
+        consul.register/service.name: "microservice-user"
     spec:
       containers:
         - name: microservice-user
@@ -51,6 +52,7 @@ spec:
         platform: microkubes
       annotations:
         consul.register/enabled: "true"
+        consul.register/service.name: "identity-provider"
     spec:
       containers:
         - name: identity-provider
