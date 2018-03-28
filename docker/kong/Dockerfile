@@ -1,4 +1,4 @@
-FROM kong:0.11.2-alpine AS plugin-build
+FROM kong:0.13.0-alpine AS plugin-build
 
 RUN apk --no-cache add --update git lua luarocks zip
 
@@ -8,7 +8,7 @@ RUN cd kong-plugin-prometheus &&\
     luarocks pack kong-plugin-prometheus 0.0.2-1
 
 
-FROM kong:0.11.2-alpine
+FROM kong:0.13.0-alpine
 
 RUN apk --no-cache add curl bind-tools
 
