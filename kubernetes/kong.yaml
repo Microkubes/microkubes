@@ -49,19 +49,31 @@ metadata:
   labels:
     platform: microkubes
 spec:
-  type: ClusterIP
+  type: NodePort
   ports:
-  - name: kong-admin
-    port: 8001
-    targetPort: 8001
-    protocol: TCP
-  - name: kong-proxy
+  - name: proxy
     port: 8000
     targetPort: 8000
     protocol: TCP
   selector:
     app: kong
 
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kong-admin
+  labels:
+    platform: microkubes
+spec:
+  type: ClusterIP
+  ports:
+  - name: admin
+    port: 8001
+    targetPort: 8001
+    protocol: TCP
+  selector:
+    app: kong
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment

@@ -99,7 +99,7 @@ spec:
             - name: SERVICE_CONFIG_FILE
               value: /config.json
             - name: API_GATEWAY_URL
-              value: "http://kong:8001"
+              value: "http://kong-admin:8001"
           ports:
             - containerPort: 8080
           volumeMounts:
@@ -212,7 +212,7 @@ spec:
             - name: SERVICE_CONFIG_FILE
               value: /config.json
             - name: API_GATEWAY_URL
-              value: "http://kong:8001"
+              value: "http://kong-admin:8001"
           ports:
             - containerPort: 8080
           volumeMounts:
@@ -251,7 +251,7 @@ spec:
             - name: SERVICE_CONFIG_FILE
               value: /config.json
             - name: API_GATEWAY_URL
-              value: "http://kong:8001"
+              value: "http://kong-admin:8001"
           ports:
             - containerPort: 8080
           volumeMounts:
