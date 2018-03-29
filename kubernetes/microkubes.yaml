@@ -70,3 +70,194 @@ spec:
         - name: microkubes-secrets 
           secret:
             secretName: microkubes-secrets
+
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: microservice-user-profile
+  labels:
+    app: microservice-user-profile
+    platform: microkubes
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: microservice-user-profile
+      labels:
+        app: microservice-user-profile
+        platform: microkubes
+      annotations:
+        consul.register/enabled: "true"
+        consul.register/service.name: "microservice-user-profile"
+    spec:
+      containers:
+        - name: microservice-user-profile
+          image: microkubes/microservice-user-profile:latest
+          imagePullPolicy: Always
+          env:
+            - name: SERVICE_CONFIG_FILE
+              value: /config.json
+            - name: API_GATEWAY_URL
+              value: "http://kong:8001"
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: microkubes-secrets 
+              mountPath: /run/secrets
+      volumes:
+        - name: microkubes-secrets 
+          secret:
+            secretName: microkubes-secrets
+
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: microservice-registration
+  labels:
+    app: microservice-registration
+    platform: microkubes
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: microservice-registration
+      labels:
+        app: microservice-registration
+        platform: microkubes
+      annotations:
+        consul.register/enabled: "true"
+        consul.register/service.name: "microservice-registration"
+    spec:
+      containers:
+        - name: microservice-registration
+          image: microkubes/microservice-registration:latest
+          imagePullPolicy: Always
+          env:
+            - name: SERVICE_CONFIG_FILE
+              value: /config.json
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: microkubes-secrets 
+              mountPath: /run/secrets
+      volumes:
+        - name: microkubes-secrets 
+          secret:
+            secretName: microkubes-secrets
+
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: microservice-mail
+  labels:
+    app: microservice-mail
+    platform: microkubes
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: microservice-mail
+      labels:
+        app: microservice-mail
+        platform: microkubes
+      annotations:
+        consul.register/enabled: "true"
+        consul.register/service.name: "microservice-mail"
+    spec:
+      containers:
+        - name: microservice-mail
+          image: microkubes/microservice-mail:latest
+          imagePullPolicy: Always
+          env:
+            - name: SERVICE_CONFIG_FILE
+              value: /config.json
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: microkubes-secrets 
+              mountPath: /run/secrets
+      volumes:
+        - name: microkubes-secrets 
+          secret:
+            secretName: microkubes-secrets
+
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: jwt-issuer
+  labels:
+    app: jwt-issuer
+    platform: microkubes
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: jwt-issuer
+      labels:
+        app: jwt-issuer
+        platform: microkubes
+      annotations:
+        consul.register/enabled: "true"
+        consul.register/service.name: "jwt-issuer"
+    spec:
+      containers:
+        - name: jwt-issuer
+          image: microkubes/jwt-issuer:latest
+          imagePullPolicy: Always
+          env:
+            - name: SERVICE_CONFIG_FILE
+              value: /config.json
+            - name: API_GATEWAY_URL
+              value: "http://kong:8001"
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: microkubes-secrets 
+              mountPath: /run/secrets
+      volumes:
+        - name: microkubes-secrets 
+          secret:
+            secretName: microkubes-secrets
+
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: authorization-server
+  labels:
+    app: authorization-server
+    platform: microkubes
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: authorization-server
+      labels:
+        app: authorization-server
+        platform: microkubes
+      annotations:
+        consul.register/enabled: "true"
+        consul.register/service.name: "authorization-server"
+    spec:
+      containers:
+        - name: authorization-server
+          image: microkubes/authorization-server:latest
+          imagePullPolicy: Always
+          env:
+            - name: SERVICE_CONFIG_FILE
+              value: /config.json
+            - name: API_GATEWAY_URL
+              value: "http://kong:8001"
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: microkubes-secrets 
+              mountPath: /run/secrets
+      volumes:
+        - name: microkubes-secrets 
+          secret:
+            secretName: microkubes-secrets
