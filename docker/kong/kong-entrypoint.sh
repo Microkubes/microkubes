@@ -28,9 +28,11 @@ done
 
 echo "Migrations complete."
 
-DNS_SERVER_IP=""
-if [ -n "$KONG_DNS_SERVER_NAME" ]; then
-  DNS_SERVER_IP=`dig +short "$KONG_DNS_SERVER_NAME"`
+echo "Setting KONG_PG_HOST"
+export KONG_PG_HOST=$(dig +search +short postgres)
+
+if [ -z "$DNS_SERVER_IP" ]; then
+  DNS_SERVER_IP=$(dig +search +short $KONG_DNS_SERVER_NAME)
   if [ -z "$DNS_SERVER_IP" ]; then
     echo "DNS Server $KONG_DNS_SERVER_NAME not resolved"
     exit 1

@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: fakesmtp
+  labels:
+    platform: microkubes
+spec:
+  ports:
+  - name: fakesmtp-smtp
+    port: 1025
+    targetPort: 1025
+    protocol: TCP
+  - name: fakesmtp-http
+    port: 8025
+    targetPort: 8025
+    protocol: TCP
+  selector:
+    app: fakesmtp
+
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: fakesmtp
+  labels:
+    platform: microkubes
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: fakesmtp
+    spec:
+      containers:
+        - name: fakesmtp
+          image: mailhog/mailhog
+          ports:
+            - name: fakesmtp-smtp
+              containerPort: 1025
+            - name: fakesmtp-http
+              containerPort: 8025
