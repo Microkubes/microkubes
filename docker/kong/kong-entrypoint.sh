@@ -29,7 +29,8 @@ done
 echo "Migrations complete."
 
 echo "Setting KONG_PG_HOST"
-export KONG_PG_HOST=$(dig +search +short postgres)
+export KONG_PG_HOST=$(dig +search +short $KONG_PG_HOST)
+echo "KONG_PG_HOST set to: $KONG_PG_HOST"
 
 if [ -z "$DNS_SERVER_IP" ]; then
   DNS_SERVER_IP=$(dig +search +short $KONG_DNS_SERVER_NAME)
