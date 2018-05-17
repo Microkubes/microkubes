@@ -1,0 +1,298 @@
+version: "3.3"
+services:
+  prometheus:
+    image: microkubes/prometheus:latest
+    volumes:
+      - "prometheus-data:/prometheus"
+    ports:
+      - 9090:9090
+
+  kong-database:
+      image: postgres:9.5
+      environment:
+        - POSTGRES_USER=kong
+        - POSTGRES_DB=kong
+      ports:
+        - 5432:5432
+      volumes:
+        - "postgres-data:/var/lib/postgresql/data"
+      deploy:
+        restart_policy:
+          condition: on-failure
+
+  kong-migration:
+    image: microkubes/kong:latest
+    environment:
+      - KONG_DATABASE=postgres
+      - KONG_PG_HOST=kong-database
+      - CONSUL_URL=http://consul:8500
+    entrypoint: "/docker-entrypoint.sh"
+    command: "/migrations.sh"
+
+  kong:
+    image: microkubes/kong:local
+    ports:
+      - "8000:8000"
+      - "8001:8001"
+      - "8443:8443"
+      - "8946:7946"
+      - "8946:7946/udp"
+    environment:
+      - KONG_DATABASE=postgres
+      - KONG_PG_HOST=kong-database
+      - KONG_PG_DATABASE=kong
+      - KONG_PG_USER=kong
+      - KONG_DNS_SERVER_NAME=consul
+      - KONG_DNS_SERVER_PORT=8600
+      - CONSUL_URL=http://consul:8500
+    deploy:
+      restart_policy:
+        condition: any
+
+  fakesmtp:
+    image: mailhog/mailhog
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    deploy:
+      restart_policy:
+        condition: on-failure
+
+  rabbitmq:
+    hostname: rabbitmq
+    image: rabbitmq:3.6.12-management
+    env_file: .env
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - "rabbitmq-data:/var/lib/rabbitmq"
+    deploy:
+      restart_policy:
+        condition: on-failure
+
+  consul:
+    image: consul:1.0.1
+    volumes:
+      - "consul-data:/consul/data"
+    ports:
+      - "8400:8400"
+      - "8500:8500"
+      - "8600:8600/udp"
+    command:
+      - "agent"
+      - "-server"
+      - "-client"
+      - "0.0.0.0"
+      - '-advertise={{ GetInterfaceIP "eth0" }}'
+      - "-recursor"
+      - "127.0.0.11"
+      - "-bootstrap"
+      - "-ui"
+    deploy:
+      restart_policy:
+        condition: any
+
+  registrator:
+    image: gliderlabs/registrator:v7
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock
+    command:
+      - -internal=true
+      - "consul://consul:8500"
+    deploy:
+      restart_policy:
+        condition: any
+
+  mongo:
+    image: mongo:3.4.9
+    ports:
+      - "27017:27017"
+    env_file: .env
+    volumes:
+      - "mongo-data:/data/db"
+    deploy:
+      restart_policy:
+        condition: on-failure
+    secrets:
+      - source: mongo-init-script
+        target: /docker-entrypoint-initdb.d/create_db_objects.sh
+        uid: "999"
+        gid: "999"
+        mode: 0740
+  
+  microservice-mail:
+    image: microkubes/microservice-mail:latest
+    deploy:
+      restart_policy:
+        condition: on-failure
+    secrets:
+      - microservice_mail_config.json
+  
+  authorization-server:
+    image: microkubes/authorization-server:latest
+    environment:
+      - API_GATEWAY_URL=http://kong:8001
+      - MONGO_URL=mongo:27017
+    deploy:
+      restart_policy:
+        condition: on-failure
+    secrets:
+      - public.pub
+      - service.key
+      - service.cert
+      - system
+      - default
+      - system.pub
+      - default.pub
+      - microservice_authorization_server_config.json
+
+  jwt-issuer:
+    image: microkubes/jwt-issuer:latest
+    environment:
+      - API_GATEWAY_URL=http://kong:8001
+      - MONGO_URL=mongo:27017
+    deploy:
+      restart_policy:
+        condition: on-failure
+    secrets:
+      - public.pub
+      - service.key
+      - service.cert
+      - system
+      - default
+      - system.pub
+      - default.pub
+      - microservice_jwt_issuer_config.json
+
+  identity-provider:
+    image: microkubes/identity-provider:local
+    environment:
+      - API_GATEWAY_URL=http://kong:8001
+      - MONGO_URL=mongo:27017
+    deploy:
+      restart_policy:
+        condition: on-failure
+    secrets:
+      - public.pub
+      - service.key
+      - service.cert
+      - system
+      - default
+      - system.pub
+      - default.pub
+      - microservice_identity_provider_config.json
+  
+  microservice-apps-management:
+    image: microkubes/microservice-apps-management:latest
+    environment:
+      - API_GATEWAY_URL=http://kong:8001
+      - MONGO_URL=mongo:27017
+    deploy:
+      restart_policy:
+        condition: on-failure
+    secrets:
+      - public.pub
+      - service.key
+      - service.cert
+      - system
+      - default
+      - system.pub
+      - default.pub
+      - microservice_apps_management_config.json
+  
+  microservice-registration:
+    image: microkubes/microservice-registration:latest
+    environment:
+      - API_GATEWAY_URL=http://kong:8001
+      - MONGO_URL=mongo:27017
+    deploy:
+      restart_policy:
+        condition: on-failure
+    secrets:
+      - public.pub
+      - service.key
+      - service.cert
+      - system
+      - default
+      - system.pub
+      - default.pub
+      - microservice_registration_config.json
+
+  microservice-user-profile:
+    image: microkubes/microservice-user-profile:latest
+    environment:
+      - API_GATEWAY_URL=http://kong:8001
+      - MONGO_URL=mongo:27017
+    deploy:
+      restart_policy:
+        condition: on-failure
+    secrets:
+      - public.pub
+      - service.key
+      - service.cert
+      - system
+      - default
+      - system.pub
+      - default.pub
+      - microservice_user_profile_config.json
+
+  microservice-user:
+    image: microkubes/microservice-user:latest
+    environment:
+      - API_GATEWAY_URL=http://kong:8001
+      - MONGO_URL=mongo:27017
+    deploy:
+      restart_policy:
+        condition: on-failure
+    secrets:
+      - public.pub
+      - service.key
+      - service.cert
+      - system
+      - default
+      - system.pub
+      - default.pub
+      - microservice_user_config.json
+
+secrets:
+  public.pub:
+    file: ./keys/public.pub
+  service.key:
+    file: ./keys/service.key
+  service.cert:
+    file: ./keys/service.cert
+  system:
+    file: ./keys/system
+  default:
+    file: ./keys/default
+  system.pub:
+    file: ./keys/system.pub
+  default.pub:
+    file: ./keys/default.pub
+  mongo-init-script:
+    file: ./mongo/create_db_objects.sh
+  microservice_user_config.json:
+    file: ./config/microservice_user_config.json
+  microservice_user_profile_config.json:
+    file: ./config/microservice_user_profile_config.json
+  microservice_registration_config.json:
+    file: ./config/microservice_registration_config.json
+  microservice_apps_management_config.json:
+    file: ./config/microservice_apps_management_config.json
+  microservice_identity_provider_config.json:
+    file: ./config/microservice_identity_provider_config.json
+  microservice_jwt_issuer_config.json:
+    file: ./config/microservice_jwt_issuer_config.json
+  microservice_authorization_server_config.json:
+    file: ./config/microservice_authorization_server_config.json
+  microservice_mail_config.json:
+    file: ./config/microservice_mail_config.json
+
+volumes:
+  prometheus-data:
+  postgres-data:
+  consul-data:
+  mongo-data:
+  rabbitmq-data:
+

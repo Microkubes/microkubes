@@ -1,0 +1,22 @@
+{
+    "jwt":{
+      "issuer": "Microkubes JWT Authority",
+      "signingMethod": "RS512",
+      "expiryTime": 86400000
+    },
+    "keys": {
+      "default": "/run/secrets/default",
+      "system": "/run/secrets/system"
+    },
+    "microservice": {
+      "name": "jwt-issuer",
+      "port": 8080,
+      "paths": ["/jwt"],
+      "virtual_host": "jwt-issuer.service.consul",
+      "weight": 10,
+      "slots": 100
+    },
+    "services": {
+      "user-microservice": "http://kong:8000/users"
+    }
+  }

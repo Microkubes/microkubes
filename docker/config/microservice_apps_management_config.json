@@ -1,0 +1,72 @@
+{
+    "service":{
+      "name": "apps-management-microservice",
+      "port": 8080,
+      "paths":["/apps"],
+      "virtual_host": "microservice-apps-management.service.consul",
+      "weight": 10,
+      "slots": 100
+    },
+    "gatewayUrl": "http://kong:8000",
+    "security":{
+      "keysDir": "/run/secrets",
+      "jwt":{
+        "description": "JWT security middleware",
+        "tokenUrl": "http://kong:8000/jwt/signin"
+      },
+      "saml":{
+        "certFile": "/run/secrets/service.cert",
+        "keyFile": "/run/secrets/service.key",
+        "identityProviderUrl": "http://kong:8000/saml/idp",
+        "userServiceUrl": "http://kong:8000/users",
+        "registrationServiceUrl": "http://kong:8000/users/register",
+        "rootURL": "http://localhost:8000/apps"
+      },
+      "oauth2":{
+        "description": "OAuth2 security middleware",
+        "tokenUrl": "https://kong:8000/oauth2/token",
+        "authorizeUrl": "https://kong:8000/oauth2/authorize"
+      },
+      "acl": {
+        "policies":[{
+            "id": "read-swagger",
+            "description": "Allows to service swagger.",
+            "resources": ["/swagger<.+>"],
+            "actions": ["api:read"],
+            "effect": "allow",
+            "subjects": ["<.+>"]
+        },{
+            "id": "apps-allow-admin-access",
+            "description": "Allows access to everything to an admin user",
+            "resources": ["<.+>"],
+            "actions": ["api:read","api:write"],
+            "effect": "allow",
+            "subjects": ["<.+>"],
+            "conditions": {
+              "roles": {
+                "type": "RolesCondition",
+                "options": {
+                  "values": ["admin", "system"]
+                }
+               }
+            }
+         },{
+             "id": "apps-allow-user-access",
+             "description": "Allows user to create and read apps",
+             "resources": ["/apps", "/apps/my", "/apps/<.+>", "/apps/<.+>/regenerate-secret"],
+             "actions": ["api:read","api:write"],
+             "effect": "allow",
+             "subjects": ["<.+>"]
+          }]
+      }
+    },
+    "database":{
+      "dbName": "mongodb",
+      "dbInfo":{
+        "host": "mongo:27017",
+        "database": "apps-management",
+        "user": "restapi",
+        "pass": "restapi"
+      }
+    }
+  }

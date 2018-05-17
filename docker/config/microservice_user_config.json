@@ -1,0 +1,83 @@
+{
+    "service":{
+      "name": "microservice-user",
+      "port": 8080,
+      "paths": ["/users"],
+      "virtual_host": "microservice-user.service.consul",
+      "weight": 10,
+      "slots": 100
+    },
+    "gatewayUrl": "http://kong:8000",
+    "gatewayAdminUrl": "http://kong:8001",
+    "security":{
+      "keysDir": "/run/secrets",
+      "ignorePatterns": ["/users/verify"],
+      "jwt":{
+        "name": "JWTSecurity",
+        "description": "JWT security middleware",
+        "tokenUrl": "http://kong:8000/jwt"
+      },
+      "saml":{
+        "certFile": "/run/secrets/service.cert",
+        "keyFile": "/run/secrets/service.key",
+        "identityProviderUrl": "http://kong:8000/saml/idp",
+        "userServiceUrl": "http://kong:8000/users",
+        "registrationServiceUrl": "http://kong:8000/users/register",
+        "rootURL": "http://localhost:8000/users"
+      },
+      "oauth2":{
+        "description": "OAuth2 security middleware",
+        "tokenUrl": "https://kong:8000/oauth2/token",
+        "authorizeUrl": "https://kong:8000/oauth2/authorize"
+      },
+      "acl": {
+        "policies":[{
+            "id": "users-allow-admin-access",
+            "description": "Allows access to everything to an admin user",
+            "resources": ["<.+>"],
+            "actions": ["api:read","api:write"],
+            "effect": "allow",
+            "subjects": ["<.+>"],
+            "conditions": {
+              "roles": {
+                "type": "RolesCondition",
+                "options": {
+                  "values": ["admin", "system"]
+                }
+               }
+            }
+         },{
+             "id": "users-allow-read-access",
+             "description": "Allows access to user's own profile",
+             "resources": ["/users/me"],
+             "actions": ["api:read"],
+             "effect": "allow",
+             "subjects": ["<.+>"],
+             "conditions": {
+               "roles": {
+                 "type": "RolesCondition",
+                 "options": {
+                   "values": ["user"]
+                 }
+                }
+             }
+          },{
+              "id": "read-swagger",
+              "description": "Allows to service swagger.",
+              "resources": ["/swagger<.+>"],
+              "actions": ["api:read"],
+              "effect": "allow",
+              "subjects": ["<.+>"]
+           }]
+      }
+    },
+    "database":{
+      "dbName": "mongodb",
+      "dbInfo": {
+        "host": "mongo:27017",
+        "database": "users",
+        "user": "restapi",
+        "pass": "restapi"
+      }
+    }
+  }
