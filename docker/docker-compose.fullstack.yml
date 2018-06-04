@@ -30,7 +30,7 @@ services:
     command: "/migrations.sh"
 
   kong:
-    image: microkubes/kong:local
+    image: microkubes/kong:latest
     ports:
       - "8000:8000"
       - "8001:8001"
