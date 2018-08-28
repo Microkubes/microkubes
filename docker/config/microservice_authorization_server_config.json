@@ -1,0 +1,39 @@
+{
+    "serverName": "Microkubes Authorization Server",
+    "security": {
+      "keys": {
+        "default": "/run/secrets/default",
+        "system": "/run/secrets/system"
+      },
+      "signingMethod": "RS256",
+      "issuer": "oauth2-auth-server"
+    },
+    "microservice": {
+      "name": "oauth2-auth-server",
+      "port": 8080,
+      "paths": [ "/oauth2", "/auth" ],
+      "virtual_host": "authorization-server.service.consul",
+      "weight": 10,
+      "slots": 10
+    },
+    "services": {
+      "userServiceURL": "http://kong:8000/users",
+      "appsServiceURL": "http://kong:8000/apps"
+    },
+    "database": {
+      "host": "mongo:27017",
+      "database": "oauth2",
+      "user": "authserver",
+      "pass": "authserver"
+    },
+    "session": {
+      "name": "OAuth2Server",
+      "authKey": "dGVzdC1hdXRoLWtleQo=",
+      "encryptKey": "t/xzB8eZ5ypUiIGbuOq5PhZAKpU7LS239ucRXDq7Lw8="
+    },
+    "clientAuthorizationTTL": 300000,
+    "accessTokenTTL": 2592000000,
+    "accessTokenSigningMethod": "RS256",
+    "authCodeLength": 10,
+    "refreshTokenLength": 27
+  }

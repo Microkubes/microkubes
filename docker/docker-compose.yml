@@ -41,6 +41,7 @@ services:
       - KONG_DATABASE=postgres
       - KONG_PG_HOST=kong-database
       - KONG_PG_DATABASE=kong
+      - KONG_PG_USER=kong
       - KONG_DNS_SERVER_NAME=consul
       - KONG_DNS_SERVER_PORT=8600
       - CONSUL_URL=http://consul:8500
@@ -72,6 +73,17 @@ services:
       - "127.0.0.11"
       - "-bootstrap"
       - "-ui"
+    deploy:
+      restart_policy:
+        condition: any
+
+  registrator:
+    image: gliderlabs/registrator:v7
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock
+    command:
+      - -internal=true
+      - "consul://consul:8500"
     deploy:
       restart_policy:
         condition: any

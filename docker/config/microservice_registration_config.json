@@ -1,0 +1,30 @@
+{
+	"microservice": {
+		"name": "registration-microservice",
+		"port": 8080,
+		"paths": ["/users/register"],
+		"virtual_host": "microservice-registration.service.consul",
+		"weight": 10,
+		"slots": 100
+	},
+	"gatewayUrl": "http://kong:8000",
+	"gatewayAdminUrl": "http://kong:8001",
+	"systemKey": "/run/secrets/system",
+	"services": {
+		"user-microservice": "http://kong:8000/users",
+		"microservice-user-profile": "http://kong:8000/profiles"
+	},
+	"mail": {
+		"host": "fakesmtp",
+		"port": "1025",
+		"user": "fake@email.com",
+		"password": "password",
+		"email": "dev@microkubes.org"
+	},
+	"rabbitmq": {
+		"username": "guest",
+		"password": "guest",
+		"host": "rabbitmq",
+		"port": "5672"
+	}
+}
