@@ -97,7 +97,7 @@ spec:
     spec:
       containers:
         - name: postgres
-          image: postgres:9.5
+          image: postgres:9.6.10-alpine
           env:
             - name: POSTGRES_USER
               value: kong
@@ -141,7 +141,7 @@ spec:
     spec:
       containers:
       - name: kong
-        image: microkubes/kong:latest
+        image: microkubes/kong:0.14.1-alpine
         imagePullPolicy: Always
         env:
           - name: KONG_ADMIN_LISTEN
