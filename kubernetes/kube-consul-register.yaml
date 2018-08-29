@@ -49,4 +49,4 @@ spec:
             memory: 300Mi
         args:
         - -logtostderr=true
-        - -configmap=default/kube-consul-register
+        - -configmap=microkubes/kube-consul-register
