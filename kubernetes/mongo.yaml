@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: mongo
+  namespace: microkubes
   labels:
     platform: microkubes
 spec:
@@ -19,6 +20,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: mongo-env
+  namespace: microkubes
   labels:
     platform: microkubes
 data:
@@ -42,13 +44,15 @@ data:
 
 
 ---
-apiVersion: extensions/v1beta1
-kind: Deployment
+apiVersion: apps/v1beta1
+kind: StatefulSet
 metadata:
   name: mongo-cluster-deployment
+  namespace: microkubes
   labels:
     platform: microkubes
 spec:
+  serviceName: mongo
   replicas: 1 # this should always be 1
   template:
     metadata:
@@ -57,7 +61,7 @@ spec:
     spec:
       containers:
       - name: mongodb
-        image: mongo:3.6.3
+        image: mongo:4.0.2
         args: ["--dbpath", "/data/mongodb"] # put your own path if it is different from a regular path
         ports:          
         - name: mongo
@@ -72,8 +76,15 @@ spec:
             - mountPath: /data/mongodb
               name: mongo-data
       volumes:
-        - name: mongo-data
-          emptyDir: {}
         - name: mongo-init-db
           secret:
             secretName: mongo-init-db
+  volumeClaimTemplates:
+    - metadata:
+        name: mongo-data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 20Gi
