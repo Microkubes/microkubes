@@ -19,10 +19,10 @@ minikube start
 ./keys/create.sh
 ```
 
-3. Create a secret from keys generated in Step 2
+4. Create a secret from keys generated in Step 2
  
 ```bash
-kubectl create secret generic microkubes-secrets \
+kubectl -n microkubes create secret generic microkubes-secrets \
 	--from-file=keys/default \
 	--from-file=keys/default.pub \
 	--from-file=keys/private.pem \
@@ -33,7 +33,14 @@ kubectl create secret generic microkubes-secrets \
 	--from-file=keys/system.pub
 ```
 
-### Deploy the Microkubes
+5. Create a secret for the mongo objects creation
+
+```bash
+kubectl -n microkubes create secret generic mongo-init-db \
+        --from-file=./kubernetes/mongo/create_microkubes_db_objects.sh
+```
+
+### Deploy Microkubes
 
 Run the following commands:
 ```bash
@@ -45,4 +52,15 @@ kubectl create -f mongo.yaml
 kubectl create -f rabbitmq.yaml
 kubectl create -f fakesmtp.yaml
 kubectl create -f microkubes.yaml
+```
+
+The platform takes about 5 minutes to bring up and you can follow the progress using `kubectl -n microkubes get pods -w`.
+Once all services are running, you can start using microkubes.
+
+### Check that microkubes is up and running
+
+The API gateway is exposed as a nodePort in kubernetes, you can get the URL and do an http GET request to check that microkubes is responding.
+```bash
+MICROKUBES_URL=`minikube service -n microkubes kong --url`
+curl $MICROKUBES_URL/users
 ```
