@@ -1,0 +1,10 @@
+name: microkubes
+version: 0.1.0
+apiVersion: v1
+appVersion: "0.1"
+description: Microkubes helm chart
+keywords:
+  - microservices
+  - platform
+home: https://www.microkubes.com
+sources: https://www.github.com/Microkubes

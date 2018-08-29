@@ -1,0 +1,13 @@
+dependencies:
+  - name: consul
+    version: 3.3.0
+    repository: https://kubernetes-charts.storage.googleapis.com/
+  - name: mongodb
+    version: 4.2.1
+    repository: https://kubernetes-charts.storage.googleapis.com/
+  - name: rabbitmq
+    version: 1.9.1
+    repository: https://kubernetes-charts.storage.googleapis.com/
+  - name: postgresql
+    version: 0.15.1
+    repository: https://kubernetes-charts.storage.googleapis.com/
