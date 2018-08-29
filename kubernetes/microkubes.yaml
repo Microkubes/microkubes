@@ -2,6 +2,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: microservice-user
+  namespace: microkubes
   labels:
     app: microservice-user
     platform: microkubes
@@ -39,6 +40,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: identity-provider
+  namespace: microkubes
   labels:
     app: identity-provider
     platform: microkubes
@@ -76,6 +78,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: microservice-user-profile
+  namespace: microkubes
   labels:
     app: microservice-user-profile
     platform: microkubes
@@ -115,6 +118,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: microservice-registration
+  namespace: microkubes
   labels:
     app: microservice-registration
     platform: microkubes
@@ -152,6 +156,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: microservice-mail
+  namespace: microkubes
   labels:
     app: microservice-mail
     platform: microkubes
@@ -189,6 +194,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: jwt-issuer
+  namespace: microkubes
   labels:
     app: jwt-issuer
     platform: microkubes
@@ -228,6 +234,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: authorization-server
+  namespace: microkubes
   labels:
     app: authorization-server
     platform: microkubes
