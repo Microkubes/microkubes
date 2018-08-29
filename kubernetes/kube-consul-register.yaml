@@ -32,13 +32,13 @@ metadata:
     platform: microkubes
 spec:
   replicas: 1
-  serviceAccountName: microkubes
   template:
     metadata:
       labels:
         app: kube-consul-register
         platform: microkubes
     spec:
+      serviceAccountName: microkubes
       containers:
       - name: kube-consul-register
         image: tczekajlo/kube-consul-register:0.1.6
@@ -49,4 +49,4 @@ spec:
             memory: 300Mi
         args:
         - -logtostderr=true
-        - -configmap=default/kube-consul-register
+        - -configmap=microkubes/kube-consul-register
