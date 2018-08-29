@@ -6,3 +6,5 @@ keys/service.cert
 keys/service.key
 keys/system
 keys/system.pub
+kubernetes/helm/microkubes/charts
+kubernetes/helm/microkubes/requirements.lock
