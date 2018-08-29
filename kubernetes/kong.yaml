@@ -2,6 +2,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: kong-migration
+  namespace: microkubes
   labels:
     platform: microkubes
 spec:
@@ -30,6 +31,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: postgres
+  namespace: microkubes
   labels:
     platform: microkubes
 spec:
@@ -46,6 +48,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: kong
+  namespace: microkubes
   labels:
     platform: microkubes
 spec:
@@ -63,6 +66,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: kong-admin
+  namespace: microkubes
   labels:
     platform: microkubes
 spec:
@@ -74,14 +78,17 @@ spec:
     protocol: TCP
   selector:
     app: kong
+
 ---
-apiVersion: extensions/v1beta1
-kind: Deployment
+apiVersion: apps/v1beta1
+kind: StatefulSet
 metadata:
   name: postgres
+  namespace: microkubes
   labels:
     platform: microkubes
 spec:
+  serviceName: postgres
   replicas: 1
   template:
     metadata:
@@ -102,18 +109,26 @@ spec:
               value: /var/lib/postgresql/data/pgdata
           ports:
             - containerPort: 5432
+              name: postgres
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
               name: pg-data
-      volumes:
-        - name: pg-data
-          emptyDir: {}
+  volumeClaimTemplates:
+    - metadata:
+        name: pg-data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 10Gi
 
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: kong
+  namespace: microkubes
   labels:
     platform: microkubes
 spec:
@@ -131,6 +146,8 @@ spec:
         env:
           - name: KONG_ADMIN_LISTEN
             value: 0.0.0.0:8001
+          - name: KONG_PG_HOST
+            value: postgres
           - name: KONG_PG_PASSWORD
             value: kong
           - name: KONG_PROXY_ACCESS_LOG
