@@ -19,6 +19,13 @@ minikube start
 ./keys/create.sh
 ```
 
+3. Create a default microkubes namespace and service account
+
+```bash
+kubectl create -f kubernetes/namespace.yaml
+kubectl create -f kubernetes/serviceaccount.yaml
+```
+
 4. Create a secret from keys generated in Step 2
  
 ```bash
