@@ -1,6 +1,90 @@
 # Default values for microkubes.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
+microkubes:
+  # Global platform coniguration
+  # Database to use: mongodb or aws (dynamodb)
+  database: mongodb
+  awsDatabaseCredentials: /full/path/to/aws/credentials
+  awsDatabaseEndpoint: http://localhost:9000
+  awsDatabaseRegion: us-east-1
+
+  serviceAccountName: microkubes
+  kongAdminUrl: http://kong-admin:8001
+
+  authKey: dGVzdC1hdXRoLWtleQo=
+  encryptKey: t/xzB8eZ5ypUiIGbuOq5PhZAKpU7LS239ucRXDq7Lw8=
+
+  # Microkubes component configuration
+  #
+  # Authorization Server
+  authorizationserver:
+    name: authorization-server
+
+    image:
+      repository: microkubes/authorization-server
+      tag: latest
+      pullPolicy: Always
+
+    podAnnotations:  
+      consul.register/enabled: "true"
+      consul.register/service.name: "authorization-server"
+
+  # Identity Provider
+  identityprovider:
+    name: identity-provider
+
+  # JWT Issuer
+  jwtissuer:
+    name: jwt-issuer
+
+  # Apps Management
+  appsmanagement:
+    name: apps-management
+
+  # Mail
+  mail:
+    name: microservice-mail
+
+  # Microservice Registration
+  microserviceregistration:
+    name: microservice-registration
+
+  # User
+  user:
+    name: microservice-user
+
+  # User Profile
+  userprofile:
+    name: microservice-profile
+
+# Microkubes database configuration
+# Mongo
+mongodb:
+  name: mongo
+# API Gateway configuration
+# KONG
+kong:
+  name: kong
+  servicePort: 8000
+  adminServiceName: kong-admin
+  adminServicePort: 8001
+
+# Service Discovery configuration
+# CONSUL
+consul:
+  option1: value
+
+# Kubernetes consul auto registration
+# Kube-consul-register
+kubeconsulregister:
+  option1: value
+
+# RabbitMQ
+rabbitmq:
+  option1: value
+
+# END CONFIGURATION
 
 replicaCount: 1
 

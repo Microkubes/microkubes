@@ -5,7 +5,7 @@ dependencies:
   - name: mongodb
     version: 4.2.1
     repository: https://kubernetes-charts.storage.googleapis.com/
-  - name: rabbitmq
+  - name: rabbitmq-ha
     version: 1.9.1
     repository: https://kubernetes-charts.storage.googleapis.com/
   - name: postgresql
