@@ -1,6 +1,46 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
+  name: microservice-apps-management
+  namespace: microkubes
+  labels:
+    app: microservice-apps-management
+    platform: microkubes
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: microservice-apps-management
+      labels:
+        app: microservice-apps-management
+        platform: microkubes
+      annotations:
+        consul.register/enabled: "true"
+        consul.register/service.name: "microservice-apps-management"
+    spec:
+      containers:
+        - name: microservice-apps-management
+          image: microkubes/microservice-apps-management:latest
+          imagePullPolicy: Always
+          env:
+            - name: SERVICE_CONFIG_FILE
+              value: /config.json
+            - name: API_GATEWAY_URL
+              value: "http://kong-admin:8001"
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: microkubes-secrets
+              mountPath: /run/secrets
+      volumes:
+        - name: microkubes-secrets
+          secret:
+            secretName: microkubes-secrets
+
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
   name: microservice-user
   namespace: microkubes
   labels:
@@ -25,13 +65,15 @@ spec:
           env:
             - name: SERVICE_CONFIG_FILE
               value: /config.json
+            - name: API_GATEWAY_URL
+              value: "http://kong-admin:8001"
           ports:
             - containerPort: 8080
           volumeMounts:
-            - name: microkubes-secrets 
+            - name: microkubes-secrets
               mountPath: /run/secrets
       volumes:
-        - name: microkubes-secrets 
+        - name: microkubes-secrets
           secret:
             secretName: microkubes-secrets
 
@@ -63,13 +105,15 @@ spec:
           env:
             - name: SERVICE_CONFIG_FILE
               value: /config.json
+            - name: API_GATEWAY_URL
+              value: "http://kong-admin:8001"
           ports:
             - containerPort: 8080
           volumeMounts:
-            - name: microkubes-secrets 
+            - name: microkubes-secrets
               mountPath: /run/secrets
       volumes:
-        - name: microkubes-secrets 
+        - name: microkubes-secrets
           secret:
             secretName: microkubes-secrets
 
@@ -106,10 +150,10 @@ spec:
           ports:
             - containerPort: 8080
           volumeMounts:
-            - name: microkubes-secrets 
+            - name: microkubes-secrets
               mountPath: /run/secrets
       volumes:
-        - name: microkubes-secrets 
+        - name: microkubes-secrets
           secret:
             secretName: microkubes-secrets
 
@@ -141,13 +185,15 @@ spec:
           env:
             - name: SERVICE_CONFIG_FILE
               value: /config.json
+            - name: API_GATEWAY_URL
+              value: "http://kong-admin:8001"
           ports:
             - containerPort: 8080
           volumeMounts:
-            - name: microkubes-secrets 
+            - name: microkubes-secrets
               mountPath: /run/secrets
       volumes:
-        - name: microkubes-secrets 
+        - name: microkubes-secrets
           secret:
             secretName: microkubes-secrets
 
@@ -179,13 +225,17 @@ spec:
           env:
             - name: SERVICE_CONFIG_FILE
               value: /config.json
+            - name: ALLOW_UNENCRYPTED_CONNECTION
+              value: "true"
+            - name: API_GATEWAY_URL
+              value: "http://kong-admin:8001"
           ports:
             - containerPort: 8080
           volumeMounts:
-            - name: microkubes-secrets 
+            - name: microkubes-secrets
               mountPath: /run/secrets
       volumes:
-        - name: microkubes-secrets 
+        - name: microkubes-secrets
           secret:
             secretName: microkubes-secrets
 
@@ -222,10 +272,10 @@ spec:
           ports:
             - containerPort: 8080
           volumeMounts:
-            - name: microkubes-secrets 
+            - name: microkubes-secrets
               mountPath: /run/secrets
       volumes:
-        - name: microkubes-secrets 
+        - name: microkubes-secrets
           secret:
             secretName: microkubes-secrets
 
@@ -262,9 +312,9 @@ spec:
           ports:
             - containerPort: 8080
           volumeMounts:
-            - name: microkubes-secrets 
+            - name: microkubes-secrets
               mountPath: /run/secrets
       volumes:
-        - name: microkubes-secrets 
+        - name: microkubes-secrets
           secret:
             secretName: microkubes-secrets
