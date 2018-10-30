@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ .Values.kong.adminServiceName }}"
+  namespace: microkubes
+  labels:
+    app: {{ template "microkubes.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: "{{ .Values.kong.adminServiceName }}"
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+spec:
+  type: {{ .Values.kong.adminServiceType }}
+  ports:
+  - name: admin
+    port: {{ .Values.kong.adminServicePort }}
+    targetPort: {{ .Values.kong.adminServicePort }}
+    protocol: {{ .Values.kong.adminServiceProtocol }}
+  selector:
+    app: "{{ .Values.kong.name }}"

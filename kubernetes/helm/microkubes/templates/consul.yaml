@@ -1,0 +1,119 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul
+  namespace: microkubes
+  labels:
+    name: consul
+    platform: microkubes
+spec:
+  type: NodePort
+  ports:
+    - name: http
+      port: 8500
+      targetPort: 8500
+    - name: https
+      port: 8443
+      targetPort: 8443
+    - name: rpc
+      port: 8400
+      targetPort: 8400
+    - name: serflan-tcp
+      protocol: "TCP"
+      port: 8301
+      targetPort: 8301
+    - name: serflan-udp
+      protocol: "UDP"
+      port: 8301
+      targetPort: 8301
+    - name: serfwan-tcp
+      protocol: "TCP"
+      port: 8302
+      targetPort: 8302
+    - name: serfwan-udp
+      protocol: "UDP"
+      port: 8302
+      targetPort: 8302
+    - name: server
+      port: 8300
+      targetPort: 8300
+    - name: consuldns
+      protocol: "UDP"
+      port: 8600
+      targetPort: 8600
+  selector:
+    app: consul
+
+---
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: consul
+  namespace: microkubes
+  labels:
+    platform: microkubes
+spec:
+  serviceName: consul
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: consul
+    spec:
+      containers:
+        - name: consul
+          image: "consul:1.2.2"
+          env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          args:
+            - "agent"
+            - "-dev"
+            - "-bootstrap"
+            - "-client=0.0.0.0"
+            - "-recursor=127.0.0.11"
+            - "-ui"
+          volumeMounts:
+            - name: data
+              mountPath: /consul/data
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                - /bin/sh
+                - -c
+                - consul leave
+          ports:
+            - containerPort: 8500
+              name: ui-port
+            - containerPort: 8400
+              name: alt-port
+            - containerPort: 53
+              name: udp-port
+            - containerPort: 8443
+              name: https-port
+            - containerPort: 8080
+              name: http-port
+            - containerPort: 8301
+              name: serflan
+            - containerPort: 8302
+              name: serfwan
+            - containerPort: 8600
+              name: consuldns
+            - containerPort: 8300
+              name: server
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 10Gi

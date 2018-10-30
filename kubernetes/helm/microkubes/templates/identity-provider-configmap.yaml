@@ -4,41 +4,41 @@ metadata:
   labels:
     app: {{ template "microkubes.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    component: "{{ .Values.microkubes.authorizationserver.name }}"
+    component: "{{ .Values.microkubes.identityprovider.name }}"
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
-  name: {{ template "microkubes.authorizationserver.fullname" . }}
+  name: {{ template "microkubes.identityprovider.fullname" . }}
+  namespace: microkubes
 data:
   config.json: |
-{
-	"microservice":	{
-		"name": "Microkubes Identity Provider",
-		"port": 8080,
-		"paths": ["/saml"],
-		"virtual_host": "{{ .Values.microkubes.authorizationserver.name }}.service.consul",
-		"weight": 10,
-		"slots": 100
-	},
-	"gatewayUrl": "http://{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}",
-	"gatewayAdminUrl": "http://{{ .Values.kong.adminServiceName }}:{{ .Values.kong.adminServicePort }}",
-	"systemKey": "/run/secrets/system",
-	"services": {
-		"microservice-user": "http://{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}/users"
-	},
-	"client": {
-		"redirect-from-login": "https://{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}/profiles/me"
-	},
-  if dynamo or mongo
-	"database":{
-	    "dbName": "{{ .Values.microkubes.database }}",
-	    "dbInfo": {
-			"credentials": "{{ .Values.microkubes.awsDatabaseCredentials }}",
-			"endpoint": "{{ .Values.microkubes.awsDatabaseEndpoint }}",
-			"awsRegion": "{{ .Values.microkubes.aswDatabaseRegion }}",
-			"host": "{{ .Values.mongodb.name }}:27017",
-			"database": "identity-provider",
-			"user": "restapi",
-			"pass": "restapi"
-	    }
-  }
-}
+    {
+      "microservice":	{
+        "name": "{{ .Values.microkubes.identityprovider.name }}",
+        "port": 8080,
+        "paths": ["/saml"],
+        "virtual_host": "{{ .Values.microkubes.identityprovider.name }}.service.consul",
+        "weight": 10,
+        "slots": 100
+      },
+      "gatewayUrl": "http://{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}",
+      "gatewayAdminUrl": "http://{{ .Values.kong.adminServiceName }}:{{ .Values.kong.adminServicePort }}",
+      "systemKey": "/run/secrets/system",
+      "services": {
+        "microservice-user": "http://{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}/users"
+      },
+      "client": {
+        "redirect-from-login": "https://{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}/profiles/me"
+      },
+      "database":{
+          "dbName": "{{ .Values.microkubes.database }}",
+          "dbInfo": {
+          "credentials": "{{ .Values.microkubes.awsDatabaseCredentials }}",
+          "endpoint": "{{ .Values.microkubes.awsDatabaseEndpoint }}",
+          "awsRegion": "{{ .Values.microkubes.aswDatabaseRegion }}",
+          "host": "{{ .Values.mongodb.service.name }}:27017",
+          "database": "identity-provider",
+          "user": "restapi",
+          "pass": "restapi"
+          }
+      }
+    }

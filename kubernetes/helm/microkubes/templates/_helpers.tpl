@@ -97,19 +97,19 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
-Create a fully qualified mail name.
+Create a fully qualified microservicemail name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 
-{{- define "microkubes.mail.fullname" -}}
-{{- if .Values.microkubes.mail.fullnameOverride -}}
-{{- .Values.microkubes.mail.fullnameOverride | trunc 63 | trimSuffix "-" -}}
+{{- define "microkubes.microservicemail.fullname" -}}
+{{- if .Values.microkubes.microservicemail.fullnameOverride -}}
+{{- .Values.microkubes.microservicemail.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
 {{- $name := default .Chart.Name .Values.nameOverride -}}
 {{- if contains $name .Release.Name -}}
-{{- printf "%s-%s" .Release.Name .Values.microkubes.mail.name | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s" .Release.Name .Values.microkubes.microservicemail.name | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
-{{- printf "%s-%s-%s" .Release.Name $name .Values.microkubes.mail.name | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s-%s" .Release.Name $name .Values.microkubes.microservicemail.name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 {{- end -}}
 {{- end -}}
@@ -167,7 +167,6 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 {{- end -}}
 {{- end -}}
-
 
 {{/*
 Create chart name and version as used by the chart label.

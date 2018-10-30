@@ -1,19 +1,19 @@
-1. Get the application URL by running these commands:
-{{- if .Values.ingress.enabled }}
-{{- range .Values.ingress.hosts }}
-  http{{ if $.Values.ingress.tls }}s{{ end }}://{{ . }}{{ $.Values.ingress.path }}
-{{- end }}
-{{- else if contains "NodePort" .Values.service.type }}
-  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "microkubes.fullname" . }})
-  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-  echo http://$NODE_IP:$NODE_PORT
-{{- else if contains "LoadBalancer" .Values.service.type }}
-     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-           You can watch the status of by running 'kubectl get svc -w {{ include "microkubes.fullname" . }}'
-  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "microkubes.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-  echo http://$SERVICE_IP:{{ .Values.service.port }}
-{{- else if contains "ClusterIP" .Values.service.type }}
-  export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app={{ include "microkubes.name" . }},release={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
-  echo "Visit http://127.0.0.1:8080 to use your application"
-  kubectl port-forward $POD_NAME 8080:80
-{{- end }}
+1. The platform can be access through the API gateway service which is exposed as a nodePort in kubernetes. To get the URL run:
+
+  MICROKUBES_URL=`minikube service -n microkubes kong --url`
+
+2. Register a user on the platform:
+
+  curl -v $MICROKUBES_URL/users/register -d '{"fullname":"John Smith", "password": "password", "email": "johnsmith@company.com"}'
+
+  The emial will be sent to johnsmith@company.com. Click on verification link to activate the user.
+
+3. Get JWT Token
+
+  curl -v -H "Content-Type: application/x-www-form-urlencoded" \
+    $MICROKUBES_URL/jwt/signin \
+    -d 'email=johnsmith@company.com&password=password&scope="api:read,api:write"'
+
+4. Get user's information
+
+  curl -v $MICROKUBES_URL/users/me -H "$JWT_TOKEN"

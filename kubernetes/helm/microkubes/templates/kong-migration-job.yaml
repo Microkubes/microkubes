@@ -1,0 +1,31 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "{{ .Values.kong.job.name }}"
+  namespace: microkubes
+  labels:
+    app: {{ template "microkubes.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: "{{ .Values.kong.job.name }}"
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+spec:
+  template:
+    metadata:
+      name: {{ .Values.kong.job.name }}
+    spec:
+      containers:
+      - name: {{ .Values.kong.job.container.name }}
+        image: {{ .Values.kong.job.container.image }}
+        imagePullPolicy: {{ .Values.kong.job.container.pullPolicy }}
+        env:
+          - name: KONG_NGINX_DAEMON
+            value: "{{ .Values.kong.job.env.nginxDeamon }}"
+          - name: KONG_PG_PASSWORD
+            value: "{{ .Values.kong.job.env.PGPassword }}"
+          - name: KONG_PG_HOST
+            value: "{{ .Values.kong.job.env.PGHost }}"
+          - name: CONSUL_URL
+            value: "{{ .Values.kong.job.env.consulURL }}"
+        command: {{ .Values.kong.job.container.command }}
+      restartPolicy: {{ .Values.kong.job.container.restartPolicy }}

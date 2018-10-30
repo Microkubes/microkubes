@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "{{ .Values.mongodb.configmap.name }}"
+  namespace: microkubes
+  labels:
+    app: {{ template "microkubes.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: "{{ .Values.mongodb.configmap.name }}"
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+data:
+  MONGO_INITDB_ROOT_USERNAME: {{ .Values.mongodb.configmap.env.mongoRootUsername }}
+  MONGO_INITDB_ROOT_PASSWORD: {{ .Values.mongodb.configmap.env.mongoRootPassword }}
+  MS_USER_DB: {{ .Values.mongodb.configmap.env.msUserDB }}
+  MS_USER_USER: {{ .Values.mongodb.configmap.env.msUserUser }}
+  MS_USER_PWD: {{ .Values.mongodb.configmap.env.msUserPassword }}
+  MS_USERPROFILE_DB: {{ .Values.mongodb.configmap.env.msUserProfileDB }}
+  MS_USERPROFILE_USER: {{ .Values.mongodb.configmap.env.msUserProfileUser }}
+  MS_USERPROFILE_PWD: {{ .Values.mongodb.configmap.env.msUserProfilePassword }}
+  MS_APPS_MNG_DB: {{ .Values.mongodb.configmap.env.msAppsMngDB }}
+  MS_APPS_MNG_USER: {{ .Values.mongodb.configmap.env.msAppsMngUser }}
+  MS_APPS_MNG_PWD: {{ .Values.mongodb.configmap.env.msAppsMngPassword }}
+  MS_IDP_DB: {{ .Values.mongodb.configmap.env.msIDPDB }}
+  MS_IDP_USER: {{ .Values.mongodb.configmap.env.msIDPUser }}
+  MS_IDP_PWD: {{ .Values.mongodb.configmap.env.msIDPPassword }}
+  MS_AUTH_SERVER_DB: {{ .Values.mongodb.configmap.env.msAuthServerDB }}
+  MS_AUTH_SERVER_USER: {{ .Values.mongodb.configmap.env.msAuthServerUser }}
+  MS_AUTH_SERVER_PWD: {{ .Values.mongodb.configmap.env.msAuthServerPassword }}

@@ -1,0 +1,51 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: "{{ .Values.kong.name }}"
+  namespace: microkubes
+  labels:
+    app: {{ template "microkubes.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: "{{ .Values.kong.name }}"
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+spec:
+  replicas: {{ .Values.kong.replicas }}
+  template:
+    metadata:
+      labels:
+        name: "{{ .Values.kong.name }}"
+        app: "{{ .Values.kong.name }}"
+    spec:
+      containers:
+      - name: {{ .Values.kong.container.name }}
+        image: {{ .Values.kong.container.image }}
+        imagePullPolicy: {{ .Values.kong.container.pullPolicy }}
+        env:
+          - name: KONG_ADMIN_LISTEN
+            value: "{{ .Values.kong.env.adminListen }}"
+          - name: KONG_PG_HOST
+            value: "{{ .Values.kong.env.PGHost }}"
+          - name: KONG_PG_PASSWORD
+            value: "{{ .Values.kong.env.PGPassword }}"
+          - name: KONG_PROXY_ACCESS_LOG
+            value: "{{ .Values.kong.env.proxyAccessLog }}"
+          - name: KONG_ADMIN_ACCESS_LOG
+            value: "{{ .Values.kong.env.adminAccessLog }}"
+          - name: KONG_PROXY_ERROR_LOG
+            value: "{{ .Values.kong.env.proxyErrorLog }}"
+          - name: KONG_ADMIN_ERROR_LOG
+            value: "{{ .Values.kong.env.adminErrorLog }}"
+          - name: KONG_DNS_SERVER_NAME
+            value: "{{ .Values.kong.env.dnsServerName }}"
+          - name: KONG_DNS_SERVER_PORT
+            value: "{{ .Values.kong.env.dnsServerPort }}"
+          - name: CONSUL_URL
+            value: "{{ .Values.kong.env.consulURL }}"
+        ports:
+        - name: admin
+          containerPort: {{ .Values.kong.adminServicePort }}
+          protocol: {{ .Values.kong.adminServiceProtocol }}
+        - name: proxy
+          containerPort: {{ .Values.kong.servicePort }}
+          protocol: {{ .Values.kong.serviceProtocol }}

@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ .Values.rabbitmq.service.name }}"
+  namespace: microkubes
+  labels:
+    app: {{ template "microkubes.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: "{{ .Values.rabbitmq.service.name }}"
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+spec:
+  ports:
+  - name: rabbitmq
+    port: {{ .Values.rabbitmq.service.port }}
+    targetPort: {{ .Values.rabbitmq.service.port }}
+    protocol: {{ .Values.rabbitmq.service.protocol }}
+  - name: rabbitmq-ui
+    port: {{ .Values.rabbitmq.service.uiPort }}
+    targetPort: {{ .Values.rabbitmq.service.uiPort }}
+    protocol: {{ .Values.rabbitmq.service.uiProtocol }}
+  selector:
+    app: {{ .Values.rabbitmq.name }}

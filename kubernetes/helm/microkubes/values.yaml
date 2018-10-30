@@ -20,55 +20,249 @@ microkubes:
   # Authorization Server
   authorizationserver:
     name: authorization-server
+    serviceConfigPath: /etc/config/config.json
 
     image:
       repository: microkubes/authorization-server
       tag: latest
       pullPolicy: Always
 
-    podAnnotations:  
+    podAnnotations:
       consul.register/enabled: "true"
       consul.register/service.name: "authorization-server"
 
   # Identity Provider
   identityprovider:
     name: identity-provider
+    serviceConfigPath: /etc/config/config.json
+
+    image:
+      repository: microkubes/identity-provider
+      tag: latest
+      pullPolicy: Always
+
+    podAnnotations:
+      consul.register/enabled: "true"
+      consul.register/service.name: "identity-provider"
+
 
   # JWT Issuer
   jwtissuer:
     name: jwt-issuer
+    serviceConfigPath: /etc/config/config.json
+
+    image:
+      repository: microkubes/jwt-issuer
+      tag: latest
+      pullPolicy: Always
+
+    podAnnotations:
+      consul.register/enabled: "true"
+      consul.register/service.name: "jwt-issuer"
 
   # Apps Management
   appsmanagement:
-    name: apps-management
+    name: microservice-apps-management
+    serviceConfigPath: /etc/config/config.json
+
+    image:
+      repository: microkubes/microservice-apps-management
+      tag: latest
+      pullPolicy: Always
+
+    podAnnotations:
+      consul.register/enabled: "true"
+      consul.register/service.name: "microservice-apps-management"
+
 
   # Mail
-  mail:
+  microservicemail:
     name: microservice-mail
+    serviceConfigPath: /etc/config/config.json
+    allowUnencryptedConnection: true
+
+    image:
+      repository: microkubes/microservice-mail
+      tag: latest
+      pullPolicy: Always
+
+    podAnnotations:
+      consul.register/enabled: "true"
+      consul.register/service.name: "microservice-mail"
+
 
   # Microservice Registration
   microserviceregistration:
     name: microservice-registration
+    serviceConfigPath: /etc/config/config.json
+
+    image:
+      repository: microkubes/microservice-registration
+      tag: latest
+      pullPolicy: Always
+
+    podAnnotations:
+      consul.register/enabled: "true"
+      consul.register/service.name: "microservice-registration"
+
 
   # User
   user:
     name: microservice-user
+    serviceConfigPath: /etc/config/config.json
+
+    image:
+      repository: microkubes/microservice-user
+      tag: latest
+      pullPolicy: Always
+
+    podAnnotations:
+      consul.register/enabled: "true"
+      consul.register/service.name: "microservice-user"
+
 
   # User Profile
   userprofile:
-    name: microservice-profile
+    name: microservice-user-profile
+    serviceConfigPath: /etc/config/config.json
+
+    image:
+      repository: microkubes/microservice-user-profile
+      tag: latest
+      pullPolicy: Always
+
+    podAnnotations:
+      consul.register/enabled: "true"
+      consul.register/service.name: "microservice-user-profile"
+
+
+# Platform secrets
+secrets:
+  mongoDB:
+    name: mongo-init-db
+    type: Opaque
+    data:
+      createMicrokubesDBObjects: IyEvdXNyL2Jpbi9lbnYgYmFzaAoKZWNobyAiQ3JlYXRpbmcgbW9uZ28gdXNlcnMuLi4iCm1vbmdvICAtdSBhZG1pbiAtcCBhZG1pbiAtLWF1dGhlbnRpY2F0aW9uRGF0YWJhc2UgYWRtaW4gIiRNU19VU0VSX0RCIiAtLWV2YWwgImRiLmNyZWF0ZVVzZXIoe3VzZXI6ICckTVNfVVNFUl9VU0VSJywgcHdkOiAnJE1TX1VTRVJfUFdEJywgcm9sZXM6IFt7cm9sZTogJ2RiT3duZXInLCBkYjogJyRNU19VU0VSX0RCJ31dfSk7Igptb25nbyAgLXUgYWRtaW4gLXAgYWRtaW4gLS1hdXRoZW50aWNhdGlvbkRhdGFiYXNlIGFkbWluICIkTVNfVVNFUlBST0ZJTEVfREIiIC0tZXZhbCAiZGIuY3JlYXRlVXNlcih7dXNlcjogJyRNU19VU0VSUFJPRklMRV9VU0VSJywgcHdkOiAnJE1TX1VTRVJQUk9GSUxFX1BXRCcsIHJvbGVzOiBbe3JvbGU6ICdkYk93bmVyJywgZGI6ICckTVNfVVNFUlBST0ZJTEVfREInfV19KTsiCm1vbmdvICAtdSBhZG1pbiAtcCBhZG1pbiAtLWF1dGhlbnRpY2F0aW9uRGF0YWJhc2UgYWRtaW4gIiRNU19BUFBTX01OR19EQiIgLS1ldmFsICJkYi5jcmVhdGVVc2VyKHt1c2VyOiAnJE1TX0FQUFNfTU5HX1VTRVInLCBwd2Q6ICckTVNfQVBQU19NTkdfUFdEJywgcm9sZXM6IFt7cm9sZTogJ2RiT3duZXInLCBkYjogJyRNU19BUFBTX01OR19EQid9XX0pOyIKbW9uZ28gIC11IGFkbWluIC1wIGFkbWluIC0tYXV0aGVudGljYXRpb25EYXRhYmFzZSBhZG1pbiAiJE1TX0lEUF9EQiIgLS1ldmFsICJkYi5jcmVhdGVVc2VyKHt1c2VyOiAnJE1TX0lEUF9VU0VSJywgcHdkOiAnJE1TX0lEUF9QV0QnLCByb2xlczogW3tyb2xlOiAnZGJPd25lcicsIGRiOiAnJE1TX0lEUF9EQid9XX0pOyIKbW9uZ28gIC11IGFkbWluIC1wIGFkbWluIC0tYXV0aGVudGljYXRpb25EYXRhYmFzZSBhZG1pbiAiJE1TX0FVVEhfU0VSVkVSX0RCIiAtLWV2YWwgImRiLmNyZWF0ZVVzZXIoe3VzZXI6ICckTVNfQVVUSF9TRVJWRVJfVVNFUicsIHB3ZDogJyRNU19BVVRIX1NFUlZFUl9QV0QnLCByb2xlczogW3tyb2xlOiAnZGJPd25lcicsIGRiOiAnJE1TX0FVVEhfU0VSVkVSX0RCJ31dfSk7IgplY2hvICJNb25nbyB1c2VycyBjcmVhdGVkLiIK
+  keys:
+    name: microkubes-keys
+    type: Opaque
+    data:
+      default: LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpNSUlFcFFJQkFBS0NBUUVBdGkrbkZCbDU3OG1lTzhrcDF4WmZkMVE5amt4bE9zN1hCZ3FZQTFPaVFwd2E4NTNBCk9FZmNyUFpyazRsSm1HckpuemhaL0dacWpIVHRUWFlhQXBCZEwrcEI2SVlTYmw3VlFYN3FDMlhsR0VzK1BIZWkKK1dWdENFMG1lZlBZbjFoT25nMWEwMEJTN1RkWXNZVGdlaDB0TjhMTTZiL0NDZzc2UUF1c2wzekozS0xmMFcvZQpzTElzZXJVZmxMSmUzaGVuYTU5NXliNEZwWG5Ibisvek9sWjhFMEE1MjJiSjJJLzk4ckh1TzVxVFgyS2hhYnpzCmNjNDB3a2dZbTM2VG02SEVOc0p2SGluWTVXVTdrZTZXR04yVkQva2xqUUJXRlQxM2syTlBXN3hrY2pHNzg1T2kKeGNOY0ZCcVhKQVUyR1hQd3VsWDlaaTRVMzQxeUh2SGZaYy9IVndJREFRQUJBb0lCQVFDSWE3SmVlSjA0RXU4cgpzWHhsRk5temp4N3cyUC9NUTJuN21oOHVEb2duL0tDcDMydzZPSVZqOXJtakptQTNnMjhxakpYRlRDTm92WDJjClRWMDRva1ZGUmRMSWZPeDhQUUxQSW11NjBUZjFNeEtOVU1CMm81NDdZeG4ybzhPSHZpWlFiNHVkT0VOZ1lkdEcKUWt1YzVSQWcrdnRaNVQ4MUxQWHkwMHNQdkYram1BWHZIbDcydk5hTjNZMGJTdXJidkUwMjlsSjlOWk1pVjVySgo5ZXQ3U3pUejJWK3JwbkxUTDRXVTd5RzhmejNsdi9aaUNOVmI0NVRiTWlZYTQwL2RmdjhtMmFSN3lRdDc1VUZtCjUrZDlyalMvSWhPSzNORGNOQ3Bsb0FXZlFwZXZBbDNHQldJczJheHV6ekFXZE5pbzVRb1lNT0ZHQWtYZy8xbTUKRTE5Ukl0QXhBb0dCQU93T1FLQ2dFUXJKQ0V4bmhEMmtEZ1g4OVdwZ3NsTmlGRWpaWnZ3OE1QUHhWN3JrY2hKZwpzL0ZQUjhYdVF5eFhPUVFVM3VqZHVpSmlnb3ZHTDg2RlRsSjl4MmhvelJXQUlUcmpGVkN6eXU3SDVSN2RneDNRCkpDVmkwRXlwU0w2cmhoaTFXdXY5Y1JoaHcwM3VpbXNmbkdFdGdaN296ZFZDL3MvQ3BFL1hnZjdOQW9HQkFNV1UKTzhNS2daTW0xRWM5MzR2RWN2cjJyMFRzdm5Kc1BSb3c2enorVEswS0tSU0NWOW5HU01mSmdLM2tHMWpHWWI2Zgp1czRWWWdPMkhKNTRiSHJSdm03OWFHNjF0WWh1dVlheWFQbnBvT2VBeWZleTBNS1Q3VStDYmw5N3hTV2dlV01lClVqWTJjZDdUWW95V3FRYnY0VCtBQUlaNXhMaVVBWVZuK05kSUdSYXpBb0dCQU5JTTJLdFY0L1JSOFFWejg3T2EKSVRSbzVNVDFLSm1VSS9LektiWDNwYVBjdFRGRUNOR2JwV05zSmJUV0VJWUxVMXZ6YW11U3FnZmcyc09mNW5pQwpITERBNWNsZHdHaUtiSWRtL0Zla3RVYUhMN1dvYlAwQmNyaWwxaTd4VUI4Q3FEK2lXVGEzZm9Td3NjYk9KZk91CjNFdUkzOWZVMXh3WEVvRXpkVnpxcXUxZEFvR0FaQitoUlU1K3FVNWxCcEV4Um9mUDZLTzM0QXJFM0FGRDJaRHUKdEtMOXdqYkM2SlRBNWlnWVc3NGVTb0NzNXdqcElZdWFRN01NVDJzckI1ZHBDYmhlYzZwUkVNRmVjL3dBWW1UbwowN1IwQ0x6NEhHRHViNXc5Qnl6R3QvWmx5cEtPMFE3ZGhJR0VwUEdrSURCOUNYbm9RS0NpSTROemtFSFluMzAzCjJnaThSZ2NDZ1lFQXZNLzZFR080SWdmRXZobzNXSWszcjlCTzBGb3RVa2hOOTRIVHo0dnBnN2JFc3MycGFNelQKc09vYUh2ajVoWVg5QUpQVGdwczhVbnJTK1U5TTZ2VWt3aTBZY2ljTkdmRyt2WkQveVA2Y0RVbkFHamdNTCttMQpWZEkwWnU2TjRFMXo4RXBtcGZUY1hhQW40WHE0bTFRL3NYblg4cU9pTklYaXo4dnRhTU93eXNvPQotLS0tLUVORCBSU0EgUFJJVkFURSBLRVktLS0tLQo=
+      defaultPub: LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUlJQklqQU5CZ2txaGtpRzl3MEJBUUVGQUFPQ0FROEFNSUlCQ2dLQ0FRRUF0aStuRkJsNTc4bWVPOGtwMXhaZgpkMVE5amt4bE9zN1hCZ3FZQTFPaVFwd2E4NTNBT0VmY3JQWnJrNGxKbUdySm56aFovR1pxakhUdFRYWWFBcEJkCkwrcEI2SVlTYmw3VlFYN3FDMlhsR0VzK1BIZWkrV1Z0Q0UwbWVmUFluMWhPbmcxYTAwQlM3VGRZc1lUZ2VoMHQKTjhMTTZiL0NDZzc2UUF1c2wzekozS0xmMFcvZXNMSXNlclVmbExKZTNoZW5hNTk1eWI0RnBYbkhuKy96T2xaOApFMEE1MjJiSjJJLzk4ckh1TzVxVFgyS2hhYnpzY2M0MHdrZ1ltMzZUbTZIRU5zSnZIaW5ZNVdVN2tlNldHTjJWCkQva2xqUUJXRlQxM2syTlBXN3hrY2pHNzg1T2l4Y05jRkJxWEpBVTJHWFB3dWxYOVppNFUzNDF5SHZIZlpjL0gKVndJREFRQUIKLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tCg==
+      privatePem: LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpNSUlFcFFJQkFBS0NBUUVBa3Fmc0dIc3ZYU2t4bGJNd3NSWjZFWVZLeEtzejNhdVZsbVhac09OSFJBMVJiRHp4Cm9zOFJWV3FtRm81NkZ6RW9BUGFDbktZVk03c20yR1doQzVvVXYzY1RLalE1ODE3NzNYZjFyWGtZM1JrVUFXRDgKYXZsSU80Zm9UUGpucjZYWXdOekd0K1Fob1FReG5XTnV5aU1vaWFjUWp6ZGhaYVVhVkZyZThxbnRHOUFEVkhDawpaZEFIS29Lb0svOEUwT0l1UzBxb2MvOVFxZE9lVlQ2dmozc3RVVUhDTFltWVhCT1RiSXNGUnViaWJ3YTBLYi9TCnBHZGpZWmRyNU1ROWxteGpLQUdxMWZqQkxlWG1RT2NoWGNJQU82K1FOSmI5ekdtNnBqeng0RkE2QjdVYmFMMTYKN0NobG1YeGpveWI1b2t2Z1h1cGZpSGszWkg3c1VENWpaSDlKYlFJREFRQUJBb0lCQVFDT2NLU0NQcHNKSytwcQpFS21aUmxCM1ZmUUJ3cHJVa1VQdjJLcXdBSCtHWEQwYUdMTkV3ME45cCtEN0JaVVZrM3ZjTzVFdVhxMDNHbTRuClBjWkdRM2dsWXB6dG45NHRQN0wzTHYwaWFQeTZPaEpSS0liaHk0N1pxeTM0SE1UQ3VCMG5iUWRoTWlWcmcyeEIKQm9OanR2UTNobGt5RU1MN2UzbHdOdlpWMEs5b0U0L1VWeFlTZEpPaURUUXpNeEU5VWVvOXZVZjFDOE83MSsvNQpBVHZqeXRlQmNucDZ1anIrclZwY2laaEltYndBbWhBYVJQRHBlODJPRERVME9PcU1NRmk5WXk0ZlJWZ0hmb3VrCkRZL2p5WTBPNG1QZjlrYnpvNmNZazU1bytqaE02R2haYnY2VDhBbFhWdWVGdTVLOTZMNitpMExGbFAydG1rSUcKTjBmRHVkbGhBb0dCQU1IM1UvWjFDYXdVU1FqZlZ6ZE14c1ZiSHR0c0hvSzFUcDVDMzZ2WXpwMWRZQUMvM29tcQpaUlZSNWpkQjFYNFV6UWlyNzlQYUh5czNvaHZtekhlWDRVRUtPL3FNSnBRN0F3TUJJa0hmQXRmWCtQdzdrcE80CmNFMFJ3aEV6U0NzMjFwWUMzd2RZblNEVmkvbzZxRTNVa2tOZmF2dVpvR09vZDh1bUpJMWZwT2xaQW9HQkFNR1AKSmN5Yno4TXdVTEM1YTR6a1lXUWZGbDZ6QXRpUTlnZWtHcjZwdjhMZklCa1BCakpYL25Nd2VHU0c3SWFVcDErMgpGTlgyamllSHdvRUZLWktFejlpYVQ5REVRMVB2MHNpcG5UWFFUNmx3Z0RBbWJEM2MxVHVjdHJublBwelFNdUdtCmx5bzRDSXorMlhyZlVJMFlYaWluY2JYL29vdzVjYS9VcnIxSytZbzFBb0dCQUk2ZWlRSWl0R1h1MUhUTm81ZHAKd0kzRW5qL0FrLzZQeWFyY2lSSVdiSFdRL3RJT1FsYi9EeXhKOS9pUlU2Vk5MaVUrSnkyaXFHQmltN1BnVkY5cgpNWmxkS1JUa2tFbFZ5clVlMUUyUzZNaEVhVE10cW0wcnBJZEdrMmVLU1hwYzdCT0pNT3g1MzY4UTFjZTc4WnlvCnZKTUZTZWlONFR6bDFvL0xMZjAxWWxDaEFvR0JBS282NFQyUUV5dFJSTVlJYlFSZW55RFZEbkYrOHBQUStmQkMKYlpzZDQ1N1phWHRnY1V5NWd2bC91WUovLzJsbE44YS9kcGV1M2RyNlZSL3ZrRjVpSEFJZHhQQ1FpNzQ0ZjZNbgpPVEpvNEliZWdIN1lhLzRFU0N6RGFSa2F2VUJoQXo3ZHFyamd5dlJsOXBOUDc2SUh1bGY2MjlENjROUitlUFB4CkV6VTd5VGU1QW9HQWJyODNucS9zTW9SNHVIditLQkZqN2tSRWZpYmhOcmk4ZlpEbk05NkVQMUlBWWxLSWxLMGEKV3NvNXhndzJCeCtIRElNU0JHd3NCeE4yS2pBVVd5S3RReFZxWXVjK0YwV1NqMm5ZR3l0S2ViWFJoeExKQjV6WAptbmtPUVM5c2FNSWprblE2Znh3VlY5OW55bWIycHEzRVF3eXpoeHR1MlYvVzRDbVEzVXRaTHlNPQotLS0tLUVORCBSU0EgUFJJVkFURSBLRVktLS0tLQo=
+      publicPub: LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUlJQklqQU5CZ2txaGtpRzl3MEJBUUVGQUFPQ0FROEFNSUlCQ2dLQ0FRRUFrcWZzR0hzdlhTa3hsYk13c1JaNgpFWVZLeEtzejNhdVZsbVhac09OSFJBMVJiRHp4b3M4UlZXcW1GbzU2RnpFb0FQYUNuS1lWTTdzbTJHV2hDNW9VCnYzY1RLalE1ODE3NzNYZjFyWGtZM1JrVUFXRDhhdmxJTzRmb1RQam5yNlhZd056R3QrUWhvUVF4bldOdXlpTW8KaWFjUWp6ZGhaYVVhVkZyZThxbnRHOUFEVkhDa1pkQUhLb0tvSy84RTBPSXVTMHFvYy85UXFkT2VWVDZ2ajNzdApVVUhDTFltWVhCT1RiSXNGUnViaWJ3YTBLYi9TcEdkallaZHI1TVE5bG14aktBR3ExZmpCTGVYbVFPY2hYY0lBCk82K1FOSmI5ekdtNnBqeng0RkE2QjdVYmFMMTY3Q2hsbVh4am95YjVva3ZnWHVwZmlIazNaSDdzVUQ1alpIOUoKYlFJREFRQUIKLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tCg==
+      serviceCert: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURGakNDQWY2Z0F3SUJBZ0lKQVB4aTRkdFpZRmZMTUEwR0NTcUdTSWIzRFFFQkN3VUFNQmt4RnpBVkJnTlYKQkFNTURtMXBZM0p2YTNWaVpYTXVZMjl0TUI0WERURTRNVEF5TlRFM01qa3pObG9YRFRFNU1UQXlOVEUzTWpregpObG93R1RFWE1CVUdBMVVFQXd3T2JXbGpjbTlyZFdKbGN5NWpiMjB3Z2dFaU1BMEdDU3FHU0liM0RRRUJBUVVBCkE0SUJEd0F3Z2dFS0FvSUJBUUM0aHlWZ0JBZ25TZ0t2dDc2U25mdHhQTHI4NjZST2FLQ2hQeTlXak1JSDYwUGYKS3JEYkM5YWtQUkhtcG9nLytaNUZWZVJraDhFR01DdnJFZCtGd2wzVHYvcUdlOFl1MFJwSXE5Rk4wZDZQTTFJRApnMmRHRjRzTnU0SHBOV2I5QllJblJvbWJ3K29zOTdYb0xKRlROVzl5Vnk1L2VwTUFERnc0TzQwc3JyZGdSMUFMCmdHY0d4cWZweE9pRk9kd1FzWEVkeW5CRHRkODJSVGNKT0NieWhBZWxTd3Qwa2ovYzMrRWNrTUdHRHFpYzRFbGMKRkdkbXpXWWlVUGNSNSt5ajAxM0FHeFgySWgxUm45Q1FpWkJ2NjlVMmJBSUNUUVhSUjVZSkxITzZWeDhnUzNUYgpna08rZ29wWm92dTdhQ2hvU1BlQXI0MGNiTkhHVnR6MDdhSUhDY3h6QWdNQkFBR2pZVEJmTUE4R0ExVWRFUVFJCk1BYUhCSDhBQUFFd0hRWURWUjBPQkJZRUZFYTBVekxFSEQyNUpBelpXYWhrYWRkNmtaS3hNQjhHQTFVZEl3UVkKTUJhQUZFYTBVekxFSEQyNUpBelpXYWhrYWRkNmtaS3hNQXdHQTFVZEV3UUZNQU1CQWY4d0RRWUpLb1pJaHZjTgpBUUVMQlFBRGdnRUJBQmNINHVmSlZIWlNtY29WSVdxSGNHUzFyVmNuazZhakFrY2xadTlZeU5vVmJ5S0h2VWNRCkpMNHpKd1JxcTFybFYyUUxUQ0NjS012SURNYnFkNHBUZFVDbjE4VlloNmFtZ2h6cW51bVo5ZjhQV29KNUlqOFMKOUlnclc0UzZoQWR4ZGo2Q2RQUUw1UnBTUWkrN1pmSzhmaVZMQ3RVTGtZOHBmNGd4MXFLU2c3cDE0R0JDS2dncQpYMXREV2V2NEliV0ZLekE0aFZCU3RwajdHZ1hsZ0JUTkFHSEt1d0Z3d1VaYjhrbmJKUFc1S0NBclZnTGVERjdhCkpHU01HbWh5ZEtPc3BNWFc4ZldDTGtxbDBLWVVjYzFld2RzVVhpNTJib1NvalBiRXp0eDU1Z3RrUS9DS1pzTTcKb0Y1NzlOb1djVGFsV1R3N1o0MGVxUTc2QytVZXVMa2k1czA9Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+      serviceKey: LS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tCk1JSUV2UUlCQURBTkJna3Foa2lHOXcwQkFRRUZBQVNDQktjd2dnU2pBZ0VBQW9JQkFRQzRoeVZnQkFnblNnS3YKdDc2U25mdHhQTHI4NjZST2FLQ2hQeTlXak1JSDYwUGZLckRiQzlha1BSSG1wb2cvK1o1RlZlUmtoOEVHTUN2cgpFZCtGd2wzVHYvcUdlOFl1MFJwSXE5Rk4wZDZQTTFJRGcyZEdGNHNOdTRIcE5XYjlCWUluUm9tYncrb3M5N1hvCkxKRlROVzl5Vnk1L2VwTUFERnc0TzQwc3JyZGdSMUFMZ0djR3hxZnB4T2lGT2R3UXNYRWR5bkJEdGQ4MlJUY0oKT0NieWhBZWxTd3Qwa2ovYzMrRWNrTUdHRHFpYzRFbGNGR2RteldZaVVQY1I1K3lqMDEzQUd4WDJJaDFSbjlDUQppWkJ2NjlVMmJBSUNUUVhSUjVZSkxITzZWeDhnUzNUYmdrTytnb3Bab3Z1N2FDaG9TUGVBcjQwY2JOSEdWdHowCjdhSUhDY3h6QWdNQkFBRUNnZ0VBVzdBclRnNHl6dkxqYXRSdUNRUWUwQ0ZRK0NOT1BQZVgrUWNnU20wZWJEam0KUEpsRnoxR09rWVVXdy9pemNyWmhnaW92bGhRdVFSam1lYU1qNFo2MmFHVFg0c0xWc3FXTDNkZ2g0LzBJRFRkKwo1T2dDQkwzbUJpakpZRXQ4cFBSN3UzQTlKL3lzK3pNS1hCYnBEdU5hUVFJNHhIYnZXL0xJVDlpblNUQjNSWXJRCnNjQWFBWnlRalBNd2Z6TzdTSVR0KzVjKzFEalRoOU5TNjV4L2hQTzVkK244a3lsRFFRTFUrSkFqREx1YTA5UkIKK2c5cVl5KzNMazNzait0eWVqQXJrMWFITlM0aUFkblB2TldTaE54dWdjNmtIMWVwdmpaYndmNUF0VGZqcVBvYgpiVUM2cTBZellMcGtPRWlDYW5RaHN1YlZhUGkwUlVYdjQ2MkROR1hhd1FLQmdRRHU1WTFCaE1NQnZkc0x3SlBICktpYkdDRFl3Z2JnZ2o2RnE3NkZaTVIzYWRJRFkwZTZHVnU0UWIyeTFGSzBPKzRSMy8yeGExT253SEtpK3djUFIKREs3VWhBaGdWRWw1azh0Ykh4RjRrRSs4Nk53eHEwbTFCUkRiWjRuTTRTb3pySWhIYjFoWVRwT3I1Y2NWTkFhdgpiMW5QY2tlQklyVDhNWnRIZTVieDRIYmYyUUtCZ1FERnZTS0JlU2hrYUJKQ1FaekpIVUZ4WUpGT09oM2lYa0s3CjZldi9SV29XbFh2RXFSSk03RkRNRndxY3JZUWhpeG90SWtnNjlwL05kUGRveWJYWERxV3prSVVXMVZnSVprbE0KZXVSOTdXUW9hc1FQd0JzOHdJUGhweDlnT2EyR3FXVWV0ZjlIb3Q1T3dQdEdvelJickUveUFqT0hwemdmanEyRQp1MjAyU0lickt3S0JnUURuZW9ucXFFZUVFb0NDM0xEVVZPV0pFVC9ndEhERExDa09RdThtUzA5UDgzODlsL3oxCk1wb3VWcWtRdE40VEhHYjVGd2ZZNDJGaUJZTUVneC9JR2UvMWY1SFdOUldVdGo1ZkpyVjVDdXdZY2RHYVZ3eHUKV0dCREdBb1ArVVU1R0w1YjZXbkM5ekJqYVp3RDBZdUF4ZlpSNmJ1YlJ4UHpJZVlCMTZFazhZaDkwUUtCZ0M5MwplM1VCRklVbHhseEpTODJyVEM1Zk5BSkhTUzB4MjJzb2VCSkxJM0JRYWVtSGZIRWl1VEtFeFhOZTQ3ejVtMHNDClU3eHp2MkNlbDFWOE5qNXRzYkV0SEFXaktRSzdLeFZFMnR5dnc3OUFBZGlXRVBQQWN1Z1VLaC83T0lCKzRWdEIKN1FuUk92UkV0d3o1MkhPNUpXZSt4NGZreUVBckM5UTArYjV5SXBFSkFvR0FDaXJlMjl5N0xhN3JleFY5TlZoWQpCTm5DbS9rRmlMY0htMkxaYWIrYllVRVBBTGZxTWtETThwQWxDR29neGhCd0wwZVZ6K1lDd0xzM1haMDV1dVhPCjdYa0FMNTBHK1lnOSszcWFFeDUzUWg3bFZoOVprTC9TRW9JbmlWbVhETG9JU0hwdHh4UnlCMkRDSURTbUhJbTcKVDI5RjYzRm9rMGpzUGpOMUhGYldlY2c9Ci0tLS0tRU5EIFBSSVZBVEUgS0VZLS0tLS0K
+      system: LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpNSUlFcFFJQkFBS0NBUUVBblBEZ1huSW5kZWo0aDh0MVowSG0yNnZ4aVVKT0tDWFFGOWZ5SW1jZ05UL2pMbmV0CnprRTlsdW14akRiMzJka2NyMDFacm55WkFaTldIODBRVVNmOTRJelI0MjU5RWxxUkZUZXJaeFJOWlhaclFEcU0KK1NKWlc4SlVsM1pxb28wOWNUc0R1bmttNHFOR2lEY1Zya0J3b0hnTHR4UW9MTXY2TVBQZ1cvOGxVeU0yTkl1QQpCWS9JSExHZDlQRy9WZUNmM29KNk0wWFlIeW5udXZWUkVhTG1oUkZsaWdaTW9WalZON3dCa0xlWUVaKzJEWlVICkxyN0RVblZDbUw2QzA1bkZRbVV0bGx3NUVUYWdGTXFDUlM0ajlpdDlWQ3Q2RDZCWWJ4aDZSY1NubTE3SE5mYWEKbEVRc1ZaRTlvL0N3eFJlZ2FxMy9SSjUxWlV0YlhEQ29ZV3BQRFFJREFRQUJBb0lCQVFDUEdFWExkNVFwT3lsWQpUNWVWZFk0ejN4dlV4ZU1UVWg3aGpxRVU0eWlIeE4rMFg2VFd1YitaV1N6c3ByWG9LTUN4eWZvcVVTc0ZON3pBCk5DNWJnUFpIaHI1YyswSUl1UkV0NGx0akdpelRoVnlXN0l2YklJbVBVNm5qakRJQVVuMmlQMmZQMzJVb0lpMU8KUjhONTVRR01Ic2kzdmlZL2FpQ04vOThpb29uNnVXUE9SQ3VJc25NVGYrS2ltN2t1ZkgrUzlBSmVEbEowQ205MApDMFFIMkFtZ1FRTUxhU2hoaXNYOVhrMVdSK3lWeFY1cXNNb3UxZnRFVW1kVEVXMjZ4RGRZdUtHS201cUlHMFgrCnF0RXFSaFd2cjkzMHJERnQ5OXRUVUYyTTJST0RHbjhpd3BnZ2preUNoM1M0WEZYK3dNWThqd0l3TDR5QnBaNW8KNGlYeVNNaDFBb0dCQU1rTmc1YmFlUzBWRGNtR3VsaDduM0t1ZlphTG80amh5ajhMVFY1a2htU01WTHN5RDJTQwpPVHYzS1FZUmQ5M2RDVnBwODNBblYyeXBvNlJqR1FQWHQ2Tkhub2U5VCtTWkpKOFVNUDBvcS9aSjF1NE1iVUlWCm5oSXlmRmFRVWtGeUpHS1huR1ZoTXlzTGNvUHVRS3R4VTV6YnN4dTVKRDBWV2xQdmozNkk1dFh2QW9HQkFNZlYKSFJOTzBYb3pWcXZua0UvVk5xaWN2Nk9FTVVkQnZWMC9wTUtkdEltbHlNbk4veHVGR2xrb0JCNnB5aDZCNnFnVgo0blQ3K3p4aERVNXpCdFZBMHdOeFB2YU1MQzJFeUVLZWFXMDhQN0E3NHNoUk52VnVGMTB3eUYyT2o2ZHdJcHhUCkMrdG5kK3hTMXFPYXJ5emcwWUFma3R5b3k0amU2NmtrQXJrY1NrYkRBb0dCQUxkQnNpZldpNDBrRzZVTlFOMVcKRVVnZTlDbzhyWnNlODVIelkxb2Vsc0VmaUR2NHJUOFgwOE5zemQvU0hFZ0dLWGhZQ3FTM3QyQThZQVIrcjFacApVZUZxYm4yYmVTOE14K3lZSXU4ZUcyQXFmZFlOVGFsbXV1WXJUbG80d2tFVklVVWNuRmxyOTQvTXAxekoxZmh2Ckc1OW1RaU9LNWhVbldXWVlmZHNBUGlmUkFvR0JBS3Z0Tml2RGQwUzg0TWZiM2ZSaGk3bzd5a0ZqM1lYaUVJc20KMDVsQlYrL0plOXZzYUowRHdteU1taWJMakFMOVlhZWwxSVV6dXE3ekRTQytwRlZiaFhFRHdOa2NObklmT0xEZwpXL0pJa0w4T2R3cERuWlpCVnNhdHp1VjNYeTcrc2podTF1Vjh5dGUvV2IyK3V4SlFoczdGMjNRUG9iV3JuWE9UCmNPaFVaNjlEQW9HQU80Zjl6TTNFZkpCM2hPV1l1bzJNeEtUZTVvcCtFYUc4VHZFS05XdXRrTEloclZJbnpjdXYKdVl6cUFZTDFRaElMQjNsZ2ZTZFp5ODg1YytQNkZZbkNvSmo0a3hPSG5jN0RKd3FkZno1OU5UOTlUS2pXanVaeQptVTJoM3NOUnJLeUQvemZpL2V3d1FlVFF0Rk9BVG1nQUVaYy80VXp6RDdodkNqdnI3NVUzZmpVPQotLS0tLUVORCBSU0EgUFJJVkFURSBLRVktLS0tLQo=
+      systemPub: LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUlJQklqQU5CZ2txaGtpRzl3MEJBUUVGQUFPQ0FROEFNSUlCQ2dLQ0FRRUFuUERnWG5JbmRlajRoOHQxWjBIbQoyNnZ4aVVKT0tDWFFGOWZ5SW1jZ05UL2pMbmV0emtFOWx1bXhqRGIzMmRrY3IwMVpybnlaQVpOV0g4MFFVU2Y5CjRJelI0MjU5RWxxUkZUZXJaeFJOWlhaclFEcU0rU0paVzhKVWwzWnFvbzA5Y1RzRHVua200cU5HaURjVnJrQncKb0hnTHR4UW9MTXY2TVBQZ1cvOGxVeU0yTkl1QUJZL0lITEdkOVBHL1ZlQ2Yzb0o2TTBYWUh5bm51dlZSRWFMbQpoUkZsaWdaTW9WalZON3dCa0xlWUVaKzJEWlVITHI3RFVuVkNtTDZDMDVuRlFtVXRsbHc1RVRhZ0ZNcUNSUzRqCjlpdDlWQ3Q2RDZCWWJ4aDZSY1NubTE3SE5mYWFsRVFzVlpFOW8vQ3d4UmVnYXEzL1JKNTFaVXRiWERDb1lXcFAKRFFJREFRQUIKLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tCg==
 
 # Microkubes database configuration
 # Mongo
 mongodb:
-  name: mongo
+  service:
+    name: mongo
+    type: NodePort
+    port: 27017
+    protocol: TCP
+
+  configmap:
+    name: mongo-env
+    env:
+      mongoRootUsername: admin
+      mongoRootPassword: admin
+      msUserDB: users
+      msUserUser: restapi
+      msUserPassword: restapi
+      msUserProfileDB: user-profiles
+      msUserProfileUser: restapi
+      msUserProfilePassword: restapi
+      msAppsMngDB: apps-management
+      msAppsMngUser: restapi
+      msAppsMngPassword: restapi
+      msIDPDB: identity-provider
+      msIDPUser: restapi
+      msIDPPassword: restapi
+      msAuthServerDB: oauth2
+      msAuthServerUser: authserver
+      msAuthServerPassword: authserver
+
+  statefulset:
+    name: mongo-cluster-deployment
+    selector: mongo-cluster
+    containers:
+      name: mongodb
+      image: mongo:4.0.1
+      containerPort: 27017
+      hostPort: 27017
+
+
 # API Gateway configuration
 # KONG
 kong:
   name: kong
   servicePort: 8000
+  serviceType: NodePort
+  serviceProtocol: TCP
+
   adminServiceName: kong-admin
   adminServicePort: 8001
+  adminServiceType: ClusterIP
+  adminServiceProtocol: TCP
+
+  replicas: 1
+
+  container:
+    name: kong
+    image: microkubes/kong:0.14.1-alpine
+    pullPolicy: Always
+
+  env:
+    adminListen: 0.0.0.0:8001
+    PGHost: postgres
+    PGPassword: kong
+    proxyAccessLog: /dev/stdout
+    adminAccessLog: /dev/stdout
+    proxyErrorLog: /dev/stderr
+    adminErrorLog: /dev/stderr
+    dnsServerName: consul
+    dnsServerPort: 8600
+    consulURL: http://consul:8500
+
+  job:
+    name: kong-migration
+
+    container:
+      name: kong-migration
+      image: microkubes/kong:latest
+      pullPolicy: Always
+      restartPolicy: Never
+      command: [ "./migrations.sh" ]
+
+    env:
+      nginxDeamon: off
+      PGPassword: kong
+      PGHost: postgres
+      consulURL: 'http://consul:8500'
+
+# Fakesmtp configuration
+# Mailhog
+fakesmtp:
+  name: fakesmtp
+
+  replicas: 1
+
+  container:
+    name: fakesmtp
+    image: mailhog/mailhog
+
+
+  service:
+    name: fakesmtp
+    type: NodePort
+    smtpPort: 1025
+    httpPort: 8025
+    smtpProtocol: TCP
+    httpProtocol: TCP
 
 # Service Discovery configuration
 # CONSUL
@@ -78,11 +272,75 @@ consul:
 # Kubernetes consul auto registration
 # Kube-consul-register
 kubeconsulregister:
-  option1: value
+  name: kube-consul-register
+
+  replicas: 1
+
+  container:
+    name: kube-consul-register
+    image: tczekajlo/kube-consul-register:0.1.6
+    pullPolicy: Always
+
+  args:
+    logToStdErr: true
+    configmap: microkubes/kube-consul-register
+
+  configMap:
+    name: kube-consul-register
+
+    args:
+      consulAddress: consul
+      consulPort: 8500
+      consulScheme: http
+      consulCAFile: ""
+      consulCertFile: ""
+      consulKeyFile: ""
+      consulInsecureSkipVerify: false
+      consulToken: ""
+      consulTimeout: 2s
+      consulContainerName: consul
+      consulNodeSelector: consul=enabled
+      podLabelSelector: ""
+      k8sTag: microkubes
+      registerMode: single
+      registerSource: pod
 
 # RabbitMQ
 rabbitmq:
-  option1: value
+  name: rabbitmq
+
+  image:
+    repository: rabbitmq:3.7.7-management
+
+  env:
+    user: guest
+    password: guest
+
+  mountPath: /var/lib/rabbitmq
+
+  replicas: 1
+
+  host: rabbitmq
+  port: 5672
+  username: guest
+  password: guest
+
+  service:
+    name: rabbitmq
+    port: 5672
+    protocol: TCP
+    uiPort: 15672
+    uiProtocol: TCP
+
+
+
+# Mail configuration
+mailconfig:
+  host: fakesmtp
+  port: 1025
+  user: fake@email.com
+  password: password
+  email: dev@microkubes.org
 
 # END CONFIGURATION
 

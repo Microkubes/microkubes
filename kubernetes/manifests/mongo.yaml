@@ -63,7 +63,7 @@ spec:
       - name: mongodb
         image: mongo:4.0.1
         args: ["--dbpath", "/data/mongodb"] # put your own path if it is different from a regular path
-        ports:          
+        ports:
         - name: mongo
           containerPort: 27017
           hostPort: 27017
@@ -71,7 +71,7 @@ spec:
           - configMapRef:
               name: mongo-env
         volumeMounts:
-            - name: mongo-init-db 
+            - name: mongo-init-db
               mountPath: /docker-entrypoint-initdb.d
             - mountPath: /data/mongodb
               name: mongo-data

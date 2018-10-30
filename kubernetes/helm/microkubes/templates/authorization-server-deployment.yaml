@@ -2,6 +2,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: {{ template "microkubes.authorizationserver.fullname" . }}
+  namespace: microkubes
   labels:
     app: {{ template "microkubes.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
@@ -30,15 +31,23 @@ spec:
           imagePullPolicy: "{{ .Values.microkubes.authorizationserver.image.pullPolicy }}"
           env:
             - name: SERVICE_CONFIG_FILE
-              value: /config.json
+              value:  "{{ .Values.microkubes.authorizationserver.serviceConfigPath }}"
             - name: API_GATEWAY_URL
               value: "{{ .Values.microkubes.kongAdminUrl }}"
           ports:
             - containerPort: 8080
           volumeMounts:
-            - name: microkubes-secrets 
+            - name: microkubes-secrets
               mountPath: /run/secrets
+            - name: service-config
+              mountPath: /etc/config
       volumes:
-        - name: microkubes-secrets 
+        - name: microkubes-secrets
           secret:
-            secretName: microkubes-secrets
+            secretName: "{{ .Values.secrets.keys.name }}"
+        - name: service-config
+          configMap:
+            name: {{ template "microkubes.authorizationserver.fullname" . }}
+            items:
+            - key: config.json
+              path: config.json

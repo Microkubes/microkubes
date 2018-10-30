@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "{{ .Values.kubeconsulregister.configMap.name }}"
+  namespace: microkubes
+  labels:
+    app: {{ template "microkubes.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: "{{ .Values.kubeconsulregister.configMap.name }}"
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+data:
+  consul_address: "{{ .Values.kubeconsulregister.configMap.args.consulAddress }}"
+  consul_port: "{{ .Values.kubeconsulregister.configMap.args.consulPort }}"
+  consul_scheme: "{{ .Values.kubeconsulregister.configMap.args.consulScheme }}"
+  consul_ca_file: "{{ .Values.kubeconsulregister.configMap.args.consulCAFile }}"
+  consul_cert_file: "{{ .Values.kubeconsulregister.configMap.args.consulCertFile }}"
+  consul_key_file: "{{ .Values.kubeconsulregister.configMap.args.consulKeyFile }}"
+  consul_insecure_skip_verify: "{{ .Values.kubeconsulregister.configMap.args.consulInsecureSkipVerify }}"
+  consul_token: "{{ .Values.kubeconsulregister.configMap.args.consulToken }}"
+  consul_timeout: "{{ .Values.kubeconsulregister.configMap.args.consulTimeout }}"
+  consul_container_name: "{{ .Values.kubeconsulregister.configMap.args.consulContainerName }}"
+  consul_node_selector: "{{ .Values.kubeconsulregister.configMap.args.consulNodeSelector }}"
+  pod_label_selector: "{{ .Values.kubeconsulregister.configMap.args.podLabelSelector }}"
+  k8s_tag: "{{ .Values.kubeconsulregister.configMap.args.k8sTag }}"
+  register_mode: "{{ .Values.kubeconsulregister.configMap.args.registerMode }}"
+  register_source: "{{ .Values.kubeconsulregister.configMap.args.registerSource }}"

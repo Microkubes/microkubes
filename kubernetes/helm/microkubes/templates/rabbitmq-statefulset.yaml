@@ -1,0 +1,44 @@
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: "{{ .Values.rabbitmq.name }}"
+  namespace: microkubes
+  labels:
+    app: {{ template "microkubes.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: "{{ .Values.rabbitmq.name }}"
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+spec:
+  serviceName: {{ .Values.rabbitmq.service.name }}
+  replicas: {{ .Values.rabbitmq.replicas }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.rabbitmq.name }}
+    spec:
+      containers:
+        - name: {{ template "microkubes.name" . }}-{{ .Values.rabbitmq.name }}
+          image: {{ .Values.rabbitmq.image.repository }}
+          env:
+            - name: RABBITMQ_DEFAULT_USER
+              value: "{{ .Values.rabbitmq.env.user }}"
+            - name: RABBITMQ_DEFAULT_PASS
+              value: "{{ .Values.rabbitmq.env.password }}"
+          ports:
+            - name: rabbitmq
+              containerPort: {{ .Values.rabbitmq.service.port }}
+            - name: rabbitmq-ui
+              containerPort: {{ .Values.rabbitmq.service.uiPort }}
+          volumeMounts:
+            - mountPath: {{ .Values.rabbitmq.mountPath }}
+              name: rabbitmq-data
+  volumeClaimTemplates:
+    - metadata:
+        name: rabbitmq-data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 2Gi
