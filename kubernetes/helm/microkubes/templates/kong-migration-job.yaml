@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: "{{ .Values.kong.job.name }}"
+  name: "{{ .Release.Name }}-{{ .Values.kong.job.name }}"
   namespace: {{ .Release.Namespace }}
   labels:
     app: {{ template "microkubes.name" . }}
@@ -12,12 +12,12 @@ metadata:
 spec:
   template:
     metadata:
-      name: {{ .Values.kong.job.name }}
+      name: {{ .Release.Name }}-{{ .Values.kong.job.name }}
     spec:
       containers:
-      - name: {{ .Values.kong.job.container.name }}
-        image: {{ .Values.kong.job.container.image }}
-        imagePullPolicy: {{ .Values.kong.job.container.pullPolicy }}
+      - name: {{ template "microkubes.name" . }}-{{ .Values.kong.job.name }}
+        image: {{ .Values.kong.job.image.repository }}
+        imagePullPolicy: {{ .Values.kong.job.image.pullPolicy }}
         env:
           - name: KONG_NGINX_DAEMON
             value: "{{ .Values.kong.job.env.nginxDeamon }}"
@@ -27,5 +27,5 @@ spec:
             value: "{{ .Values.kong.job.env.PGHost }}"
           - name: CONSUL_URL
             value: "{{ .Values.kong.job.env.consulURL }}"
-        command: {{ .Values.kong.job.container.command }}
-      restartPolicy: {{ .Values.kong.job.container.restartPolicy }}
+        command: {{ .Values.kong.job.image.command }}
+      restartPolicy: {{ .Values.kong.job.image.restartPolicy }}

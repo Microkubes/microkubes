@@ -1,6 +1,13 @@
+The platform takes about 5 minutes to bring up and you can follow the progress using:
+
+  kubectl -n {{ .Release.Namespace }} get pods -w.
+
+Once all services are running, you can start using microkubes.
+
+
 1. The platform can be access through the API gateway service which is exposed as a nodePort in kubernetes. To get the URL run:
 
-  MICROKUBES_URL=`minikube service -n {{ .Release.Namespace }} kong --url`
+  MICROKUBES_URL=`minikube service -n {{ .Release.Namespace }} {{ .Release.Name }}-{{ .Values.kong.name }} --url`
 
 2. Register a user on the platform:
 
@@ -17,3 +24,10 @@
 4. Get user's information
 
   curl -v $MICROKUBES_URL/users/me -H "$JWT_TOKEN"
+
+
+To remove the spawned pods and created persistent volume claims run:
+
+  helm del --purge {{ .Release.Name }}
+
+  kubectl -n {{ .Release.Namespace }} delete pvc -l release={{ .Release.Name }}

@@ -33,15 +33,15 @@ $ helm install --namespace microkubes --name my-release -f microkubes/values-dev
 
 ## Cleanup
 
-To remove the spawned pods you can run a simple `helm delete <release-name>`.
+To remove the spawned pods you can run a simple `helm del --purge <release-name>`.
 
 Helm will however preserve created persistent volume claims, to also remove them execute the commands below.
 
 ```console
 $ release=<release-name>
-$ helm delete $release
+$ namespace=<namespace-name>
 $ helm del --purge $release
-$ kubectl -n microkubes delete pvc data-consul-0 mongo-data-mongo-cluster-deployment-0 pg-data-postgres-0 rabbitmq-data-rabbitmq-0
+$ kubectl -n $namespace delete pvc -l release=$release
 ```
 
 

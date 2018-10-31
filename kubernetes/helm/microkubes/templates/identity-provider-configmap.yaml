@@ -20,14 +20,14 @@ data:
         "weight": 10,
         "slots": 100
       },
-      "gatewayUrl": "http://{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}",
-      "gatewayAdminUrl": "http://{{ .Values.kong.adminServiceName }}:{{ .Values.kong.adminServicePort }}",
+      "gatewayUrl": "http://{{ .Release.Name }}-{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}",
+      "gatewayAdminUrl": "http://{{ .Release.Name }}-{{ .Values.kong.adminServiceName }}:{{ .Values.kong.adminServicePort }}",
       "systemKey": "/run/secrets/system",
       "services": {
-        "microservice-user": "http://{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}/users"
+        "microservice-user": "http://{{ .Release.Name }}-{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}/users"
       },
       "client": {
-        "redirect-from-login": "https://{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}/profiles/me"
+        "redirect-from-login": "https://{{ .Release.Name }}-{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}/profiles/me"
       },
       "database":{
           "dbName": "{{ .Values.microkubes.database }}",
@@ -35,7 +35,7 @@ data:
           "credentials": "{{ .Values.microkubes.awsDatabaseCredentials }}",
           "endpoint": "{{ .Values.microkubes.awsDatabaseEndpoint }}",
           "awsRegion": "{{ .Values.microkubes.aswDatabaseRegion }}",
-          "host": "{{ .Values.mongodb.service.name }}:27017",
+          "host": "{{ .Release.Name }}-{{ .Values.mongodb.service.name }}:27017",
           "database": "identity-provider",
           "user": "restapi",
           "pass": "restapi"

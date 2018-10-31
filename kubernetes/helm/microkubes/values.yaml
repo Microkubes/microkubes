@@ -1,6 +1,7 @@
 # Default values for microkubes.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
+
 microkubes:
   # Global platform coniguration
   # Database to use: mongodb or aws (dynamodb)
@@ -10,7 +11,6 @@ microkubes:
   awsDatabaseRegion: us-east-1
 
   serviceAccountName: microkubes
-  kongAdminUrl: http://kong-admin:8001
 
   authKey: dGVzdC1hdXRoLWtleQo=
   encryptKey: t/xzB8eZ5ypUiIGbuOq5PhZAKpU7LS239ucRXDq7Lw8=
@@ -166,7 +166,6 @@ mongodb:
     protocol: TCP
 
   configmap:
-    name: mongo-env
     env:
       mongoRootUsername: admin
       mongoRootPassword: admin
@@ -187,11 +186,9 @@ mongodb:
       msAuthServerPassword: authserver
 
   statefulset:
-    name: mongo-cluster-deployment
-    selector: mongo-cluster
-    containers:
-      name: mongodb
-      image: mongo:4.0.1
+    name: mongo-cluster
+    image:
+      repository: mongo:4.0.1
       containerPort: 27017
       hostPort: 27017
 
@@ -205,15 +202,14 @@ kong:
   serviceProtocol: TCP
 
   adminServiceName: kong-admin
-  adminServicePort: 8001
+  adminServicePort: '8001'
   adminServiceType: ClusterIP
   adminServiceProtocol: TCP
 
   replicas: 1
 
-  container:
-    name: kong
-    image: microkubes/kong:0.14.1-alpine
+  image:
+    repository: microkubes/kong:0.14.1-alpine
     pullPolicy: Always
 
   env:
@@ -231,9 +227,8 @@ kong:
   job:
     name: kong-migration
 
-    container:
-      name: kong-migration
-      image: microkubes/kong:latest
+    image:
+      repository: microkubes/kong:latest
       pullPolicy: Always
       restartPolicy: Never
       command: [ "./migrations.sh" ]
@@ -251,10 +246,8 @@ fakesmtp:
 
   replicas: 1
 
-  container:
-    name: fakesmtp
-    image: mailhog/mailhog
-
+  image:
+    repository: mailhog/mailhog
 
   service:
     name: fakesmtp
@@ -276,9 +269,8 @@ kubeconsulregister:
 
   replicas: 1
 
-  container:
-    name: kube-consul-register
-    image: tczekajlo/kube-consul-register:0.1.6
+  image:
+    repository: tczekajlo/kube-consul-register:0.1.6
     pullPolicy: Always
 
   args:
@@ -286,8 +278,6 @@ kubeconsulregister:
     configmap: microkubes/kube-consul-register
 
   configMap:
-    name: kube-consul-register
-
     args:
       consulAddress: consul
       consulPort: 8500
@@ -320,7 +310,6 @@ rabbitmq:
 
   replicas: 1
 
-  host: rabbitmq
   port: 5672
   username: guest
   password: guest
@@ -332,11 +321,8 @@ rabbitmq:
     uiPort: 15672
     uiProtocol: TCP
 
-
-
 # Mail configuration
 mailconfig:
-  host: fakesmtp
   port: 1025
   user: fake@email.com
   password: password

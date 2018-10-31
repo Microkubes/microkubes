@@ -20,25 +20,25 @@ data:
         "weight": 10,
         "slots": 100
       },
-      "gatewayUrl": "http://{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}",
+      "gatewayUrl": "http://{{ .Release.Name }}-{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}",
       "security":{
         "keysDir": "/run/secrets",
         "jwt":{
           "description": "JWT security middleware",
-          "tokenUrl": "http://{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}/jwt/signin"
+          "tokenUrl": "http://{{ .Release.Name }}-{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}/jwt/signin"
         },
         "saml":{
           "certFile": "/run/secrets/service.cert",
           "keyFile": "/run/secrets/service.key",
-          "identityProviderUrl": "http://{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}/saml/idp",
-          "userServiceUrl": "http://{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}/users",
-          "registrationServiceUrl": "http://{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}/users/register",
-          "rootURL": "http://{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}/apps"
+          "identityProviderUrl": "http://{{ .Release.Name }}-{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}/saml/idp",
+          "userServiceUrl": "http://{{ .Release.Name }}-{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}/users",
+          "registrationServiceUrl": "http://{{ .Release.Name }}-{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}/users/register",
+          "rootURL": "http://{{ .Release.Name }}-{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}/apps"
         },
         "oauth2":{
           "description": "OAuth2 security middleware",
-          "tokenUrl": "https://{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}/oauth2/token",
-          "authorizeUrl": "https://{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}/oauth2/authorize"
+          "tokenUrl": "https://{{ .Release.Name }}-{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}/oauth2/token",
+          "authorizeUrl": "https://{{ .Release.Name }}-{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}/oauth2/authorize"
         },
         "acl": {
           "policies":[{
@@ -79,7 +79,7 @@ data:
           "credentials": "{{ .Values.microkubes.awsDatabaseCredentials }}",
           "endpoint": "{{ .Values.microkubes.awsDatabaseEndpoint }}",
           "awsRegion": "{{ .Values.microkubes.aswDatabaseRegion }}",
-          "host": "{{ .Values.mongodb.service.name }}:27017",
+          "host": "{{ .Release.Name }}-{{ .Values.mongodb.service.name }}:27017",
           "database": "apps-management",
           "user": "restapi",
           "pass": "restapi"

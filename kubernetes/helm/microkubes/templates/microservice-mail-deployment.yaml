@@ -33,7 +33,7 @@ spec:
             - name: SERVICE_CONFIG_FILE
               value:  "{{ .Values.microkubes.microservicemail.serviceConfigPath }}"
             - name: API_GATEWAY_URL
-              value: "{{ .Values.microkubes.kongAdminUrl }}"
+              value: "{{ template "kong.adminURL" . }}"
             - name: ALLOW_UNENCRYPTED_CONNECTION
               value: "{{ .Values.microkubes.microservicemail.allowUnencryptedConnection }}"
           ports:

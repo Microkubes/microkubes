@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: ReplicaSet
 metadata:
-  name: "{{ .Values.kubeconsulregister.name }}"
+  name: "{{ template "kubeconsulregister.fullname" . }}"
   namespace: {{ .Release.Namespace }}
   labels:
     app: {{ template "microkubes.name" . }}
@@ -13,15 +13,20 @@ spec:
   replicas: {{ .Values.kubeconsulregister.replicas }}
   template:
     metadata:
+      name: "{{ template "kubeconsulregister.fullname" . }}"
       labels:
-        app: {{ .Values.kubeconsulregister.name }}
+        app: "{{ template "kubeconsulregister.fullname" . }}"
+        chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+        component: "{{ .Values.kubeconsulregister.name }}"
+        heritage: {{ .Release.Service }}
+        release: {{ .Release.Name }}
         platform: microkubes
     spec:
       serviceAccountName: {{ .Values.microkubes.serviceAccountName }}
       containers:
-      - name: {{ .Values.kubeconsulregister.container.name }}
-        image: {{ .Values.kubeconsulregister.container.image }}
-        imagePullPolicy: {{ .Values.kubeconsulregister.container.pullPolicy }}
+      - name: {{ template "microkubes.name" . }}-{{ .Values.kubeconsulregister.name }}
+        image: {{ .Values.kubeconsulregister.image.repository }}
+        imagePullPolicy: {{ .Values.kubeconsulregister.image.pullPolicy }}
         resources:
           requests:
             cpu: 1

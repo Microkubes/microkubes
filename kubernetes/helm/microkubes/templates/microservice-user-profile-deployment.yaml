@@ -33,7 +33,7 @@ spec:
             - name: SERVICE_CONFIG_FILE
               value:  "{{ .Values.microkubes.userprofile.serviceConfigPath }}"
             - name: API_GATEWAY_URL
-              value: "{{ .Values.microkubes.kongAdminUrl }}"
+              value: "{{ template "kong.adminURL" . }}"
           ports:
             - containerPort: 8080
           volumeMounts:

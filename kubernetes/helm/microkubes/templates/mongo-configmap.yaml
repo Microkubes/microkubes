@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: "{{ .Values.mongodb.configmap.name }}"
+  name: "{{ template "mongodb.fullname" . }}"
   namespace: {{ .Release.Namespace }}
   labels:
     app: {{ template "microkubes.name" . }}

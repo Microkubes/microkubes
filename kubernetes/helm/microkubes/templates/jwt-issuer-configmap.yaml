@@ -30,6 +30,6 @@ data:
         "slots": 100
       },
       "services": {
-        "user-microservice": "http://{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}/users"
+        "user-microservice": "http://{{ .Release.Name }}-{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}/users"
       }
     }

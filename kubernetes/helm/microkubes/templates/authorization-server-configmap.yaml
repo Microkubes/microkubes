@@ -30,11 +30,11 @@ data:
         "slots": 10
       },
       "services": {
-        "userServiceURL": "http://{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}/users",
-        "appsServiceURL": "http://{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}/apps"
+        "userServiceURL": "http://{{ .Release.Name }}-{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}/users",
+        "appsServiceURL": "http://{{ .Release.Name }}-{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}/apps"
       },
       "database": {
-        "host": "{{ .Values.mongodb.service.name }}:27017",
+        "host": "{{ .Release.Name }}-{{ .Values.mongodb.service.name }}:27017",
         "database": "oauth2",
         "user": "authserver",
         "pass": "authserver"

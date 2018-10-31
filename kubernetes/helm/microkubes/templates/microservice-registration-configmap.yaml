@@ -20,15 +20,15 @@ data:
         "weight": 10,
         "slots": 100
       },
-      "gatewayUrl": "http://{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}",
-      "gatewayAdminUrl": "http://{{ .Values.kong.adminServiceName }}:{{ .Values.kong.adminServicePort }}",
+      "gatewayUrl": "http://{{ .Release.Name }}-{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}",
+      "gatewayAdminUrl": "http://{{ .Release.Name }}-{{ .Values.kong.adminServiceName }}:{{ .Values.kong.adminServicePort }}",
       "systemKey": "/run/secrets/system",
       "services": {
-        "user-microservice": "http://{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}/users",
-        "microservice-user-profile": "http://{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}/profiles"
+        "user-microservice": "http://{{ .Release.Name }}-{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}/users",
+        "microservice-user-profile": "http://{{ .Release.Name }}-{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}/profiles"
       },
       "mail": {
-        "host": "{{ .Values.mailconfig.host }}",
+        "host": "{{ template "mailconfig.host" . }}",
         "port": "{{ .Values.mailconfig.port }}",
         "user": "{{ .Values.mailconfig.user }}",
         "password": "{{ .Values.mailconfig.password }}",
@@ -37,7 +37,7 @@ data:
       "rabbitmq": {
         "username": "{{ .Values.rabbitmq.username }}",
         "password": "{{ .Values.rabbitmq.password }}",
-        "host": "{{ .Values.rabbitmq.host }}",
+        "host": "{{ .Release.Name }}-{{ .Values.rabbitmq.service.name }}",
         "port": "{{ .Values.rabbitmq.port }}"
       }
     }

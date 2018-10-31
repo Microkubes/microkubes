@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: "{{ .Values.kong.name }}"
+  name: "{{ template "kong.fullname" . }}"
   namespace: {{ .Release.Namespace }}
   labels:
     app: {{ template "microkubes.name" . }}
@@ -13,14 +13,19 @@ spec:
   replicas: {{ .Values.kong.replicas }}
   template:
     metadata:
+      name: "{{ template "kong.fullname" . }}"
       labels:
-        name: "{{ .Values.kong.name }}"
-        app: "{{ .Values.kong.name }}"
+        app: "{{ template "kong.fullname" . }}"
+        chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+        component: "{{ .Values.kong.name }}"
+        heritage: {{ .Release.Service }}
+        release: {{ .Release.Name }}
+        platform: microkubes
     spec:
       containers:
-      - name: {{ .Values.kong.container.name }}
-        image: {{ .Values.kong.container.image }}
-        imagePullPolicy: {{ .Values.kong.container.pullPolicy }}
+      - name: {{ template "microkubes.name" . }}-{{ .Values.kong.name }}
+        image: {{ .Values.kong.image.repository }}
+        imagePullPolicy: {{ .Values.kong.image.pullPolicy }}
         env:
           - name: KONG_ADMIN_LISTEN
             value: "{{ .Values.kong.env.adminListen }}"

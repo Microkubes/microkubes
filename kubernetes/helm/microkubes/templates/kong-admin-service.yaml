@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: "{{ .Values.kong.adminServiceName }}"
+  name: "{{ .Release.Name }}-{{ .Values.kong.adminServiceName }}"
   namespace: {{ .Release.Namespace }}
   labels:
     app: {{ template "microkubes.name" . }}
@@ -17,4 +17,4 @@ spec:
     targetPort: {{ .Values.kong.adminServicePort }}
     protocol: {{ .Values.kong.adminServiceProtocol }}
   selector:
-    app: "{{ .Values.kong.name }}"
+    app: "{{ template "kong.fullname" . }}"
