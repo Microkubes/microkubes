@@ -2,7 +2,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: {{ template "microkubes.microserviceregistration.fullname" . }}
-  namespace: microkubes
+  namespace: {{ .Release.Namespace }}
   labels:
     app: {{ template "microkubes.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}

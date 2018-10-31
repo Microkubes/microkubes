@@ -2,7 +2,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: "{{ .Values.kong.job.name }}"
-  namespace: microkubes
+  namespace: {{ .Release.Namespace }}
   labels:
     app: {{ template "microkubes.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}

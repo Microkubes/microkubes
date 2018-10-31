@@ -1,13 +1,14 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
+  name: {{ template "microkubes.microservicemail.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels:
     app: {{ template "microkubes.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
     component: "{{ .Values.microkubes.microservicemail.name }}"
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
-  name: {{ template "microkubes.microservicemail.fullname" . }}
 data:
   config.json: |
     {

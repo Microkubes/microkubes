@@ -9,7 +9,7 @@ metadata:
     component: "{{ .Values.microkubes.identityprovider.name }}"
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
-    platform: microkubes
+    platform: {{ .Release.Namespace }}
 spec:
   replicas: {{ .Values.microkubes.identityprovider.replicaCount }}
   template:

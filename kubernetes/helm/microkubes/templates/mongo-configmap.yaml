@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: "{{ .Values.mongodb.configmap.name }}"
-  namespace: microkubes
+  namespace: {{ .Release.Namespace }}
   labels:
     app: {{ template "microkubes.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
