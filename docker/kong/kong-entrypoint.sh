@@ -33,15 +33,17 @@ export KONG_PG_HOST=$(dig +search +short $KONG_PG_HOST)
 echo "KONG_PG_HOST set to: $KONG_PG_HOST"
 
 if [ -z "$DNS_SERVER_IP" ]; then
-  DNS_SERVER_IP=$(dig +search +short $KONG_DNS_SERVER_NAME)
+  if [ -z "$KONG_DNS_SERVER_PORT" ]; then
+    echo "DNS Server Port not set"
+    exit 1
+  fi
+
+  echo "DNS Server Port: $KONG_DNS_SERVER_PORT"
+  DNS_SERVER_IP=$(dig +search +short $KONG_DNS_SERVER_NAME | tr '\n' ',' | sed "s/,/\:${KONG_DNS_SERVER_PORT}\,/g" | sed 's/,$//')
   if [ -z "$DNS_SERVER_IP" ]; then
     echo "DNS Server $KONG_DNS_SERVER_NAME not resolved"
     exit 1
   fi
-fi
-
-if [ -n "$KONG_DNS_SERVER_PORT" ]; then
-  DNS_SERVER_IP="$DNS_SERVER_IP:$KONG_DNS_SERVER_PORT"
 fi
 
 if [ -n "$DNS_SERVER_IP" ]; then
