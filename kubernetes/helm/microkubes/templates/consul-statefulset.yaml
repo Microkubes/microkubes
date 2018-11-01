@@ -1,0 +1,84 @@
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: "{{ template "consul.fullname" . }}"
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ template "consul.fullname" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: "{{ .Values.consul.name }}"
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+    platform: microkubes
+spec:
+  serviceName: consul
+  replicas: {{ .Values.consul.replicas }}
+  template:
+    metadata:
+      name: "{{ template "consul.fullname" . }}"
+      namespace: {{ .Release.Namespace }}
+      labels:
+        app: {{ template "consul.fullname" . }}
+        chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+        component: "{{ .Values.consul.name }}"
+        heritage: {{ .Release.Service }}
+        release: {{ .Release.Name }}
+        platform: microkubes
+    spec:
+      containers:
+        - name: {{ .Release.Name }}-{{ .Values.consul.name }}
+          image: "{{ .Values.consul.image.repository }}"
+          env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          args:
+            - "agent"
+            - "-dev"
+            - "-bootstrap"
+            - "-client=0.0.0.0"
+            - "-recursor=127.0.0.11"
+            - "-ui"
+          volumeMounts:
+            - name: data
+              mountPath: {{ .Values.consul.dataDir }}
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                - /bin/sh
+                - -c
+                - consul leave
+          ports:
+            - containerPort: {{ .Values.consul.ports.ui }}
+              name: ui-port
+            - containerPort: {{ .Values.consul.ports.alt }}
+              name: alt-port
+            - containerPort: {{ .Values.consul.ports.udp }}
+              name: udp-port
+            - containerPort: {{ .Values.consul.ports.https }}
+              name: https-port
+            - containerPort: {{ .Values.consul.ports.http }}
+              name: http-port
+            - containerPort: {{ .Values.consul.ports.serflan }}
+              name: serflan
+            - containerPort: {{ .Values.consul.ports.serfwan }}
+              name: serfwan
+            - containerPort: {{ .Values.consul.ports.consuldns }}
+              name: consuldns
+            - containerPort: {{ .Values.consul.ports.server }}
+              name: server
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 10Gi

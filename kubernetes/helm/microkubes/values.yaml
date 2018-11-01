@@ -161,7 +161,7 @@ secrets:
 mongodb:
   service:
     name: mongo
-    type: NodePort
+    type: ClusterIP
     port: 27017
     protocol: TCP
 
@@ -214,15 +214,12 @@ kong:
 
   env:
     adminListen: 0.0.0.0:8001
-    PGHost: postgres
     PGPassword: kong
     proxyAccessLog: /dev/stdout
     adminAccessLog: /dev/stdout
     proxyErrorLog: /dev/stderr
     adminErrorLog: /dev/stderr
-    dnsServerName: consul
     dnsServerPort: 8600
-    consulURL: http://consul:8500
 
   job:
     name: kong-migration
@@ -236,8 +233,6 @@ kong:
     env:
       nginxDeamon: off
       PGPassword: kong
-      PGHost: postgres
-      consulURL: 'http://consul:8500'
 
 # Fakesmtp configuration
 # Mailhog
@@ -260,7 +255,28 @@ fakesmtp:
 # Service Discovery configuration
 # CONSUL
 consul:
-  option1: value
+  name: consul
+
+  replicas: 1
+
+  image:
+    repository: consul:1.2.2
+
+  dataDir: /consul/data
+
+  type: ClusterIP
+
+  ports:
+    ui: '8500'
+    alt: 8400
+    udp: 53
+    https: 8443
+    http: 8080
+    serflan: 8301
+    serfwan: 8302
+    consuldns: 8600
+    server: 8300
+
 
 # Kubernetes consul auto registration
 # Kube-consul-register
@@ -320,6 +336,24 @@ rabbitmq:
     protocol: TCP
     uiPort: 15672
     uiProtocol: TCP
+
+# PostgreSQL configuration
+postgres:
+  name: postgres
+
+  replicas: 1
+
+  image:
+    repository: postgres:9.6.10-alpine
+
+  containerPort: 5432
+  volumePath: /var/lib/postgresql/data
+
+  pgUser: kong
+  pgPassword: kong
+  pgDB: kong
+  pgData: /var/lib/postgresql/data/pgdata
+
 
 # Mail configuration
 mailconfig:

@@ -2,8 +2,8 @@
 
 function enable_kong_plugins(){
   while true; do
-    is_kong_up=`curl -sSf http://localhost:8001/plugins 2>/dev/null || echo "false"` 
-    if [ "$is_kong_up" != "false"  ]; then 
+    is_kong_up=`curl -sSf http://localhost:8001/plugins 2>/dev/null || echo "false"`
+    if [ "$is_kong_up" != "false"  ]; then
       # register plugin
       prometheus_registered=`(curl -sSf http://localhost:8001/plugins 2>/dev/null | grep -i prometheus) || echo "false"`
       if [ "$prometheus_registered" == "false" ]; then
@@ -23,7 +23,7 @@ function enable_kong_plugins(){
 echo "Waiting for migrations to complete..."
 while [ "$response" != "200" ]; do
 	sleep 1
-	response=$(curl --write-out %{http_code} --silent --output /dev/null http://consul:8500/v1/kv/kong-migrations)
+	response=$(curl --write-out %{http_code} --silent --output /dev/null ${CONSUL_URL}/v1/kv/kong-migrations)
 done
 
 echo "Migrations complete."

@@ -24,8 +24,8 @@ spec:
           - name: KONG_PG_PASSWORD
             value: "{{ .Values.kong.job.env.PGPassword }}"
           - name: KONG_PG_HOST
-            value: "{{ .Values.kong.job.env.PGHost }}"
+            value: "{{ .Release.Name }}-{{ .Values.postgres.name }}"
           - name: CONSUL_URL
-            value: "{{ .Values.kong.job.env.consulURL }}"
+            value: "{{ template "consul.URL" . }}"
         command: {{ .Values.kong.job.image.command }}
       restartPolicy: {{ .Values.kong.job.image.restartPolicy }}

@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.consul.name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ template "consul.fullname" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: "{{ .Values.consul.name }}"
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+    platform: microkubes
+spec:
+  type: {{ .Values.consul.type }}
+  ports:
+    - name: http
+      port: {{ .Values.consul.ports.ui }}
+      targetPort: {{ .Values.consul.ports.ui }}
+    - name: https
+      port: {{ .Values.consul.ports.https }}
+      targetPort: {{ .Values.consul.ports.https }}
+    - name: rpc
+      port: {{ .Values.consul.ports.alt }}
+      targetPort: {{ .Values.consul.ports.alt }}
+    - name: serflan-tcp
+      protocol: "TCP"
+      port: {{ .Values.consul.ports.serflan }}
+      targetPort: {{ .Values.consul.ports.serflan }}
+    - name: serflan-udp
+      protocol: "UDP"
+      port: {{ .Values.consul.ports.serflan }}
+      targetPort: {{ .Values.consul.ports.serflan }}
+    - name: serfwan-tcp
+      protocol: "TCP"
+      port: {{ .Values.consul.ports.serfwan }}
+      targetPort: {{ .Values.consul.ports.serfwan }}
+    - name: serfwan-udp
+      protocol: "UDP"
+      port: {{ .Values.consul.ports.serfwan }}
+      targetPort: {{ .Values.consul.ports.serfwan }}
+    - name: server
+      port: {{ .Values.consul.ports.server }}
+      targetPort: {{ .Values.consul.ports.server }}
+    - name: consuldns
+      protocol: "UDP"
+      port: {{ .Values.consul.ports.consuldns }}
+      targetPort: {{ .Values.consul.ports.consuldns }}
+  selector:
+    app: "{{ template "consul.fullname" . }}"

@@ -1,0 +1,54 @@
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: "{{ template "postgres.fullname" . }}"
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ template "postgres.fullname" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: "{{ .Values.postgres.name }}"
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+    platform: microkubes
+spec:
+  serviceName: {{ .Release.Name }}-{{ .Values.postgres.name }}
+  replicas: {{ .Values.postgres.replicas }}
+  template:
+    metadata:
+      name: "{{ template "postgres.fullname" . }}"
+      namespace: {{ .Release.Namespace }}
+      labels:
+        app: {{ template "postgres.fullname" . }}
+        chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+        component: "{{ .Values.postgres.name }}"
+        heritage: {{ .Release.Service }}
+        release: {{ .Release.Name }}
+        platform: microkubes
+    spec:
+      containers:
+        - name: {{ .Release.Name }}-{{ .Values.postgres.name }}
+          image: {{ .Values.postgres.image.repository }}
+          env:
+            - name: POSTGRES_USER
+              value: {{ .Values.postgres.pgUser }}
+            - name: POSTGRES_PASSWORD
+              value: {{ .Values.postgres.pgPassword }}
+            - name: POSTGRES_DB
+              value: {{ .Values.postgres.pgDB }}
+            - name: PGDATA
+              value: {{ .Values.postgres.pgData }}
+          ports:
+            - containerPort: {{ .Values.postgres.containerPort }}
+              name: postgres
+          volumeMounts:
+            - mountPath: {{ .Values.postgres.volumePath }}
+              name: pg-data
+  volumeClaimTemplates:
+    - metadata:
+        name: pg-data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 10Gi

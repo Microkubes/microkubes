@@ -30,7 +30,7 @@ spec:
           - name: KONG_ADMIN_LISTEN
             value: "{{ .Values.kong.env.adminListen }}"
           - name: KONG_PG_HOST
-            value: "{{ .Values.kong.env.PGHost }}"
+            value: "{{ .Release.Name }}-{{ .Values.postgres.name }}"
           - name: KONG_PG_PASSWORD
             value: "{{ .Values.kong.env.PGPassword }}"
           - name: KONG_PROXY_ACCESS_LOG
@@ -42,11 +42,11 @@ spec:
           - name: KONG_ADMIN_ERROR_LOG
             value: "{{ .Values.kong.env.adminErrorLog }}"
           - name: KONG_DNS_SERVER_NAME
-            value: "{{ .Values.kong.env.dnsServerName }}"
+            value: "{{ .Values.consul.name }}"
           - name: KONG_DNS_SERVER_PORT
             value: "{{ .Values.kong.env.dnsServerPort }}"
           - name: CONSUL_URL
-            value: "{{ .Values.kong.env.consulURL }}"
+            value: "{{ template "consul.URL" . }}"
         ports:
         - name: admin
           containerPort: {{ .Values.kong.adminServicePort }}

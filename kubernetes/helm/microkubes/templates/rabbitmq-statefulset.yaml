@@ -9,6 +9,7 @@ metadata:
     component: "{{ .Values.rabbitmq.name }}"
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
+    platform: microkubes
 spec:
   serviceName: {{ .Values.rabbitmq.service.name }}
   replicas: {{ .Values.rabbitmq.replicas }}

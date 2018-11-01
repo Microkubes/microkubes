@@ -4,7 +4,6 @@ The platform takes about 5 minutes to bring up and you can follow the progress u
 
 Once all services are running, you can start using microkubes.
 
-
 1. The platform can be access through the API gateway service which is exposed as a nodePort in kubernetes. To get the URL run:
 
   MICROKUBES_URL=`minikube service -n {{ .Release.Namespace }} {{ .Release.Name }}-{{ .Values.kong.name }} --url`
