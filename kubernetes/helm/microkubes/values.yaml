@@ -295,7 +295,6 @@ kubeconsulregister:
 
   configMap:
     args:
-      consulAddress: consul
       consulPort: 8500
       consulScheme: http
       consulCAFile: ""

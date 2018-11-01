@@ -285,30 +285,11 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
-Create a fully qualified Consul name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-*/}}
-
-{{- define "consul.fullname" -}}
-{{- if .Values.consul.fullnameOverride -}}
-{{- .Values.consul.fullnameOverride | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- if contains $name .Release.Name -}}
-{{- printf "%s-%s" .Release.Name .Values.consul.name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s-%s" .Release.Name $name .Values.consul.name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
 Define Consul URL
 */}}
 {{- define "consul.URL" -}}
-{{- printf "http://%s:%s" .Values.consul.name .Values.consul.ports.ui -}}
+{{- printf "http://%s-%s:%s" .Release.Name .Values.consul.name .Values.consul.ports.ui -}}
 {{- end -}}
-
 
 {{/*
 Define Mail host

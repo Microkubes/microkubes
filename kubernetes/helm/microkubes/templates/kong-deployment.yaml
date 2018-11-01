@@ -42,7 +42,7 @@ spec:
           - name: KONG_ADMIN_ERROR_LOG
             value: "{{ .Values.kong.env.adminErrorLog }}"
           - name: KONG_DNS_SERVER_NAME
-            value: "{{ .Values.consul.name }}"
+            value: "{{ .Release.Name }}-{{ .Values.consul.name }}"
           - name: KONG_DNS_SERVER_PORT
             value: "{{ .Values.kong.env.dnsServerPort }}"
           - name: CONSUL_URL

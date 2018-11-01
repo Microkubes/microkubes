@@ -15,6 +15,7 @@ To deploy Microkubes on kubernetes cluster with the release name `my-release` wi
 
 ```console
 $ cd kubernetes/helm
+$ helm dependency update microkubes/
 $ helm install --namespace microkubes --name my-release microkubes/
 ```
 

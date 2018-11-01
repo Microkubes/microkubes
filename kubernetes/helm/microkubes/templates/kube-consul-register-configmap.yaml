@@ -10,7 +10,7 @@ metadata:
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
 data:
-  consul_address: "{{ .Values.kubeconsulregister.configMap.args.consulAddress }}"
+  consul_address: "{{ .Release.Name }}-{{ .Values.consul.name }}"
   consul_port: "{{ .Values.kubeconsulregister.configMap.args.consulPort }}"
   consul_scheme: "{{ .Values.kubeconsulregister.configMap.args.consulScheme }}"
   consul_ca_file: "{{ .Values.kubeconsulregister.configMap.args.consulCAFile }}"
