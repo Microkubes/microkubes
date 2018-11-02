@@ -21,7 +21,7 @@ $ helm install microkubes/ --namespace microkubes --name microkubes-test \
     --set postgresql.postgresUser=kong,postgresql.postgresPassword=<secretpassword>,postgresql.postgresDatabase=kong
 ```
 
-** Note: ** PostgreSQL user should be `kong` and database `kong` as well
+**Note:** PostgreSQL user should be `kong` and database `kong` as well
 
 ## Configuration
 
