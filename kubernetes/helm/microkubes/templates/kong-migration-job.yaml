@@ -22,7 +22,7 @@ spec:
           - name: KONG_NGINX_DAEMON
             value: "{{ .Values.kong.job.env.nginxDeamon }}"
           - name: KONG_PG_PASSWORD
-            value: "{{ .Values.kong.job.env.PGPassword }}"
+            value: "{{ .Values.postgresql.postgresPassword }}"
           - name: KONG_PG_HOST
             value: "{{ .Release.Name }}-{{ .Values.postgres.name }}"
           - name: CONSUL_URL

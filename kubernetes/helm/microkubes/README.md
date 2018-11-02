@@ -11,13 +11,17 @@ The helm chart implements all the relevant configuration parameters that can be 
 
 ## Deploy Microkubes on kubernetes cluster
 
-To deploy Microkubes on kubernetes cluster with the release name `my-release` within namespace `microkubes`:
+To deploy Microkubes on kubernetes cluster with the release name `<release-name>` within namespace `<namespace-name>`:
 
 ```console
 $ cd kubernetes/helm
 $ helm dependency update microkubes/
-$ helm install --namespace microkubes --name my-release microkubes/
+$ helm install --namespace <namespace-name> --name <release-name> microkubes/
+$ helm install microkubes/ --namespace microkubes --name microkubes-test \
+    --set postgresql.postgresUser=kong,postgresql.postgresPassword=<secretpassword>,postgresql.postgresDatabase=kong
 ```
+
+** Note: ** PostgreSQL user should be `kong` and database `kong` as well
 
 ## Configuration
 
@@ -29,7 +33,8 @@ Alternatively, you can specify each parameter using the `--set key=value[,key=va
 
 > **Tip**: You can use values file different from the default [values.yaml](https://github.com/Microkubes/microkubes/blob/helm/kubernetes/helm/microkubes/values.yaml) that specifies the values for the parameters by providing that file while installing the chart. For example:
 ```console
-$ helm install --namespace microkubes --name my-release -f microkubes/values-development.yaml microkubes/
+$ helm install microkubes/ --namespace microkubes --name microkubes-test -f microkubes/values-development.yaml \
+    --set postgresql.postgresUser=kong,postgresql.postgresPassword=<secretpassword>,postgresql.postgresDatabase=kong
 ```
 
 ## Cleanup

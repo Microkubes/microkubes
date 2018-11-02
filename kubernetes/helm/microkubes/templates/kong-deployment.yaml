@@ -32,7 +32,7 @@ spec:
           - name: KONG_PG_HOST
             value: "{{ .Release.Name }}-{{ .Values.postgres.name }}"
           - name: KONG_PG_PASSWORD
-            value: "{{ .Values.kong.env.PGPassword }}"
+            value: "{{ .Values.postgresql.postgresPassword }}"
           - name: KONG_PROXY_ACCESS_LOG
             value: "{{ .Values.kong.env.proxyAccessLog }}"
           - name: KONG_ADMIN_ACCESS_LOG

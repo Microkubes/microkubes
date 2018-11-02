@@ -214,7 +214,6 @@ kong:
 
   env:
     adminListen: 0.0.0.0:8001
-    PGPassword: kong
     proxyAccessLog: /dev/stdout
     adminAccessLog: /dev/stdout
     proxyErrorLog: /dev/stderr
@@ -232,7 +231,6 @@ kong:
 
     env:
       nginxDeamon: off
-      PGPassword: kong
 
 # Fakesmtp configuration
 # Mailhog
@@ -338,21 +336,7 @@ rabbitmq:
 
 # PostgreSQL configuration
 postgres:
-  name: postgres
-
-  replicas: 1
-
-  image:
-    repository: postgres:9.6.10-alpine
-
-  containerPort: 5432
-  volumePath: /var/lib/postgresql/data
-
-  pgUser: kong
-  pgPassword: kong
-  pgDB: kong
-  pgData: /var/lib/postgresql/data/pgdata
-
+  name: postgresql
 
 # Mail configuration
 mailconfig:
