@@ -40,6 +40,18 @@ $ helm install microkubes/ --namespace microkubes --name microkubes-test -f micr
 
 Platfrom secrets are all Base64 encoded. Microkubes [keys](https://github.com/Microkubes/microkubes/tree/master/docker/keys) and MongoDB init [script](https://github.com/Microkubes/microkubes/blob/master/docker/mongo/create_db_objects.sh) are base64 encoded and put in [microkubes secrets](https://github.com/Microkubes/microkubes/blob/helm/kubernetes/helm/microkubes/templates/microkubes-secrets.yaml) template file which creates platform secrets.
 
+If you want to generate new keys first run the script:
+```console
+./keys/create.sh
+```
+
+then encode the content:
+```console
+base64 keys/default.pub  >&2
+```
+
+The encoded content put in the [microkubes secrets](https://github.com/Microkubes/microkubes/blob/helm/kubernetes/helm/microkubes/templates/microkubes-secrets.yaml) template file.
+
 ## Cleanup
 
 To remove the spawned pods you can run a simple `helm del --purge <release-name>`.
