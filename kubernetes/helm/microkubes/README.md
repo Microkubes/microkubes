@@ -5,6 +5,7 @@ The helm chart implements all the relevant configuration parameters that can be 
 
 ## Prerequisites Details
 
+* Kubernetes 1.9
 * Install [Helm](https://github.com/helm/helm/releases)
 * Make sure that you have helm tiller running in your cluster, if not run `helm init`
 * Setup correctly kubectl and kubeconfig setup before running helm.

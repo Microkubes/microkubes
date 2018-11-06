@@ -5,6 +5,10 @@ Microkubes is a ground-up scalable microservice framework
 
 These instructions will let you deploy the Microkubes on Kubernetes
 
+### Prerequisites Details
+
+* Kubernetes 1.9
+
 ### Preparing
 
 1. Run a single-node Kubernetes cluster via Minikube tool
@@ -27,7 +31,7 @@ kubectl create -f kubernetes/manifests/serviceaccount.yaml
 ```
 
 4. Create a secret from keys generated in Step 2
- 
+
 ```bash
 kubectl -n microkubes create secret generic microkubes-secrets \
 	--from-file=keys/default \
