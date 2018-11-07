@@ -32,8 +32,7 @@ Alternatively, you can specify each parameter using the `--set key=value[,key=va
 
 > **Tip**: You can use values file different from the default [values.yaml](https://github.com/Microkubes/microkubes/blob/helm/kubernetes/helm/microkubes/values.yaml) that specifies the values for the parameters by providing that file while installing the chart. For example:
 ```console
-$ helm install microkubes/ --namespace microkubes --name microkubes-test -f microkubes/values-development.yaml \
-    --set postgresql.postgresUser=kong,postgresql.postgresPassword=<secretpassword>,postgresql.postgresDatabase=kong
+$ helm install --namespace <namespace-name> --name <release-name> -f microkubes/values-development.yaml microkubes/
 ```
 
 ## Secrets
