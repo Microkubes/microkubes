@@ -17,8 +17,7 @@ To deploy Microkubes on kubernetes cluster with the release name `<release-name>
 ```console
 $ cd kubernetes/helm
 $ helm dependency update microkubes/
-$ helm install --namespace <namespace-name> --name <release-name> microkubes/
-$ helm install microkubes/ --namespace microkubes --name microkubes-test \
+$ helm install microkubes/ --namespace <namespace-name> --name <release-name> \
     --set postgresql.postgresUser=kong,postgresql.postgresPassword=<secretpassword>,postgresql.postgresDatabase=kong
 ```
 
