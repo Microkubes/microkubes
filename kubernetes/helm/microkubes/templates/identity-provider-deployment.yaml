@@ -1,0 +1,53 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "microkubes.identityprovider.fullname" . }}
+  namespace: microkubes
+  labels:
+    app: {{ template "microkubes.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: "{{ .Values.microkubes.identityprovider.name }}"
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+    platform: {{ .Release.Namespace }}
+spec:
+  replicas: {{ .Values.microkubes.identityprovider.replicaCount }}
+  template:
+    metadata:
+      name: {{ template "microkubes.identityprovider.fullname" . }}
+      labels:
+        app: {{ template "microkubes.name" . }}
+        component: "{{ .Values.microkubes.identityprovider.name }}"
+        release: {{ .Release.Name }}
+        platform: microkubes
+      {{- if .Values.microkubes.identityprovider.podAnnotations }}
+      annotations:
+{{ toYaml .Values.microkubes.identityprovider.podAnnotations | indent 8 }}
+      {{- end }}
+    spec:
+      containers:
+        - name: {{ template "microkubes.name" . }}-{{ .Values.microkubes.identityprovider.name }}
+          image: "{{ .Values.microkubes.identityprovider.image.repository }}:{{ .Values.microkubes.identityprovider.image.tag }}"
+          imagePullPolicy: "{{ .Values.microkubes.identityprovider.image.pullPolicy }}"
+          env:
+            - name: SERVICE_CONFIG_FILE
+              value:  "{{ .Values.microkubes.identityprovider.serviceConfigPath }}"
+            - name: API_GATEWAY_URL
+              value: "{{ template "kong.adminURL" . }}"
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: microkubes-secrets
+              mountPath: /run/secrets
+            - name: service-config
+              mountPath: /etc/config
+      volumes:
+        - name: microkubes-secrets
+          secret:
+            secretName: "{{ .Values.secrets.keys.name }}"
+        - name: service-config
+          configMap:
+            name: {{ template "microkubes.identityprovider.fullname" . }}
+            items:
+            - key: config.json
+              path: config.json

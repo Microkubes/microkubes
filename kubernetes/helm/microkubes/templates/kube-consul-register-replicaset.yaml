@@ -1,0 +1,36 @@
+apiVersion: extensions/v1beta1
+kind: ReplicaSet
+metadata:
+  name: "{{ template "kubeconsulregister.fullname" . }}"
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ template "microkubes.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: "{{ .Values.kubeconsulregister.name }}"
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+spec:
+  replicas: {{ .Values.kubeconsulregister.replicas }}
+  template:
+    metadata:
+      name: "{{ template "kubeconsulregister.fullname" . }}"
+      labels:
+        app: "{{ template "kubeconsulregister.fullname" . }}"
+        chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+        component: "{{ .Values.kubeconsulregister.name }}"
+        heritage: {{ .Release.Service }}
+        release: {{ .Release.Name }}
+        platform: microkubes
+    spec:
+      serviceAccountName: {{ .Values.microkubes.serviceAccountName }}
+      containers:
+      - name: {{ template "microkubes.name" . }}-{{ .Values.kubeconsulregister.name }}
+        image: {{ .Values.kubeconsulregister.image.repository }}
+        imagePullPolicy: {{ .Values.kubeconsulregister.image.pullPolicy }}
+        resources:
+          requests:
+            cpu: 1
+            memory: 300Mi
+        args:
+        - -logtostderr={{ .Values.kubeconsulregister.args.logToStdErr }}
+        - -configmap={{ .Values.kubeconsulregister.args.configmap }}

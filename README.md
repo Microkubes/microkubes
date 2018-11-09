@@ -5,6 +5,10 @@ Microkubes is a ground-up scalable microservice framework
 
 These instructions will let you deploy the Microkubes on Kubernetes
 
+### Prerequisites Details
+
+* Kubernetes 1.9
+
 ### Preparing
 
 1. Run a single-node Kubernetes cluster via Minikube tool
@@ -22,12 +26,12 @@ minikube start
 3. Create a default microkubes namespace and service account
 
 ```bash
-kubectl create -f kubernetes/namespace.yaml
-kubectl create -f kubernetes/serviceaccount.yaml
+kubectl create -f kubernetes/manifests/namespace.yaml
+kubectl create -f kubernetes/manifests/serviceaccount.yaml
 ```
 
 4. Create a secret from keys generated in Step 2
- 
+
 ```bash
 kubectl -n microkubes create secret generic microkubes-secrets \
 	--from-file=keys/default \
@@ -44,14 +48,14 @@ kubectl -n microkubes create secret generic microkubes-secrets \
 
 ```bash
 kubectl -n microkubes create secret generic mongo-init-db \
-        --from-file=./kubernetes/mongo/create_microkubes_db_objects.sh
+        --from-file=./kubernetes/manifests/mongo/create_microkubes_db_objects.sh
 ```
 
 ### Deploy Microkubes
 
 Run the following commands:
 ```bash
-cd kubernetes/
+cd kubernetes/manifests
 kubectl create -f consul.yaml
 kubectl create -f kube-consul-register.yaml
 kubectl create -f kong.yaml

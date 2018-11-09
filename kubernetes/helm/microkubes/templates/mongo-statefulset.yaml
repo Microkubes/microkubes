@@ -1,0 +1,54 @@
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: "{{ template "mongodb.fullname" . }}"
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ template "microkubes.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: "{{ .Values.mongodb.statefulset.name }}"
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+spec:
+  serviceName: {{ .Values.mongodb.service.name }}
+  replicas: 1 # this should always be 1
+  template:
+    metadata:
+      name: "{{ template "mongodb.fullname" . }}"
+      labels:
+        app: "{{ template "mongodb.fullname" . }}"
+        chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+        component: "{{ .Values.mongodb.statefulset.name }}"
+        heritage: {{ .Release.Service }}
+        release: {{ .Release.Name }}
+        platform: microkubes
+    spec:
+      containers:
+      - name: {{ .Release.Name }}-{{ .Values.mongodb.statefulset.name }}
+        image: {{ .Values.mongodb.statefulset.image.repository }}
+        args: ["--dbpath", "/data/mongodb"] # put your own path if it is different from a regular path
+        ports:
+        - name: mongo
+          containerPort: {{ .Values.mongodb.statefulset.image.containerPort }}
+          hostPort: {{ .Values.mongodb.statefulset.image.hostPort }}
+        envFrom:
+          - configMapRef:
+              name: "{{ template "mongodb.fullname" . }}"
+        volumeMounts:
+            - name: mongo-init-db
+              mountPath: /docker-entrypoint-initdb.d
+            - mountPath: /data/mongodb
+              name: mongo-data
+      volumes:
+        - name: mongo-init-db
+          secret:
+            secretName: {{ .Values.secrets.mongoDB.name }}
+  volumeClaimTemplates:
+    - metadata:
+        name: mongo-data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 20Gi

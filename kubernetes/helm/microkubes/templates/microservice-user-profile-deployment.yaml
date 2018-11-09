@@ -1,0 +1,53 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "microkubes.userprofile.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ template "microkubes.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: "{{ .Values.microkubes.userprofile.name }}"
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+    platform: microkubes
+spec:
+  replicas: {{ .Values.microkubes.userprofile.replicaCount }}
+  template:
+    metadata:
+      name: {{ template "microkubes.userprofile.fullname" . }}
+      labels:
+        app: {{ template "microkubes.name" . }}
+        component: "{{ .Values.microkubes.userprofile.name }}"
+        release: {{ .Release.Name }}
+        platform: microkubes
+      {{- if .Values.microkubes.userprofile.podAnnotations }}
+      annotations:
+{{ toYaml .Values.microkubes.userprofile.podAnnotations | indent 8 }}
+      {{- end }}
+    spec:
+      containers:
+        - name: {{ template "microkubes.name" . }}-{{ .Values.microkubes.userprofile.name }}
+          image: "{{ .Values.microkubes.userprofile.image.repository }}:{{ .Values.microkubes.userprofile.image.tag }}"
+          imagePullPolicy: "{{ .Values.microkubes.userprofile.image.pullPolicy }}"
+          env:
+            - name: SERVICE_CONFIG_FILE
+              value:  "{{ .Values.microkubes.userprofile.serviceConfigPath }}"
+            - name: API_GATEWAY_URL
+              value: "{{ template "kong.adminURL" . }}"
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: microkubes-secrets
+              mountPath: /run/secrets
+            - name: service-config
+              mountPath: /etc/config
+      volumes:
+        - name: microkubes-secrets
+          secret:
+            secretName: "{{ .Values.secrets.keys.name }}"
+        - name: service-config
+          configMap:
+            name: {{ template "microkubes.userprofile.fullname" . }}
+            items:
+            - key: config.json
+              path: config.json

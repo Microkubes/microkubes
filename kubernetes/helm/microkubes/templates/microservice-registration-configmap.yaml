@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "microkubes.microserviceregistration.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ template "microkubes.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: "{{ .Values.microkubes.microserviceregistration.name }}"
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+data:
+  config.json: |
+    {
+      "microservice": {
+        "name": "{{ .Values.microkubes.microserviceregistration.name }}",
+        "port": 8080,
+        "paths": ["/users/register"],
+        "virtual_host": "microservice-registration.service.consul",
+        "weight": 10,
+        "slots": 100
+      },
+      "gatewayUrl": "http://{{ .Release.Name }}-{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}",
+      "gatewayAdminUrl": "http://{{ .Release.Name }}-{{ .Values.kong.adminServiceName }}:{{ .Values.kong.adminServicePort }}",
+      "systemKey": "/run/secrets/system",
+      "services": {
+        "user-microservice": "http://{{ .Release.Name }}-{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}/users",
+        "microservice-user-profile": "http://{{ .Release.Name }}-{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}/profiles"
+      },
+      "mail": {
+        "host": "{{ template "mailconfig.host" . }}",
+        "port": "{{ .Values.mailconfig.port }}",
+        "user": "{{ .Values.mailconfig.user }}",
+        "password": "{{ .Values.mailconfig.password }}",
+        "email": "{{ .Values.mailconfig.email }}"
+      },
+      "rabbitmq": {
+        "username": "{{ .Values.rabbitmq.username }}",
+        "password": "{{ .Values.rabbitmq.password }}",
+        "host": "{{ .Release.Name }}-{{ .Values.rabbitmq.service.name }}",
+        "port": "{{ .Values.rabbitmq.port }}"
+      }
+    }

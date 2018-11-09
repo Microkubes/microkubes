@@ -1,0 +1,53 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "microkubes.appsmanagement.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ template "microkubes.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: "{{ .Values.microkubes.appsmanagement.name }}"
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+    platform: microkubes
+spec:
+  replicas: {{ .Values.microkubes.appsmanagement.replicaCount }}
+  template:
+    metadata:
+      name: {{ template "microkubes.appsmanagement.fullname" . }}
+      labels:
+        app: {{ template "microkubes.name" . }}
+        component: "{{ .Values.microkubes.appsmanagement.name }}"
+        release: {{ .Release.Name }}
+        platform: microkubes
+      {{- if .Values.microkubes.appsmanagement.podAnnotations }}
+      annotations:
+{{ toYaml .Values.microkubes.appsmanagement.podAnnotations | indent 8 }}
+      {{- end }}
+    spec:
+      containers:
+        - name: {{ template "microkubes.name" . }}-{{ .Values.microkubes.appsmanagement.name }}
+          image: "{{ .Values.microkubes.appsmanagement.image.repository }}:{{ .Values.microkubes.appsmanagement.image.tag }}"
+          imagePullPolicy: "{{ .Values.microkubes.appsmanagement.image.pullPolicy }}"
+          env:
+            - name: SERVICE_CONFIG_FILE
+              value:  "{{ .Values.microkubes.appsmanagement.serviceConfigPath }}"
+            - name: API_GATEWAY_URL
+              value: "{{ template "kong.adminURL" . }}"
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: microkubes-secrets
+              mountPath: /run/secrets
+            - name: service-config
+              mountPath: /etc/config
+      volumes:
+        - name: microkubes-secrets
+          secret:
+            secretName: "{{ .Values.secrets.keys.name }}"
+        - name: service-config
+          configMap:
+            name: {{ template "microkubes.appsmanagement.fullname" . }}
+            items:
+            - key: config.json
+              path: config.json

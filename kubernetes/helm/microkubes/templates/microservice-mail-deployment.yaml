@@ -1,0 +1,55 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "microkubes.microservicemail.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ template "microkubes.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: "{{ .Values.microkubes.microservicemail.name }}"
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+    platform: microkubes
+spec:
+  replicas: {{ .Values.microkubes.microservicemail.replicaCount }}
+  template:
+    metadata:
+      name: {{ template "microkubes.microservicemail.fullname" . }}
+      labels:
+        app: {{ template "microkubes.name" . }}
+        component: "{{ .Values.microkubes.microservicemail.name }}"
+        release: {{ .Release.Name }}
+        platform: microkubes
+      {{- if .Values.microkubes.microservicemail.podAnnotations }}
+      annotations:
+{{ toYaml .Values.microkubes.microservicemail.podAnnotations | indent 8 }}
+      {{- end }}
+    spec:
+      containers:
+        - name: {{ template "microkubes.name" . }}-{{ .Values.microkubes.microservicemail.name }}
+          image: "{{ .Values.microkubes.microservicemail.image.repository }}:{{ .Values.microkubes.microservicemail.image.tag }}"
+          imagePullPolicy: "{{ .Values.microkubes.microservicemail.image.pullPolicy }}"
+          env:
+            - name: SERVICE_CONFIG_FILE
+              value:  "{{ .Values.microkubes.microservicemail.serviceConfigPath }}"
+            - name: API_GATEWAY_URL
+              value: "{{ template "kong.adminURL" . }}"
+            - name: ALLOW_UNENCRYPTED_CONNECTION
+              value: "{{ .Values.microkubes.microservicemail.allowUnencryptedConnection }}"
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: microkubes-secrets
+              mountPath: /run/secrets
+            - name: service-config
+              mountPath: /etc/config
+      volumes:
+        - name: microkubes-secrets
+          secret:
+            secretName: "{{ .Values.secrets.keys.name }}"
+        - name: service-config
+          configMap:
+            name: {{ template "microkubes.microservicemail.fullname" . }}
+            items:
+            - key: config.json
+              path: config.json

@@ -1,0 +1,53 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "microkubes.authorizationserver.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ template "microkubes.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: "{{ .Values.microkubes.authorizationserver.name }}"
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+    platform: microkubes
+spec:
+  replicas: {{ .Values.microkubes.authorizationserver.replicaCount }}
+  template:
+    metadata:
+      name: {{ template "microkubes.authorizationserver.fullname" . }}
+      labels:
+        app: {{ template "microkubes.name" . }}
+        component: "{{ .Values.microkubes.authorizationserver.name }}"
+        release: {{ .Release.Name }}
+        platform: microkubes
+      {{- if .Values.microkubes.authorizationserver.podAnnotations }}
+      annotations:
+{{ toYaml .Values.microkubes.authorizationserver.podAnnotations | indent 8 }}
+      {{- end }}
+    spec:
+      containers:
+        - name: {{ template "microkubes.name" . }}-{{ .Values.microkubes.authorizationserver.name }}
+          image: "{{ .Values.microkubes.authorizationserver.image.repository }}:{{ .Values.microkubes.authorizationserver.image.tag }}"
+          imagePullPolicy: "{{ .Values.microkubes.authorizationserver.image.pullPolicy }}"
+          env:
+            - name: SERVICE_CONFIG_FILE
+              value:  "{{ .Values.microkubes.authorizationserver.serviceConfigPath }}"
+            - name: API_GATEWAY_URL
+              value: "{{ template "kong.adminURL" . }}"
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: microkubes-secrets
+              mountPath: /run/secrets
+            - name: service-config
+              mountPath: /etc/config
+      volumes:
+        - name: microkubes-secrets
+          secret:
+            secretName: "{{ .Values.secrets.keys.name }}"
+        - name: service-config
+          configMap:
+            name: {{ template "microkubes.authorizationserver.fullname" . }}
+            items:
+            - key: config.json
+              path: config.json

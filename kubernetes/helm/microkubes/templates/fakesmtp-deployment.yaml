@@ -1,0 +1,30 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: "{{ template "fakesmtp.fullname" . }}"
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ template "microkubes.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: "{{ .Values.fakesmtp.name }}"
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+spec:
+  replicas: {{ .Values.fakesmtp.replicas }}
+  template:
+    metadata:
+      name: "{{ template "fakesmtp.fullname" . }}"
+      labels:
+        app: "{{ template "fakesmtp.fullname" . }}"
+        component: "{{ .Values.fakesmtp.name }}"
+        release: {{ .Release.Name }}
+        platform: microkubes
+    spec:
+      containers:
+        - name: {{ .Release.Name }}-{{ .Values.fakesmtp.name }}
+          image: {{ .Values.fakesmtp.image.repository }}
+          ports:
+            - name: fakesmtp-smtp
+              containerPort: {{ .Values.fakesmtp.service.smtpPort }}
+            - name: fakesmtp-http
+              containerPort: {{ .Values.fakesmtp.service.httpPort }}

@@ -1,0 +1,53 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "microkubes.microserviceregistration.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ template "microkubes.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: "{{ .Values.microkubes.microserviceregistration.name }}"
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+    platform: microkubes
+spec:
+  replicas: {{ .Values.microkubes.microserviceregistration.replicaCount }}
+  template:
+    metadata:
+      name: {{ template "microkubes.microserviceregistration.fullname" . }}
+      labels:
+        app: {{ template "microkubes.name" . }}
+        component: "{{ .Values.microkubes.microserviceregistration.name }}"
+        release: {{ .Release.Name }}
+        platform: microkubes
+      {{- if .Values.microkubes.microserviceregistration.podAnnotations }}
+      annotations:
+{{ toYaml .Values.microkubes.microserviceregistration.podAnnotations | indent 8 }}
+      {{- end }}
+    spec:
+      containers:
+        - name: {{ template "microkubes.name" . }}-{{ .Values.microkubes.microserviceregistration.name }}
+          image: "{{ .Values.microkubes.microserviceregistration.image.repository }}:{{ .Values.microkubes.microserviceregistration.image.tag }}"
+          imagePullPolicy: "{{ .Values.microkubes.microserviceregistration.image.pullPolicy }}"
+          env:
+            - name: SERVICE_CONFIG_FILE
+              value:  "{{ .Values.microkubes.microserviceregistration.serviceConfigPath }}"
+            - name: API_GATEWAY_URL
+              value: "{{ template "kong.adminURL" . }}"
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: microkubes-secrets
+              mountPath: /run/secrets
+            - name: service-config
+              mountPath: /etc/config
+      volumes:
+        - name: microkubes-secrets
+          secret:
+            secretName: "{{ .Values.secrets.keys.name }}"
+        - name: service-config
+          configMap:
+            name: {{ template "microkubes.microserviceregistration.fullname" . }}
+            items:
+            - key: config.json
+              path: config.json
