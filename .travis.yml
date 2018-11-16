@@ -1,0 +1,23 @@
+sudo: required
+
+services:
+  - docker
+
+env:
+  global:
+    - GIT_COMMITTED_AT=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then git log -1 --pretty=format:%ct; else git log -1 --skip 1 --pretty=format:%ct; fi)
+    - CURRENT_BRANCH=$(if [ ! -z "$TRAVIS_TAG" ]; then echo $TRAVIS_TAG; else echo "master"; fi)
+
+language: bash
+
+install:
+  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+  - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+  - sudo apt-get update
+  - sudo apt-get -y install docker-ce
+
+after_success:
+  - if [ "$TRAVIS_BRANCH" == "$CURRENT_BRANCH" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+    echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin;
+    make push;
+    fi
