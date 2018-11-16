@@ -209,7 +209,8 @@ kong:
   replicas: 1
 
   image:
-    repository: microkubes/kong:0.14.1-alpine
+    repository: microkubes/kong
+    tag: latest
     pullPolicy: Always
 
   env:
@@ -224,7 +225,8 @@ kong:
     name: kong-migration
 
     image:
-      repository: microkubes/kong:latest
+      repository: microkubes/kong
+      tag: latest
       pullPolicy: Always
       restartPolicy: Never
       command: [ "./migrations.sh" ]

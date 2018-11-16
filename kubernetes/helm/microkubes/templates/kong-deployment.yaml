@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
       - name: {{ template "microkubes.name" . }}-{{ .Values.kong.name }}
-        image: {{ .Values.kong.image.repository }}
+        image: {{ .Values.kong.image.repository }}:{{ .Values.kong.image.tag }}
         imagePullPolicy: {{ .Values.kong.image.pullPolicy }}
         env:
           - name: KONG_ADMIN_LISTEN
