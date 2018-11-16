@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: microservice-apps-management
-          image: microkubes/microservice-apps-management:latest
+          image: microkubes/microservice-apps-management:v1.0.0-beta
           imagePullPolicy: Always
           env:
             - name: SERVICE_CONFIG_FILE
@@ -60,7 +60,7 @@ spec:
     spec:
       containers:
         - name: microservice-user
-          image: microkubes/microservice-user:latest
+          image: microkubes/microservice-user:v1.0.0-beta
           imagePullPolicy: Always
           env:
             - name: SERVICE_CONFIG_FILE
@@ -100,7 +100,7 @@ spec:
     spec:
       containers:
         - name: identity-provider
-          image: microkubes/identity-provider:latest
+          image: microkubes/identity-provider:v1.0.0-beta
           imagePullPolicy: Always
           env:
             - name: SERVICE_CONFIG_FILE
@@ -140,7 +140,7 @@ spec:
     spec:
       containers:
         - name: microservice-user-profile
-          image: microkubes/microservice-user-profile:latest
+          image: microkubes/microservice-user-profile:v1.0.0-beta
           imagePullPolicy: Always
           env:
             - name: SERVICE_CONFIG_FILE
@@ -180,7 +180,7 @@ spec:
     spec:
       containers:
         - name: microservice-registration
-          image: microkubes/microservice-registration:latest
+          image: microkubes/microservice-registration:v1.0.0-beta
           imagePullPolicy: Always
           env:
             - name: SERVICE_CONFIG_FILE
@@ -220,7 +220,7 @@ spec:
     spec:
       containers:
         - name: microservice-mail
-          image: microkubes/microservice-mail:latest
+          image: microkubes/microservice-mail:v1.0.0-beta
           imagePullPolicy: Always
           env:
             - name: SERVICE_CONFIG_FILE
@@ -262,7 +262,7 @@ spec:
     spec:
       containers:
         - name: jwt-issuer
-          image: microkubes/jwt-issuer:latest
+          image: microkubes/jwt-issuer:v1.0.0-beta
           imagePullPolicy: Always
           env:
             - name: SERVICE_CONFIG_FILE
@@ -302,7 +302,7 @@ spec:
     spec:
       containers:
         - name: authorization-server
-          image: microkubes/authorization-server:latest
+          image: microkubes/authorization-server:v1.0.0-beta
           imagePullPolicy: Always
           env:
             - name: SERVICE_CONFIG_FILE

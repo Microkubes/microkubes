@@ -21,7 +21,7 @@ services:
           condition: on-failure
 
   kong-migration:
-    image: microkubes/kong:latest
+    image: microkubes/kong:v1.0.0-beta
     environment:
       - KONG_DATABASE=postgres
       - KONG_PG_HOST=kong-database
@@ -30,7 +30,7 @@ services:
     command: "/migrations.sh"
 
   kong:
-    image: microkubes/kong:latest
+    image: microkubes/kong:v1.0.0-beta
     ports:
       - "8000:8000"
       - "8001:8001"
@@ -120,17 +120,17 @@ services:
         uid: "999"
         gid: "999"
         mode: 0740
-  
+
   microservice-mail:
-    image: microkubes/microservice-mail:latest
+    image: microkubes/microservice-mail:v1.0.0-beta
     deploy:
       restart_policy:
         condition: on-failure
     secrets:
       - microservice_mail_config.json
-  
+
   authorization-server:
-    image: microkubes/authorization-server:latest
+    image: microkubes/authorization-server:v1.0.0-beta
     environment:
       - API_GATEWAY_URL=http://kong:8001
       - MONGO_URL=mongo:27017
@@ -148,7 +148,7 @@ services:
       - microservice_authorization_server_config.json
 
   jwt-issuer:
-    image: microkubes/jwt-issuer:latest
+    image: microkubes/jwt-issuer:v1.0.0-beta
     environment:
       - API_GATEWAY_URL=http://kong:8001
       - MONGO_URL=mongo:27017
@@ -166,7 +166,7 @@ services:
       - microservice_jwt_issuer_config.json
 
   identity-provider:
-    image: microkubes/identity-provider:local
+    image: microkubes/identity-provider:v1.0.0-beta
     environment:
       - API_GATEWAY_URL=http://kong:8001
       - MONGO_URL=mongo:27017
@@ -182,9 +182,9 @@ services:
       - system.pub
       - default.pub
       - microservice_identity_provider_config.json
-  
+
   microservice-apps-management:
-    image: microkubes/microservice-apps-management:latest
+    image: microkubes/microservice-apps-management:v1.0.0-beta
     environment:
       - API_GATEWAY_URL=http://kong:8001
       - MONGO_URL=mongo:27017
@@ -200,9 +200,9 @@ services:
       - system.pub
       - default.pub
       - microservice_apps_management_config.json
-  
+
   microservice-registration:
-    image: microkubes/microservice-registration:latest
+    image: microkubes/microservice-registration:v1.0.0-beta
     environment:
       - API_GATEWAY_URL=http://kong:8001
       - MONGO_URL=mongo:27017
@@ -220,7 +220,7 @@ services:
       - microservice_registration_config.json
 
   microservice-user-profile:
-    image: microkubes/microservice-user-profile:latest
+    image: microkubes/microservice-user-profile:v1.0.0-beta
     environment:
       - API_GATEWAY_URL=http://kong:8001
       - MONGO_URL=mongo:27017
@@ -238,7 +238,7 @@ services:
       - microservice_user_profile_config.json
 
   microservice-user:
-    image: microkubes/microservice-user:latest
+    image: microkubes/microservice-user:v1.0.0-beta
     environment:
       - API_GATEWAY_URL=http://kong:8001
       - MONGO_URL=mongo:27017
