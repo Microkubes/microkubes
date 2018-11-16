@@ -1,0 +1,114 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Backends · Microkubes</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="&lt;p&gt;Microkubes platform supports multiple backends. So far it supports &lt;a href=&quot;https://www.mongodb.com/&quot;&gt;MongoDB&lt;/a&gt; and &lt;a href=&quot;https://aws.amazon.com/dynamodb/&quot;&gt;DynamoDB&lt;/a&gt;. Both databases are nonrelational which are delivering reliable performance at any scale.&lt;/p&gt;
+"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Backends · Microkubes"/><meta property="og:type" content="website"/><meta property="og:url" content="https://www.microkubes.com/index.html"/><meta property="og:description" content="&lt;p&gt;Microkubes platform supports multiple backends. So far it supports &lt;a href=&quot;https://www.mongodb.com/&quot;&gt;MongoDB&lt;/a&gt; and &lt;a href=&quot;https://aws.amazon.com/dynamodb/&quot;&gt;DynamoDB&lt;/a&gt;. Both databases are nonrelational which are delivering reliable performance at any scale.&lt;/p&gt;
+"/><meta name="twitter:card" content="summary"/><link rel="shortcut icon" href="/img/favicon.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><link rel="stylesheet" href="https://use.typekit.net/eaz5jri.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><link rel="stylesheet" href="/css/main.css"/></head><body class="sideNavVisible"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/microkubes-logo.svg" alt="Microkubes"/><h2 class="headerTitleWithLogo">Microkubes</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/docs/installation-and-setup.html" target="_self">Docs</a></li><li class=""><a href="/help.html" target="_self">Support</a></li><li class=""><a href="/about.html" target="_self">About</a></li><li class=""><a href="https://github.com/Microkubes/microkubes" target="_self">Download</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><i></i></div><h2><i>›</i><span>Microkubes Manual</span></h2></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Get Started with Microkubes</h3><ul><li class="navListItem"><a class="navItem" href="/docs/installation-and-setup.html">Get Started with Microkubes</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Microkubes Manual</h3><ul><li class="navListItem"><a class="navItem" href="/docs/introduction.html">Introduction</a></li><li class="navListItem"><a class="navItem" href="/docs/installation.html">Installation</a></li><li class="navListItem"><a class="navItem" href="/docs/external-services.html">External Services</a></li><li class="navListItem"><a class="navItem" href="/docs/configuration.html">Configuration</a></li><li class="navListItem"><a class="navItem" href="/docs/self-registration.html">Self Registration on Kong</a></li><li class="navListItem"><a class="navItem" href="/docs/security.html">Security</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/docs/backends.html">Backends</a></li><li class="navListItem"><a class="navItem" href="/docs/deployments.html">Deployments</a></li><li class="navListItem"><a class="navItem" href="/docs/ci-cd.html">CI, CD, Code Quality</a></li></ul></div></div></section></div><script>
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              const headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                if (event.target.tagName === 'A') {
+                  document.body.classList.remove('tocActive');
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">Backends</h1></header><article><div><span><p>Microkubes platform supports multiple backends. So far it supports <a href="https://www.mongodb.com/">MongoDB</a> and <a href="https://aws.amazon.com/dynamodb/">DynamoDB</a>. Both databases are nonrelational which are delivering reliable performance at any scale.</p>
+<p>Microkubes has its own <code>Golang Package</code> for supporting multiple backends. There is not equivalent library in Python for this purpose. The package is easy to use and set up. The backend is determined by the configuration properties. When some microservice is using backends package it does not care about the backend it uses. It always calls same interface methods.</p>
+<p>Backend is set up at start up of the services. It initialize the backend service base of the configuration provided. The package builds the backend service and returns it to the microservice for the later use.</p>
+<p>Under the hood we are using <a href="https://gopkg.in/mgo.v2">mgo</a> and <a href="https://github.com/guregu/dynamo">dynamo</a> packages for MongoDB and DynamoDB database operations appropriately. The packages are still under development, so the API may change rarely. However, breaking changes will be avoided and the API can be considered relatively stable.</p>
+<p>Creating of MongoDB database is done by using shell script which is run on platform start up. DynamoDB tables on the other hand are created using the official <a href="https://github.com/aws/aws-sdk-go">AWS SDK</a> for the Go programming language.</p>
+<p>Future plan is to add support for <a href="https://www.postgresql.org/">PostgreSQL</a> and other databases.</p>
+<h1><a class="anchor" aria-hidden="true" id="set-up-backends-service"></a><a href="#set-up-backends-service" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Set Up Backends service</h1>
+<p>As mentioned above the package read the DB configuration and base on that creates the backend service.</p>
+<p>In the <code>main.go</code>:</p>
+<p>Define the supported backends:</p>
+<pre><code class="hljs css language-go">  backendManager := backends.NewBackendSupport(<span class="hljs-keyword">map</span>[<span class="hljs-keyword">string</span>]*config.DBInfo{
+    <span class="hljs-string">"mongodb"</span>:  &amp;dbConf.DBInfo,
+    <span class="hljs-string">"dynamodb"</span>: &amp;dbConf.DBInfo,
+  })
+
+</code></pre>
+<p>Get the desire backend(mongoDB or dynamoDB):</p>
+<pre><code class="hljs css language-go">  backend, err := backendManager.GetBackend(dbConf.DBName)
+  <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> {
+    service.LogError(<span class="hljs-string">"Failed to configure backend. "</span>, err)
+  }
+</code></pre>
+<p>Define the repositories(collections/tables):</p>
+<pre><code class="hljs css language-go">  serviceRepo, err := backend.DefineRepository(<span class="hljs-string">"repository-name"</span>, backends.RepositoryDefinitionMap{
+    <span class="hljs-string">"name"</span>:          <span class="hljs-string">"collection/table-name"</span>,
+    <span class="hljs-string">"indexes"</span>:       []<span class="hljs-keyword">string</span>{<span class="hljs-string">"email"</span>},
+    <span class="hljs-string">"hashKey"</span>:       <span class="hljs-string">"email"</span>,
+    <span class="hljs-string">"readCapacity"</span>:  <span class="hljs-keyword">int64</span>(<span class="hljs-number">5</span>),
+    <span class="hljs-string">"writeCapacity"</span>: <span class="hljs-keyword">int64</span>(<span class="hljs-number">5</span>),
+    <span class="hljs-string">"GSI"</span>: <span class="hljs-keyword">map</span>[<span class="hljs-keyword">string</span>]<span class="hljs-keyword">interface</span>{}{
+      <span class="hljs-string">"email"</span>: <span class="hljs-keyword">map</span>[<span class="hljs-keyword">string</span>]<span class="hljs-keyword">interface</span>{}{
+        <span class="hljs-string">"readCapacity"</span>:  <span class="hljs-number">1</span>,
+        <span class="hljs-string">"writeCapacity"</span>: <span class="hljs-number">1</span>,
+      },
+    },
+  })
+  <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> {
+    service.LogError(<span class="hljs-string">"Failed to get repo."</span>, err)
+    <span class="hljs-keyword">return</span>
+  }
+
+</code></pre>
+<ul>
+<li><strong>name</strong> - is the name of the collection/table</li>
+<li><strong>indexes</strong> - are the mongoDB indexs</li>
+<li><strong>hashKey</strong> - is the primary key (hash key) for dynamoDB table</li>
+<li><strong>rangeKey</strong> - is the sort key (range key) for dynamoDB table</li>
+<li><strong>readCapacity</strong> - is the read capacity of the table. 1 unit is eqaul to 4KB</li>
+<li><strong>writeCapacity</strong> - is the write capacity of the table. 1 unit is eqaul to 4KB</li>
+<li><strong>GSI</strong> - are the global secondary indexes for dynamoDB</li>
+<li><strong>enableTtl</strong> - set TTL</li>
+<li><strong>ttlAttribute</strong> - is the TTL attribute in the collection/table</li>
+<li><strong>ttl</strong> - is the TTL value in seconds</li>
+</ul>
+<h2><a class="anchor" aria-hidden="true" id="service-db-configuration"></a><a href="#service-db-configuration" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Service DB configuration</h2>
+<p>The service loads the configuration from a JSON file. Here's an example of a JSON configuration file for DB settings:</p>
+<pre><code class="hljs css language-json">{
+    ...
+    "database":{
+        "dbName": "dynamodb",
+        "dbInfo": {
+        "credentials": "/run/secrets/aws-credentials",
+        "endpoint": "http://dynamo:8000",
+        "awsRegion": "us-east-1",
+        "host": "mongo:27017",
+        "database": "database-name",
+        "user": "username",
+        "pass": "password"
+        }
+    }
+}
+</code></pre>
+<p>Configuration properties:</p>
+<ul>
+<li><strong>dbName</strong> - <code>&quot;dynamodb/mongodb&quot;</code> - is the name of the database( it can be mongodb/dynamodb ).</li>
+<li><strong>dbInfo</strong> - holds informations about each database.</li>
+<li><strong>credentials</strong> - <code>&quot;/run/secrets/aws-credentials&quot;</code> - is the full the to the AWS credentials file.</li>
+<li><strong>endpoint</strong> - <code>&quot;http://dynamo:8000&quot;</code> - is the dynamoDB endpoint. Format <a href="http://host:port">http://host:port</a></li>
+<li><strong>awsRegion</strong> - <code>us-east-1</code> - is the AWS region.</li>
+<li><strong>host</strong> - <code>mongo:27017</code> - mongoDB endpoint. Format host:port.</li>
+<li><strong>database</strong> - <code>db-name</code> - database name. Use only for mongoDB.</li>
+<li><strong>user</strong> - mongo database user</li>
+<li><strong>pass</strong> - mongo database password</li>
+</ul>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/docs/security.html"><span class="arrow-prev">← </span><span>Security</span></a><a class="docs-next button" href="/docs/deployments.html"><span>Deployments</span><span class="arrow-next"> →</span></a></div></div></div></div><footer class="nav-footer" id="footer"><section class="sitemap"><div><h5>Docs</h5><a href="/docs/en/installation-and-setup.html">Getting Started</a><a href="/docs/en/introduction.html">Microkubes Manual</a></div><div><h5>Community</h5><a href="http://stackoverflow.com/questions/tagged/" target="_blank">Stack Overflow</a><a href="https://twitter.com/" target="_blank">Twitter</a></div><div><h5>More</h5><a href="https://github.com/">GitHub</a><a class="github-button" href="https://github.com/facebook/test-site" data-icon="octicon-star" data-count-href="/microkubes/microkubes/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><section class="copyright">Copyright © 2018 Keitaro Inc.</section></footer></div></body></html>

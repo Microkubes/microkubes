@@ -1,0 +1,151 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Deployments · Microkubes</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="&lt;p&gt;&lt;a href=&quot;https://github.com/Microkubes/microkubes&quot;&gt;Microkubes&lt;/a&gt; supports &lt;a href=&quot;https://kubernetes.io/&quot;&gt;Kubernetes&lt;/a&gt; and &lt;a href=&quot;https://docs.docker.com/engine/swarm/&quot;&gt;Docker Swarm&lt;/a&gt; deployments. It works on any cloud, is easy to set up and simple to use at any scale. It provides a completely integrated open source Microservices framework, which works out of the box on Kubernetes and Swarm. The framework is easy to use, can be deployed on any infrastructure.&lt;/p&gt;
+"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Deployments · Microkubes"/><meta property="og:type" content="website"/><meta property="og:url" content="https://www.microkubes.com/index.html"/><meta property="og:description" content="&lt;p&gt;&lt;a href=&quot;https://github.com/Microkubes/microkubes&quot;&gt;Microkubes&lt;/a&gt; supports &lt;a href=&quot;https://kubernetes.io/&quot;&gt;Kubernetes&lt;/a&gt; and &lt;a href=&quot;https://docs.docker.com/engine/swarm/&quot;&gt;Docker Swarm&lt;/a&gt; deployments. It works on any cloud, is easy to set up and simple to use at any scale. It provides a completely integrated open source Microservices framework, which works out of the box on Kubernetes and Swarm. The framework is easy to use, can be deployed on any infrastructure.&lt;/p&gt;
+"/><meta name="twitter:card" content="summary"/><link rel="shortcut icon" href="/img/favicon.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><link rel="stylesheet" href="https://use.typekit.net/eaz5jri.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><link rel="stylesheet" href="/css/main.css"/></head><body class="sideNavVisible"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/microkubes-logo.svg" alt="Microkubes"/><h2 class="headerTitleWithLogo">Microkubes</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/docs/installation-and-setup.html" target="_self">Docs</a></li><li class=""><a href="/help.html" target="_self">Support</a></li><li class=""><a href="/about.html" target="_self">About</a></li><li class=""><a href="https://github.com/Microkubes/microkubes" target="_self">Download</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><i></i></div><h2><i>›</i><span>Microkubes Manual</span></h2></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Get Started with Microkubes</h3><ul><li class="navListItem"><a class="navItem" href="/docs/installation-and-setup.html">Get Started with Microkubes</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Microkubes Manual</h3><ul><li class="navListItem"><a class="navItem" href="/docs/introduction.html">Introduction</a></li><li class="navListItem"><a class="navItem" href="/docs/installation.html">Installation</a></li><li class="navListItem"><a class="navItem" href="/docs/external-services.html">External Services</a></li><li class="navListItem"><a class="navItem" href="/docs/configuration.html">Configuration</a></li><li class="navListItem"><a class="navItem" href="/docs/self-registration.html">Self Registration on Kong</a></li><li class="navListItem"><a class="navItem" href="/docs/security.html">Security</a></li><li class="navListItem"><a class="navItem" href="/docs/backends.html">Backends</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/docs/deployments.html">Deployments</a></li><li class="navListItem"><a class="navItem" href="/docs/ci-cd.html">CI, CD, Code Quality</a></li></ul></div></div></section></div><script>
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              const headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                if (event.target.tagName === 'A') {
+                  document.body.classList.remove('tocActive');
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">Deployments</h1></header><article><div><span><p><a href="https://github.com/Microkubes/microkubes">Microkubes</a> supports <a href="https://kubernetes.io/">Kubernetes</a> and <a href="https://docs.docker.com/engine/swarm/">Docker Swarm</a> deployments. It works on any cloud, is easy to set up and simple to use at any scale. It provides a completely integrated open source Microservices framework, which works out of the box on Kubernetes and Swarm. The framework is easy to use, can be deployed on any infrastructure.</p>
+<p>Each microservice has its own Dockerfile. We use multi-stage build in order reduce the size of the image. The base image for building the microservices is the <code>goa-build</code> image. It contains the all dependencies needed for the platform which speed up the build process. Microkubes use the <code>alpine:3.7</code> image for running the microservices.</p>
+<p><img src="/img/microkubes.png" alt="stack"></p>
+<p>Kubernetes and Docker Swarm are two of the most powerful IT cloud container management platforms. Microkubes is build on top of these technologies</p>
+<h2><a class="anchor" aria-hidden="true" id="kubernetes"></a><a href="#kubernetes" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Kubernetes</h2>
+<p>These instructions will let you deploy the Microkubes on Kubernetes</p>
+<h3><a class="anchor" aria-hidden="true" id="preparing"></a><a href="#preparing" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Preparing</h3>
+<ol>
+<li>Run a single-node Kubernetes cluster via Minikube tool</li>
+</ol>
+<pre><code class="hljs css language-bash">minikube start
+</code></pre>
+<ol start="2">
+<li>Create keys for authorization servers:</li>
+</ol>
+<pre><code class="hljs css language-bash">./keys/create.sh
+</code></pre>
+<ol start="3">
+<li>Create a default microkubes namespace and service account</li>
+</ol>
+<pre><code class="hljs css language-bash">kubectl create -f kubernetes/namespace.yaml
+kubectl create -f kubernetes/serviceaccount.yaml
+</code></pre>
+<ol start="4">
+<li>Create a secret from keys generated in Step 2</li>
+</ol>
+<pre><code class="hljs css language-bash">kubectl -n microkubes create secret generic microkubes-secrets \
+    --from-file=keys/default \
+    --from-file=keys/default.pub \
+    --from-file=keys/private.pem \
+    --from-file=keys/public.pub \
+    --from-file=keys/service.cert \
+    --from-file=keys/service.key \
+    --from-file=keys/system \
+    --from-file=keys/system.pub
+</code></pre>
+<ol start="5">
+<li>Create a secret for the mongo objects creation</li>
+</ol>
+<pre><code class="hljs css language-bash">kubectl -n microkubes create secret generic mongo-init-db \
+        --from-file=./kubernetes/mongo/create_microkubes_db_objects.sh
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="deploy-microkubes"></a><a href="#deploy-microkubes" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Deploy Microkubes</h3>
+<p>Run the following commands:</p>
+<pre><code class="hljs css language-bash"><span class="hljs-built_in">cd</span> kubernetes/
+kubectl create -f consul.yaml
+kubectl create -f kube-consul-register.yaml
+kubectl create -f kong.yaml
+kubectl create -f mongo.yaml
+kubectl create -f rabbitmq.yaml
+kubectl create -f fakesmtp.yaml
+kubectl create -f microkubes.yaml
+</code></pre>
+<p>The platform takes about 5 minutes to bring up and you can follow the progress using <code>kubectl -n microkubes get pods -w</code>.
+Once all services are running, you can start using microkubes.</p>
+<h3><a class="anchor" aria-hidden="true" id="check-that-microkubes-is-up-and-running"></a><a href="#check-that-microkubes-is-up-and-running" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Check that microkubes is up and running</h3>
+<p>The API gateway is exposed as a nodePort in kubernetes, you can get the URL and do an http GET request to check that microkubes is responding.</p>
+<pre><code class="hljs css language-bash">MICROKUBES_URL=`minikube service -n microkubes kong --url`
+curl <span class="hljs-variable">$MICROKUBES_URL</span>/users
+</code></pre>
+<p><a href="https://github.com/helm/charts">Helm chart</a> will be available very soon.</p>
+<h2><a class="anchor" aria-hidden="true" id="docker-swarm"></a><a href="#docker-swarm" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Docker Swarm</h2>
+<p>The <a href="https://github.com/Microkubes/microkubes/tree/master/docker">docker</a> subdirectory of Microkubes platform contains docker compose files to run Microkubes platform on docker swarm</p>
+<h3><a class="anchor" aria-hidden="true" id="run-microkubes-on-docker-swarm"></a><a href="#run-microkubes-on-docker-swarm" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Run Microkubes on Docker Swarm</h3>
+<p>First make sure your node is swarm manager. If not, initialize a swarm first:</p>
+<pre><code class="hljs css language-bash">docker swarm init
+</code></pre>
+<p>Then generate the keys:</p>
+<pre><code class="hljs css language-bash"><span class="hljs-built_in">cd</span> keys
+./generate-keys.sh
+</code></pre>
+<p>Once you have the keys in the <code>keys</code> directory, run the script to build all Microkubes docker
+images:</p>
+<pre><code class="hljs css language-bash"><span class="hljs-built_in">cd</span> ..
+./build-docker-images.sh &lt;build_directory&gt; [&lt;images_tag&gt;]
+</code></pre>
+<p>This would build all Microkubes images (may take a while) in the <code>build</code> directory.</p>
+<p>To deploy the full platform, run:</p>
+<pre><code class="hljs css language-bash">docker stack deploy -c docker-compose.fullstack.yml microkubes
+</code></pre>
+<p>Confirm that all services have been deployed by running <code>docker service ls</code></p>
+<h3><a class="anchor" aria-hidden="true" id="deploy-the-basic-infrastructure-only"></a><a href="#deploy-the-basic-infrastructure-only" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Deploy the basic infrastructure only</h3>
+<p>We provide a compose file to deploy only the basic infrastructure and the build upon that stack.
+You can deploy this as a docker swarm stack by running:</p>
+<pre><code class="hljs css language-bash">docker stack deploy -c docker-compose.yml microkubes
+</code></pre>
+<h2><a class="anchor" aria-hidden="true" id="build-images-script"></a><a href="#build-images-script" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Build images script</h2>
+<p>The platfrom provides a script to build all Microkubes images at once. It resides in <a href="https://github.com/Microkubes/microkubes/tree/master/docker">docker</a> subdirectory.</p>
+<p>The script syntax:</p>
+<pre><code class="hljs css language-bash">./build-docker-images.sh &lt;build_directory&gt; [&lt;images_tag&gt;]
+</code></pre>
+<p>where:</p>
+<ul>
+<li><code>build_directory</code> is the target directory in which to checkout the source code and from which to build the docker images.
+If the direcotry does not exists, it will be created. If the build directory already has the subprojects cloned with git, then
+the script will not attempt to clone the repositories and will use the existing ones. Default target direcotry is the current
+working directory.</li>
+<li><code>images_tag</code> - the docker tag to append to the docker images. Default is <code>latest</code> (for example: <code>microkubes/kong:latest</code>).</li>
+</ul>
+<p>The example below shows the usual Dockerfile of Microkubes service:</p>
+<pre><code class="hljs css language-Dockerfile"><span class="hljs-comment">### Multi-stage build</span>
+<span class="hljs-keyword">FROM</span> jormungandrk/goa-build as build
+
+<span class="hljs-keyword">RUN</span><span class="bash"> apk --update add ca-certificates
+</span>
+<span class="hljs-keyword">COPY</span><span class="bash"> . /go/src/github.com/Microkubes/microservice-name
+</span><span class="hljs-keyword">RUN</span><span class="bash"> CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go install github.com/Microkubes/microservice-name
+</span>
+<span class="hljs-comment">### Main</span>
+<span class="hljs-keyword">FROM</span> alpine:<span class="hljs-number">3.7</span>
+
+<span class="hljs-keyword">COPY</span><span class="bash"> --from=build /go/src/github.com/Microkubes/microservice-name/config.json /config.json
+</span><span class="hljs-keyword">COPY</span><span class="bash"> --from=build /go/bin/microservice-name /microservice-name
+</span><span class="hljs-keyword">COPY</span><span class="bash"> --from=build /etc/ssl/certs /etc/ssl/certs
+</span>
+<span class="hljs-keyword">EXPOSE</span> <span class="hljs-number">8080</span>
+
+<span class="hljs-keyword">ENV</span> API_GATEWAY_URL=<span class="hljs-string">"http://localhost:8001"</span>
+
+<span class="hljs-keyword">CMD</span><span class="bash"> [<span class="hljs-string">"/microservice-name"</span>]
+</span></code></pre>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/docs/backends.html"><span class="arrow-prev">← </span><span>Backends</span></a><a class="docs-next button" href="/docs/ci-cd.html"><span>CI, CD, Code Quality</span><span class="arrow-next"> →</span></a></div></div></div></div><footer class="nav-footer" id="footer"><section class="sitemap"><div><h5>Docs</h5><a href="/docs/en/installation-and-setup.html">Getting Started</a><a href="/docs/en/introduction.html">Microkubes Manual</a></div><div><h5>Community</h5><a href="http://stackoverflow.com/questions/tagged/" target="_blank">Stack Overflow</a><a href="https://twitter.com/" target="_blank">Twitter</a></div><div><h5>More</h5><a href="https://github.com/">GitHub</a><a class="github-button" href="https://github.com/facebook/test-site" data-icon="octicon-star" data-count-href="/microkubes/microkubes/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><section class="copyright">Copyright © 2018 Keitaro Inc.</section></footer></div></body></html>

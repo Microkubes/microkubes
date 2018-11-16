@@ -1,0 +1,43 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Configuration · Microkubes</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="&lt;p&gt;Each microservice on the platorm hat it own config file. It resides in the root of the service.&lt;/p&gt;
+"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Configuration · Microkubes"/><meta property="og:type" content="website"/><meta property="og:url" content="https://www.microkubes.com/index.html"/><meta property="og:description" content="&lt;p&gt;Each microservice on the platorm hat it own config file. It resides in the root of the service.&lt;/p&gt;
+"/><meta name="twitter:card" content="summary"/><link rel="shortcut icon" href="/img/favicon.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><link rel="stylesheet" href="https://use.typekit.net/eaz5jri.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><link rel="stylesheet" href="/css/main.css"/></head><body class="sideNavVisible"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/microkubes-logo.svg" alt="Microkubes"/><h2 class="headerTitleWithLogo">Microkubes</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/docs/installation-and-setup.html" target="_self">Docs</a></li><li class=""><a href="/help.html" target="_self">Support</a></li><li class=""><a href="/about.html" target="_self">About</a></li><li class=""><a href="https://github.com/Microkubes/microkubes" target="_self">Download</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><i></i></div><h2><i>›</i><span>Microkubes Manual</span></h2></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Get Started with Microkubes</h3><ul><li class="navListItem"><a class="navItem" href="/docs/installation-and-setup.html">Get Started with Microkubes</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Microkubes Manual</h3><ul><li class="navListItem"><a class="navItem" href="/docs/introduction.html">Introduction</a></li><li class="navListItem"><a class="navItem" href="/docs/installation.html">Installation</a></li><li class="navListItem"><a class="navItem" href="/docs/external-services.html">External Services</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/docs/configuration.html">Configuration</a></li><li class="navListItem"><a class="navItem" href="/docs/self-registration.html">Self Registration on Kong</a></li><li class="navListItem"><a class="navItem" href="/docs/security.html">Security</a></li><li class="navListItem"><a class="navItem" href="/docs/backends.html">Backends</a></li><li class="navListItem"><a class="navItem" href="/docs/deployments.html">Deployments</a></li><li class="navListItem"><a class="navItem" href="/docs/ci-cd.html">CI, CD, Code Quality</a></li></ul></div></div></section></div><script>
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              const headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                if (event.target.tagName === 'A') {
+                  document.body.classList.remove('tocActive');
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">Configuration</h1></header><article><div><span><p>Each microservice on the platorm hat it own config file. It resides in the root of the service.
+In different deployment systems (<a href="https://docs.docker.com/engine/swarm/">Docker Swarm</a>/<a href="https://kubernetes.io/">Kubernetes</a>) it is mounted under some volume path. The default path of the configuration file is <code>/run/secrets/microservice-name_config.json</code>. To change the path set the SERVICE_CONFIG_FILE enviroment variable.</p>
+<p>The format of the configuration file is <code>JSON</code>. It is easy to manage the configuration and extend as need is growing.</p>
+<p>Micrkubes has its own <a href="https://github.com/Microkubes/microservice-tools/tree/master/config">package</a> for managing the configuration files. It is able to load the remote and local config as well. It holds the full microservice configuration:</p>
+<ul>
+<li>Configuration for registering on the API Gateway</li>
+<li>Security configuration</li>
+<li>Database configuration</li>
+<li>API Gateway URL</li>
+<li>API Admin Gateway URL</li>
+<li>Container Manager</li>
+</ul>
+<p><strong>Note:</strong> You are able to add new property to the configuration by extending it.</p>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/docs/external-services.html"><span class="arrow-prev">← </span><span>External Services</span></a><a class="docs-next button" href="/docs/self-registration.html"><span>Self Registration on Kong</span><span class="arrow-next"> →</span></a></div></div></div></div><footer class="nav-footer" id="footer"><section class="sitemap"><div><h5>Docs</h5><a href="/docs/en/installation-and-setup.html">Getting Started</a><a href="/docs/en/introduction.html">Microkubes Manual</a></div><div><h5>Community</h5><a href="http://stackoverflow.com/questions/tagged/" target="_blank">Stack Overflow</a><a href="https://twitter.com/" target="_blank">Twitter</a></div><div><h5>More</h5><a href="https://github.com/">GitHub</a><a class="github-button" href="https://github.com/facebook/test-site" data-icon="octicon-star" data-count-href="/microkubes/microkubes/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><section class="copyright">Copyright © 2018 Keitaro Inc.</section></footer></div></body></html>

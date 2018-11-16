@@ -1,0 +1,114 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>CI, CD, Code Quality · Microkubes</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="&lt;p&gt;For all changes in the platform PR must be creating. On merging the PR to &lt;code&gt;master&lt;/code&gt; branch &lt;a href=&quot;https://travis-ci.org/&quot;&gt;TravisCI&lt;/a&gt; is triggered. The build makes several things:&lt;/p&gt;
+"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="CI, CD, Code Quality · Microkubes"/><meta property="og:type" content="website"/><meta property="og:url" content="https://www.microkubes.com/index.html"/><meta property="og:description" content="&lt;p&gt;For all changes in the platform PR must be creating. On merging the PR to &lt;code&gt;master&lt;/code&gt; branch &lt;a href=&quot;https://travis-ci.org/&quot;&gt;TravisCI&lt;/a&gt; is triggered. The build makes several things:&lt;/p&gt;
+"/><meta name="twitter:card" content="summary"/><link rel="shortcut icon" href="/img/favicon.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><link rel="stylesheet" href="https://use.typekit.net/eaz5jri.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><link rel="stylesheet" href="/css/main.css"/></head><body class="sideNavVisible"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/microkubes-logo.svg" alt="Microkubes"/><h2 class="headerTitleWithLogo">Microkubes</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/docs/installation-and-setup.html" target="_self">Docs</a></li><li class=""><a href="/help.html" target="_self">Support</a></li><li class=""><a href="/about.html" target="_self">About</a></li><li class=""><a href="https://github.com/Microkubes/microkubes" target="_self">Download</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><i></i></div><h2><i>›</i><span>Microkubes Manual</span></h2></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Get Started with Microkubes</h3><ul><li class="navListItem"><a class="navItem" href="/docs/installation-and-setup.html">Get Started with Microkubes</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Microkubes Manual</h3><ul><li class="navListItem"><a class="navItem" href="/docs/introduction.html">Introduction</a></li><li class="navListItem"><a class="navItem" href="/docs/installation.html">Installation</a></li><li class="navListItem"><a class="navItem" href="/docs/external-services.html">External Services</a></li><li class="navListItem"><a class="navItem" href="/docs/configuration.html">Configuration</a></li><li class="navListItem"><a class="navItem" href="/docs/self-registration.html">Self Registration on Kong</a></li><li class="navListItem"><a class="navItem" href="/docs/security.html">Security</a></li><li class="navListItem"><a class="navItem" href="/docs/backends.html">Backends</a></li><li class="navListItem"><a class="navItem" href="/docs/deployments.html">Deployments</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/docs/ci-cd.html">CI, CD, Code Quality</a></li></ul></div></div></section></div><script>
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              const headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                if (event.target.tagName === 'A') {
+                  document.body.classList.remove('tocActive');
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">CI, CD, Code Quality</h1></header><article><div><span><p>For all changes in the platform PR must be creating. On merging the PR to <code>master</code> branch <a href="https://travis-ci.org/">TravisCI</a> is triggered. The build makes several things:</p>
+<ul>
+<li>Download all dependencies</li>
+<li>Install the microservice</li>
+<li>Run tests</li>
+<li>Build new image</li>
+<li>Push the image on <a href="https://hub.docker.com/">docker hub</a> automatically</li>
+</ul>
+<p>The usual .travis.yaml file:</p>
+<pre><code class="hljs css language-yaml"><span class="hljs-attr">sudo:</span> <span class="hljs-string">required</span>
+
+<span class="hljs-attr">env:</span>
+<span class="hljs-attr">  global:</span>
+<span class="hljs-bullet">    -</span> <span class="hljs-string">CC_TEST_REPORTER_ID=${CODE_CLIMATE_REPORTER_ID}</span>
+<span class="hljs-bullet">    -</span> <span class="hljs-string">GIT_COMMITTED_AT=$(if</span> <span class="hljs-string">[</span> <span class="hljs-string">"$TRAVIS_PULL_REQUEST"</span> <span class="hljs-string">==</span> <span class="hljs-string">"false"</span> <span class="hljs-string">];</span> <span class="hljs-string">then</span> <span class="hljs-string">git</span> <span class="hljs-string">log</span> <span class="hljs-bullet">-1</span> <span class="hljs-bullet">--pretty=format:%ct;</span> <span class="hljs-string">else</span> <span class="hljs-string">git</span> <span class="hljs-string">log</span> <span class="hljs-bullet">-1</span> <span class="hljs-bullet">--skip</span> <span class="hljs-number">1</span> <span class="hljs-bullet">--pretty=format:%ct;</span> <span class="hljs-string">fi)</span>
+
+<span class="hljs-attr">language:</span> <span class="hljs-string">go</span>
+
+<span class="hljs-attr">go:</span>
+<span class="hljs-bullet">  -</span> <span class="hljs-number">1.10</span><span class="hljs-string">.x</span>
+
+<span class="hljs-attr">before_install:</span>
+<span class="hljs-bullet">  -</span> <span class="hljs-string">curl</span> <span class="hljs-bullet">-fsSL</span> <span class="hljs-attr">https://download.docker.com/linux/ubuntu/gpg</span> <span class="hljs-string">| sudo apt-key add -
+  - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+  - sudo apt-get update
+  - sudo apt-get -y install docker-ce
+  - go get github.com/axw/gocov/gocov
+  - go get github.com/AlekSi/gocov-xml
+  - go get gopkg.in/h2non/gock.v1
+  - go get -u github.com/Microkubes/microservice-tools/...
+  - go get -u github.com/Microkubes/microservice-security/...
+  - go get github.com/goadesign/goa/...
+  - go get gopkg.in/mgo.v2
+
+</span><span class="hljs-attr">before_script:</span>
+<span class="hljs-bullet">  -</span> <span class="hljs-string">curl</span> <span class="hljs-bullet">-L</span> <span class="hljs-attr">https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64</span> <span class="hljs-string">&gt; ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+
+</span><span class="hljs-attr">script:</span>
+<span class="hljs-bullet">  -</span> <span class="hljs-string">gocov</span> <span class="hljs-string">test</span> <span class="hljs-string">github.com/Microkubes/microservice-name/...</span> <span class="hljs-string">| gocov-xml &gt; coverage.xml &amp;&amp; ./cc-test-reporter format-coverage -t cobertura -o coverage.json coverage.xml
+  - if [ "$TRAVIS_PULL_REQUEST" == "false" ] &amp;&amp; [ "$TRIGGER" != "yes" ]; then
+    ./cc-test-reporter upload-coverage -i coverage.json;
+    fi
+
+</span><span class="hljs-attr">after_success:</span>
+<span class="hljs-bullet">  -</span> <span class="hljs-string">if</span> <span class="hljs-string">[</span> <span class="hljs-string">"$TRAVIS_BRANCH"</span> <span class="hljs-string">==</span> <span class="hljs-string">"master"</span> <span class="hljs-string">]</span> <span class="hljs-string">&amp;&amp;</span> <span class="hljs-string">[</span> <span class="hljs-string">"$TRAVIS_PULL_REQUEST"</span> <span class="hljs-string">==</span> <span class="hljs-string">"false"</span> <span class="hljs-string">];</span> <span class="hljs-string">then</span>
+    <span class="hljs-string">docker</span> <span class="hljs-string">login</span> <span class="hljs-bullet">-u</span> <span class="hljs-string">"$DOCKER_USERNAME"</span> <span class="hljs-bullet">-p</span> <span class="hljs-string">"$DOCKER_PASSWORD"</span><span class="hljs-string">;</span>
+    <span class="hljs-string">make</span> <span class="hljs-string">push;</span>
+    <span class="hljs-string">fi</span>
+</code></pre>
+<p>Each microservice has it own Makefile for building/pushing docker images and running the service: Example:</p>
+<pre><code class="hljs css language-Makefile">VERSION := <span class="hljs-variable">$(<span class="hljs-built_in">shell</span> git describe --tags --exact-match 2&gt;/dev/null || echo latest)</span>
+DOCKERHUB_NAMESPACE ?= microkubes
+IMAGE := ${DOCKERHUB_NAMESPACE}/microservice-user:${VERSION}
+
+<span class="hljs-section">build:</span>
+    docker build -t ${IMAGE} .
+
+<span class="hljs-section">push: build</span>
+    docker push ${IMAGE}
+
+<span class="hljs-section">run: build</span>
+    docker run -p 8080:8080 ${IMAGE}
+</code></pre>
+<p>When it building/pushing docker images it takes the latest git tag and set it as image tag. Namespace by default is <code>microkubes</code>.</p>
+<p>For Code Quality we use <a href="https://codeclimate.com/">Code Climate</a>. It makes code review, report test coverage and so on. Travis build reports the test coverage to Code Climate. It supports Golang among the other programming languages. Each microservice has .codeclimate.yml file which sets the Code Climate configuration:</p>
+<pre><code class="hljs css language-yaml"><span class="hljs-meta">---</span>
+<span class="hljs-attr">engines:</span>
+<span class="hljs-attr">  fixme:</span>
+<span class="hljs-attr">    enabled:</span> <span class="hljs-literal">true</span>
+<span class="hljs-attr">  gofmt:</span>
+<span class="hljs-attr">    enabled:</span> <span class="hljs-literal">true</span>
+<span class="hljs-attr">  golint:</span>
+<span class="hljs-attr">    enabled:</span> <span class="hljs-literal">true</span>
+<span class="hljs-attr">    checks:</span>
+      <span class="hljs-string">GoLint/Imports/ImportDot:</span>
+<span class="hljs-attr">        enabled:</span> <span class="hljs-literal">false</span>
+<span class="hljs-attr">  govet:</span>
+<span class="hljs-attr">    enabled:</span> <span class="hljs-literal">true</span>
+<span class="hljs-attr">ratings:</span>
+<span class="hljs-attr">  paths:</span>
+<span class="hljs-bullet">    -</span> <span class="hljs-string">"**.go"</span>
+<span class="hljs-attr">exclude_paths:</span> <span class="hljs-string">[]</span>
+</code></pre>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/docs/deployments.html"><span class="arrow-prev">← </span><span>Deployments</span></a></div></div></div></div><footer class="nav-footer" id="footer"><section class="sitemap"><div><h5>Docs</h5><a href="/docs/en/installation-and-setup.html">Getting Started</a><a href="/docs/en/introduction.html">Microkubes Manual</a></div><div><h5>Community</h5><a href="http://stackoverflow.com/questions/tagged/" target="_blank">Stack Overflow</a><a href="https://twitter.com/" target="_blank">Twitter</a></div><div><h5>More</h5><a href="https://github.com/">GitHub</a><a class="github-button" href="https://github.com/facebook/test-site" data-icon="octicon-star" data-count-href="/microkubes/microkubes/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><section class="copyright">Copyright © 2018 Keitaro Inc.</section></footer></div></body></html>
