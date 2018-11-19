@@ -21,7 +21,7 @@ services:
           condition: on-failure
 
   kong-migration:
-    image: microkubes/kong:latest
+    image: microkubes/kong:v1.0.0-beta
     environment:
       - KONG_DATABASE=postgres
       - KONG_PG_HOST=kong-database
@@ -30,7 +30,7 @@ services:
     command: "/migrations.sh"
 
   kong:
-    image: microkubes/kong:latest
+    image: microkubes/kong:v1.0.0-beta
     ports:
       - "8000:8000"
       - "8001:8001"
@@ -51,7 +51,7 @@ services:
 
   nginx:
     image: nginx:latest
-    ports: 
+    ports:
       - 10080:80
 
 
