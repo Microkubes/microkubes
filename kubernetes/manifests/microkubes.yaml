@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: microservice-apps-management
-          image: microkubes/microservice-apps-management:v1.0.0-beta
+          image: microkubes/microservice-apps-management:v1.0.1-beta
           imagePullPolicy: Always
           env:
             - name: SERVICE_CONFIG_FILE
@@ -60,7 +60,7 @@ spec:
     spec:
       containers:
         - name: microservice-user
-          image: microkubes/microservice-user:v1.0.0-beta
+          image: microkubes/microservice-user:v1.0.1-beta
           imagePullPolicy: Always
           env:
             - name: SERVICE_CONFIG_FILE
@@ -100,7 +100,7 @@ spec:
     spec:
       containers:
         - name: identity-provider
-          image: microkubes/identity-provider:v1.0.0-beta
+          image: microkubes/identity-provider:v1.0.2-beta
           imagePullPolicy: Always
           env:
             - name: SERVICE_CONFIG_FILE
@@ -140,7 +140,7 @@ spec:
     spec:
       containers:
         - name: microservice-user-profile
-          image: microkubes/microservice-user-profile:v1.0.0-beta
+          image: microkubes/microservice-user-profile:v1.0.1-beta
           imagePullPolicy: Always
           env:
             - name: SERVICE_CONFIG_FILE
@@ -180,7 +180,7 @@ spec:
     spec:
       containers:
         - name: microservice-registration
-          image: microkubes/microservice-registration:v1.0.0-beta
+          image: microkubes/microservice-registration:v1.0.1-beta
           imagePullPolicy: Always
           env:
             - name: SERVICE_CONFIG_FILE
@@ -262,7 +262,7 @@ spec:
     spec:
       containers:
         - name: jwt-issuer
-          image: microkubes/jwt-issuer:v1.0.0-beta
+          image: microkubes/jwt-issuer:v1.0.1-beta
           imagePullPolicy: Always
           env:
             - name: SERVICE_CONFIG_FILE

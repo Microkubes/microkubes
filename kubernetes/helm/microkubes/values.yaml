@@ -38,7 +38,7 @@ microkubes:
 
     image:
       repository: microkubes/identity-provider
-      tag: v1.0.0-beta
+      tag: v1.0.2-beta
       pullPolicy: Always
 
     podAnnotations:
@@ -53,7 +53,7 @@ microkubes:
 
     image:
       repository: microkubes/jwt-issuer
-      tag: v1.0.0-beta
+      tag: v1.0.1-beta
       pullPolicy: Always
 
     podAnnotations:
@@ -67,7 +67,7 @@ microkubes:
 
     image:
       repository: microkubes/microservice-apps-management
-      tag: v1.0.0-beta
+      tag: v1.0.1-beta
       pullPolicy: Always
 
     podAnnotations:
@@ -98,7 +98,7 @@ microkubes:
 
     image:
       repository: microkubes/microservice-registration
-      tag: v1.0.0-beta
+      tag: v1.0.1-beta
       pullPolicy: Always
 
     podAnnotations:
@@ -113,7 +113,7 @@ microkubes:
 
     image:
       repository: microkubes/microservice-user
-      tag: v1.0.0-beta
+      tag: v1.0.1-beta
       pullPolicy: Always
 
     podAnnotations:
@@ -128,7 +128,7 @@ microkubes:
 
     image:
       repository: microkubes/microservice-user-profile
-      tag: v1.0.0-beta
+      tag: v1.0.1-beta
       pullPolicy: Always
 
     podAnnotations:
