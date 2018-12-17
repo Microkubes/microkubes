@@ -75,3 +75,6 @@ The API gateway is exposed as a nodePort in kubernetes, you can get the URL and 
 MICROKUBES_URL=`minikube service -n microkubes kong --url`
 curl $MICROKUBES_URL/users
 ```
+## Contributing
+
+For contributing to this repository or its documentation, see the [Contributing guidelines](CONTRIBUTING.md).
