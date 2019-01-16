@@ -13,21 +13,21 @@ data:
   config.json: |
     {
       "jwt":{
-        "issuer": "Microkubes JWT Authority",
-        "signingMethod": "RS512",
+        "issuer": "{{ .Values.microkubes.jwtissuer.jwt.issuer }}",
+        "signingMethod": "{{ .Values.microkubes.jwtissuer.jwt.signingMethod }}",
         "expiryTime": 86400000
       },
       "keys": {
-        "default": "/run/secrets/default",
-        "system": "/run/secrets/system"
+        "default": {{ .Values.microkubes.jwtissuer.keys.default | quote }},
+        "system": {{ .Values.microkubes.jwtissuer.keys.system | quote }}
       },
       "microservice": {
         "name": "{{ .Values.microkubes.jwtissuer.name }}",
-        "port": 8080,
-        "paths": ["/jwt"],
+        "port": {{ .Values.microkubes.jwtissuer.microservice.port }},
+        "paths": [{{- range $index, $item := .Values.microkubes.jwtissuer.microservice.paths }}{{ if $index }}, {{ end }}{{ $item | quote }}{{- end }}],
         "virtual_host": "{{ .Values.microkubes.jwtissuer.name }}.service.consul",
-        "weight": 10,
-        "slots": 100
+        "weight": {{ .Values.microkubes.jwtissuer.microservice.weight }},
+        "slots": {{ .Values.microkubes.jwtissuer.microservice.slots }}
       },
       "services": {
         "user-microservice": "http://{{ .Release.Name }}-{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}/users"
