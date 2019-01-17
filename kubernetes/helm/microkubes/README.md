@@ -9,9 +9,10 @@ The helm chart implements all the relevant configuration parameters that can be 
 * Install [Helm](https://github.com/helm/helm/releases)
 * Make sure that you have helm tiller running in your cluster, if not run `helm init`
 * Setup correctly kubectl and kubeconfig setup before running helm.
-* Generate keys needed for authorization with the following command: `./keys/create.sh`
 
 ## Deploy Microkubes on kubernetes cluster
+
+Before deploying Microkubes on kubernetes cluster execute the following command to generate keys needed for authorization: `./keys/create.sh`.
 
 To deploy Microkubes on kubernetes cluster with the release name `<release-name>` within namespace `<namespace-name>`:
 
