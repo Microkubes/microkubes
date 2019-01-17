@@ -12,7 +12,7 @@ Once all services are running, you can start using microkubes.
 
   curl -v $MICROKUBES_URL/users/register -d '{"fullname":"John Smith", "password": "password", "email": "johnsmith@company.com"}'
 
-  The emial will be sent to johnsmith@company.com. Click on verification link to activate the user.
+  The email will be sent to johnsmith@company.com. Click on verification link to activate the user.
 
 3. Get JWT Token
 

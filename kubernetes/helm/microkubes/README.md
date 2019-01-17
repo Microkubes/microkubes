@@ -9,6 +9,7 @@ The helm chart implements all the relevant configuration parameters that can be 
 * Install [Helm](https://github.com/helm/helm/releases)
 * Make sure that you have helm tiller running in your cluster, if not run `helm init`
 * Setup correctly kubectl and kubeconfig setup before running helm.
+* Generate keys needed for authorization with the following command: `./keys/create.sh`
 
 ## Deploy Microkubes on kubernetes cluster
 
@@ -34,22 +35,6 @@ Alternatively, you can specify each parameter using the `--set key=value[,key=va
 ```console
 $ helm install --namespace <namespace-name> --name <release-name> -f microkubes/values-development.yaml microkubes/
 ```
-
-## Secrets
-
-Platfrom secrets are all Base64 encoded. Microkubes [keys](https://github.com/Microkubes/microkubes/tree/master/docker/keys) and MongoDB init [script](https://github.com/Microkubes/microkubes/blob/master/docker/mongo/create_db_objects.sh) are base64 encoded and put in [microkubes secrets](https://github.com/Microkubes/microkubes/blob/helm/kubernetes/helm/microkubes/templates/microkubes-secrets.yaml) template file which creates platform secrets.
-
-If you want to generate new keys first run the script:
-```console
-./keys/create.sh
-```
-
-then encode the content:
-```console
-base64 keys/default.pub  >&2
-```
-
-The encoded content put in the [microkubes secrets](https://github.com/Microkubes/microkubes/blob/helm/kubernetes/helm/microkubes/templates/microkubes-secrets.yaml) template file.
 
 ## Cleanup
 

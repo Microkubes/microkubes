@@ -14,63 +14,63 @@ data:
     {
       "service":{
         "name": "{{ .Values.microkubes.userprofile.name }}",
-        "port": 8080,
-        "paths": ["/profiles"],
+        "port": {{ .Values.microkubes.userprofile.service.port }},
+        "paths": [{{- range $index, $item := .Values.microkubes.userprofile.service.paths }}{{ if $index }}, {{ end }}{{ $item | quote }}{{- end }}],
         "virtual_host": "{{ .Values.microkubes.userprofile.name }}.service.consul",
-        "weight": 10,
-        "slots": 100
+        "weight": {{ .Values.microkubes.userprofile.service.weight }},
+        "slots": {{ .Values.microkubes.userprofile.service.slots }}
       },
       "gatewayUrl": "http://{{ .Release.Name }}-{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}",
       "gatewayAdminUrl": "http://{{ .Release.Name }}-{{ .Values.kong.adminServiceName }}:{{ .Values.kong.adminServicePort }}",
       "security":{
-        "keysDir": "/run/secrets",
+        "keysDir": {{ .Values.microkubes.userprofile.security.keysDir | quote }},
         "jwt":{
-          "description": "JWT security middleware",
+          "description": "{{ .Values.microkubes.userprofile.security.jwt.description }}",
           "tokenUrl": "http://{{ .Release.Name }}-{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}/jwt/signin"
         },
         "saml":{
-          "certFile": "/run/secrets/service.cert",
-          "keyFile": "/run/secrets/service.key",
+          "certFile": {{ .Values.microkubes.userprofile.security.saml.certFile | quote }},
+          "keyFile": {{ .Values.microkubes.userprofile.security.saml.keyFile | quote }},
           "identityProviderUrl": "http://{{ .Release.Name }}-{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}/saml/idp",
           "userServiceUrl": "http://{{ .Release.Name }}-{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}/users",
           "registrationServiceUrl": "http://{{ .Release.Name }}-{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}/users/register",
           "rootURL": "http://localhost:{{ .Values.kong.servicePort }}/profiles"
         },
         "oauth2":{
-          "description": "OAuth2 security middleware",
+          "description": "{{ .Values.microkubes.userprofile.security.oauth2.description }}",
           "tokenUrl": "https://{{ .Release.Name }}-{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}/oauth2/token",
           "authorizeUrl": "https://{{ .Release.Name }}-{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}/oauth2/authorize"
         },
         "acl": {
           "policies":[{
-              "id": "read-swagger",
-              "description": "Allows to service swagger.",
-              "resources": ["/swagger<.+>"],
-              "actions": ["api:read"],
-              "effect": "allow",
-              "subjects": ["<.+>"]
+              "id": "{{ .Values.microkubes.userprofile.security.acl.policy_read_swagger.id }}",
+              "description": "{{ .Values.microkubes.userprofile.security.acl.policy_read_swagger.description }}",
+              "resources": [{{- range $index, $item := .Values.microkubes.userprofile.security.acl.policy_read_swagger.resources }}{{ if $index }}, {{ end }}{{ $item | quote }}{{- end }}],
+              "actions": [{{- range $index, $item := .Values.microkubes.userprofile.security.acl.policy_read_swagger.actions }}{{ if $index }}, {{ end }}{{ $item | quote }}{{- end }}],
+              "effect": "{{ .Values.microkubes.userprofile.security.acl.policy_read_swagger.effect }}",
+              "subjects": [{{- range $index, $item := .Values.microkubes.userprofile.security.acl.policy_read_swagger.subjects }}{{ if $index }}, {{ end }}{{ $item | quote }}{{- end }}]
           },{
-              "id": "profile-allow-admin-access",
-              "description": "Allows access to everything to an admin user",
-              "resources": ["<.+>"],
-              "actions": ["api:read","api:write"],
-              "effect": "allow",
-              "subjects": ["<.+>"],
+              "id": "{{ .Values.microkubes.userprofile.security.acl.policy_allow_admin.id }}",
+              "description": "{{ .Values.microkubes.userprofile.security.acl.policy_allow_admin.description }}",
+              "resources": [{{- range $index, $item := .Values.microkubes.userprofile.security.acl.policy_allow_admin.resources }}{{ if $index }}, {{ end }}{{ $item | quote }}{{- end }}],
+              "actions": [{{- range $index, $item := .Values.microkubes.userprofile.security.acl.policy_allow_admin.actions }}{{ if $index }}, {{ end }}{{ $item | quote }}{{- end }}],
+              "effect": "{{ .Values.microkubes.userprofile.security.acl.policy_allow_admin.effect }}",
+              "subjects": [{{- range $index, $item := .Values.microkubes.userprofile.security.acl.policy_allow_admin.subjects }}{{ if $index }}, {{ end }}{{ $item | quote }}{{- end }}],
               "conditions": {
                 "roles": {
-                  "type": "RolesCondition",
+                  "type": "{{ .Values.microkubes.userprofile.security.acl.policy_allow_admin.conditions.roles.type }}",
                   "options": {
-                    "values": ["admin"]
+                    "values": [{{- range $index, $item := .Values.microkubes.userprofile.security.acl.policy_allow_admin.conditions.roles.options.values }}{{ if $index }}, {{ end }}{{ $item | quote }}{{- end }}]
                   }
                 }
               }
           },{
-              "id": "profile-allow-user-access",
-              "description": "Allows user to access its profile",
-              "resources": ["/profiles/me"],
-              "actions": ["api:read","api:write"],
-              "effect": "allow",
-              "subjects": ["<.+>"]
+              "id": "{{ .Values.microkubes.userprofile.security.acl.policy_allow_user.id }}",
+              "description": "{{ .Values.microkubes.userprofile.security.acl.policy_allow_user.description }}",
+              "resources": [{{- range $index, $item := .Values.microkubes.userprofile.security.acl.policy_allow_user.resources }}{{ if $index }}, {{ end }}{{ $item | quote }}{{- end }}],
+              "actions": [{{- range $index, $item := .Values.microkubes.userprofile.security.acl.policy_allow_user.actions }}{{ if $index }}, {{ end }}{{ $item | quote }}{{- end }}],
+              "effect": "{{ .Values.microkubes.userprofile.security.acl.policy_allow_user.effect }}",
+              "subjects": [{{- range $index, $item := .Values.microkubes.userprofile.security.acl.policy_allow_user.subjects }}{{ if $index }}, {{ end }}{{ $item | quote }}{{- end }}]
             }]
         }
       },
@@ -81,9 +81,9 @@ data:
           "endpoint": "{{ .Values.microkubes.awsDatabaseEndpoint }}",
           "awsRegion": "{{ .Values.microkubes.aswDatabaseRegion }}",
           "host": "{{ .Release.Name }}-{{ .Values.mongodb.service.name }}:27017",
-          "database": "user-profiles",
-          "user": "restapi",
-          "pass": "restapi"
+          "database": "{{ .Values.microkubes.userprofile.database.dbInfo.name }}",
+          "user": "{{ .Values.microkubes.userprofile.database.dbInfo.user }}",
+          "pass": "{{ .Values.microkubes.userprofile.database.dbInfo.pass }}"
         }
       }
     }

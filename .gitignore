@@ -7,5 +7,13 @@ keys/service.key
 keys/system
 keys/system.pub
 kubernetes/helm/microkubes/charts
+kubernetes/helm/microkubes/keys/default
+kubernetes/helm/microkubes/keys/default.pub
+kubernetes/helm/microkubes/keys/private.pem
+kubernetes/helm/microkubes/keys/public.pub
+kubernetes/helm/microkubes/keys/service.cert
+kubernetes/helm/microkubes/keys/service.key
+kubernetes/helm/microkubes/keys/system
+kubernetes/helm/microkubes/keys/system.pub
 kubernetes/helm/microkubes/requirements.lock
 *.swp
