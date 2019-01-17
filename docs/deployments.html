@@ -159,6 +159,7 @@ The helm chart implements all the relevant configuration parameters that can be 
 <li>Setup correctly kubectl and kubeconfig setup before running helm.</li>
 </ul>
 <h2><a class="anchor" aria-hidden="true" id="deploy-microkubes-on-kubernetes-cluster"></a><a href="#deploy-microkubes-on-kubernetes-cluster" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Deploy Microkubes on kubernetes cluster</h2>
+<p>Before deploying Microkubes on kubernetes cluster execute the following command to generate keys needed for authorization: <code>./keys/create.sh</code>.</p>
 <p>To deploy Microkubes on kubernetes cluster with the release name <code>&lt;release-name&gt;</code> within namespace <code>&lt;namespace-name&gt;</code>:</p>
 <pre><code class="hljs css language-console"><span class="hljs-meta">$</span><span class="bash"> <span class="hljs-built_in">cd</span> kubernetes/helm</span>
 <span class="hljs-meta">$</span><span class="bash"> helm dependency update microkubes/</span>
@@ -175,15 +176,6 @@ This file contains variables that will be passed to the templates. All configura
 </blockquote>
 <pre><code class="hljs css language-console"><span class="hljs-meta">$</span><span class="bash"> helm install --namespace &lt;namespace-name&gt; --name &lt;release-name&gt; -f microkubes/values-development.yaml microkubes/</span>
 </code></pre>
-<h2><a class="anchor" aria-hidden="true" id="secrets"></a><a href="#secrets" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Secrets</h2>
-<p>Platfrom secrets are all Base64 encoded. Microkubes <a href="https://github.com/Microkubes/microkubes/tree/master/docker/keys">keys</a> and MongoDB init <a href="https://github.com/Microkubes/microkubes/blob/master/docker/mongo/create_db_objects.sh">script</a> are base64 encoded and put in <a href="https://github.com/Microkubes/microkubes/blob/helm/kubernetes/helm/microkubes/templates/microkubes-secrets.yaml">microkubes secrets</a> template file which creates platform secrets.</p>
-<p>If you want to generate new keys first run the script:</p>
-<pre><code class="hljs css language-console">./keys/create.sh
-</code></pre>
-<p>then encode the content:</p>
-<pre><code class="hljs css language-console">base64 keys/default.pub  &gt;&amp;2
-</code></pre>
-<p>The encoded content put in the <a href="https://github.com/Microkubes/microkubes/blob/helm/kubernetes/helm/microkubes/templates/microkubes-secrets.yaml">microkubes secrets</a> template file.</p>
 <h2><a class="anchor" aria-hidden="true" id="cleanup"></a><a href="#cleanup" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Cleanup</h2>
 <p>To remove the spawned pods you can run a simple <code>helm del --purge &lt;release-name&gt;</code>.</p>
 <p>Helm will however preserve created persistent volume claims, to also remove them execute the commands below.</p>
