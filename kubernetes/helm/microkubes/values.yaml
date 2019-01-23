@@ -353,26 +353,6 @@ microkubes:
         user: restapi
         pass: restapi
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     image:
       repository: microkubes/microservice-user-profile
       tag: v1.0.1-beta
