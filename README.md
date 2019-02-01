@@ -14,7 +14,7 @@ These instructions will let you deploy the Microkubes on Kubernetes
 1. Run a single-node Kubernetes cluster via Minikube tool
 
 ```bash
-minikube start
+minikube --memory 8192 --cpus 4 start --kubernetes-version=v1.9.0
 ```
 
 2. Create keys for authorization servers:
