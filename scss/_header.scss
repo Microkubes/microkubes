@@ -1,0 +1,44 @@
+.fixedHeaderContainer {
+  padding: $spacer - 9;
+  @include lg {
+    padding: $spacer - 9.5;
+  }
+  background: $white;
+  @include shadow;
+  header {
+    .headerTitleWithLogo {
+      display: none;
+    }
+    img {
+      height: 140%;
+      @include lg {
+        height: 125%;
+      }
+    }
+  }
+}
+
+.navigationSlider .slidingNav ul li:last-child a {
+  border: 0.15rem solid $primary-color;
+  padding: 0 $spacer - 9;
+  font-weight: 500;
+}
+
+.navigationSlider .slidingNav ul li a {
+  color: $primary-color;
+  @include lg {
+    color: $white;
+  }
+  font-weight: 500;
+  padding: $spacer - 9;
+  letter-spacing: 0.3px;
+  &:hover,
+  &:focus,
+  &:active {
+    background: $primary-color;
+    @include lg {
+      background: $line-light;
+    }
+    font-weight: 500;
+  }
+}

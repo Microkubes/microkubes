@@ -1,0 +1,58 @@
+.homeContainer {
+  background: $primary-color;
+  color: $white;
+  .homeSplashFade {
+    padding-top: $spacer - 6;
+    @include lg {
+      padding-top: 0;
+    }
+    .heroSection {
+      justify-content: center;
+      display: flex;
+      padding: 0 $spacer / 5 $spacer / 2;
+      @include lg {
+        display: block;
+        margin-top: $spacer / 5;
+      }
+      .featureSecond {
+        position: relative;
+        z-index: 1;
+        @include lg {
+          padding-top: $spacer / 2;
+          padding-bottom: $spacer / 2;
+        }
+
+        &::before {
+          content: "";
+          width: 17%;
+          border-bottom: dashed 2px $line-light;
+          position: absolute;
+          right: 85%;
+          top: 50%;
+          z-index: -1;
+          @include lg {
+            width: 8%;
+            transform: rotate(-90deg);
+            right: 41.5%;
+            top: 11%;
+          }
+        }
+        &::after {
+          content: "";
+          width: 17%;
+          border-bottom: dashed 2px $line-light;
+          position: absolute;
+          left: 98%;
+          top: 50%;
+          z-index: -1;
+          @include lg {
+            width: 8%;
+            transform: rotate(-90deg);
+            left: 50.3%;
+            top: 95%;
+          }
+        }
+      }
+    }
+  }
+}

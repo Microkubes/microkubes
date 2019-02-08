@@ -1,0 +1,27 @@
+.navPusher {
+  overflow: hidden;
+  #footer {
+    .nav-footer {
+      .sitemap {
+        h5 {
+          font-size: inherit;
+        }
+      }
+    }
+  }
+}
+
+.nav-footer {
+  background: $primary-color;
+  color: $white;
+  letter-spacing: 0.5px;
+  padding: 2rem;
+  .copyright {
+    margin-top: 4rem;
+    border-top: 1px solid $line-light;
+    padding-top: 1rem;
+    a {
+      color: $white;
+    }
+  }
+}

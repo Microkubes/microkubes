@@ -1,0 +1,18 @@
+.button {
+  border: 1px solid $white;
+  border-radius: 0px;
+  color: $white;
+  background-color: $primary-color;
+  padding: $spacer - 9 $spacer / 4;
+  font-size: initial;
+  letter-spacing: 1px;
+  font-weight: 600;
+  border: 2px solid $primary-color;
+  &:hover,
+  &:focus,
+  &:active {
+    background: $white;
+    color: $primary-color;
+    border: 2px solid $primary-color;
+  }
+}

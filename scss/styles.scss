@@ -1,0 +1,17 @@
+
+// Custom Variables
+
+$primary-color: #4a148c;
+$white: #ffffff;
+$line-light: #fff3;
+$bg-light: #f5f5f5;
+$spacer: 10rem;
+
+// SASS Imports
+
+@import "mixins.scss";
+@import "content.scss";
+@import "buttons.scss";
+@import "hero.scss";
+@import "header.scss";
+@import "footer.scss";

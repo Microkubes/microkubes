@@ -1,0 +1,94 @@
+body {
+  font-family: "futura-pt", sans-serif;
+}
+
+.wrapper {
+  @include xl {
+    margin-left: $spacer / 5.5;
+  }
+  @include lg {
+    margin-left: $spacer / 5;
+  }
+  @include md {
+    margin-left: 0;
+  }
+  .gridBlock {
+    .threeByGridBlock {
+      flex: 1 0 30%;
+      @include md {
+        flex: 1 0 55%;
+      }
+
+      margin: 0 $spacer / 5 $spacer / 5 0;
+      @include md {
+        margin: 0 0 $spacer / 5 0;
+      }
+      background-color: $white;
+      padding: $spacer / 2 $spacer / 3;
+      @include shadow;
+      background-size: 35px;
+    }
+  }
+}
+
+.blockElement.alignCenter.imageAlignTop.threeByGridBlock
+  .blockContent
+  h2
+  > div
+  > span
+  > p {
+  text-align: center;
+}
+.blockContent p {
+  hyphens: auto;
+  text-align: justify;
+}
+
+.fourByGridBlock {
+  padding: $spacer - 6 $spacer - 9 $spacer - 6 $spacer - 9;
+}
+
+.productShowcaseSection.paddingBottom {
+  padding-bottom: $spacer - 6;
+  padding-top: $spacer - 6;
+}
+.downloadSection {
+  background-color: $bg-light;
+}
+.productShowcaseSection p {
+  margin: 0 auto;
+  max-width: 900px;
+  font-size: 1.2rem;
+}
+
+.projectTitle,
+small {
+  color: $white;
+  letter-spacing: 0.1rem;
+}
+
+.docMainWrapper .wrapper {
+  padding-top: $spacer - 7;
+  margin-bottom: $spacer - 6;
+}
+
+.mainContainer {
+  padding: 0;
+  .wrapper .post .postHeader {
+    padding-top: $spacer / 5;
+  }
+}
+
+.imageAlignTop .blockImage {
+  max-width: 100px;
+}
+.toc .toggleNav ul li a {
+  font-size: inherit;
+}
+.section-title {
+  color: $primary-color;
+  letter-spacing: 0.7px;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-top: $spacer - 9;
+}
