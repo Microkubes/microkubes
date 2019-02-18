@@ -1,6 +1,10 @@
 # microkubes
 Microkubes is a ground-up scalable microservice framework
 
+## Getting started guide
+
+For more information and how to set up your first microservice with Microkubes, visit our [Getting started page](https://www.microkubes.com/docs/installation-and-setup.html).
+
 ## Deployment guide for Kubernetes
 
 These instructions will let you deploy the Microkubes on Kubernetes
@@ -79,6 +83,3 @@ curl $MICROKUBES_URL/users
 
 For contributing to this repository or its documentation, see the [Contributing guidelines](CONTRIBUTING.md).
 
-## Getting started guide
-
-For more information and how to set up your first microservice with Microkubes, visit our [Getting started page](https://www.microkubes.com/docs/installation-and-setup.html).
