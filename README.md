@@ -78,3 +78,7 @@ curl $MICROKUBES_URL/users
 ## Contributing
 
 For contributing to this repository or its documentation, see the [Contributing guidelines](CONTRIBUTING.md).
+
+## Getting started guide
+
+For more information and how to set up your first microservice with Microkubes, visit our [Getting started page](https://www.microkubes.com/docs/installation-and-setup.html).
