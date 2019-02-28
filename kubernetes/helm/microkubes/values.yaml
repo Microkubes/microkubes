@@ -63,22 +63,24 @@ microkubes:
     name: identity-provider
     serviceConfigPath: /etc/config/config.json
 
-    microservice:	
+    microservice:
       port: 8080
       paths: ["/saml"]
       weight: 10
       slots: 100
 
-    systemKey: "/run/secrets/system"
+    systemKey: /run/secrets/system
+    serviceKey: /run/secrets/service.key
+    serviceCert: /run/secrets/service.cert
 
-    database: 
+    database:
       name: "identity-provider"
       user: "restapi"
       pass: "restapi"
 
     image:
       repository: microkubes/identity-provider
-      tag: v1.0.2-beta
+      tag: v1.0.3-beta
       pullPolicy: Always
 
     podAnnotations:
@@ -153,10 +155,10 @@ microkubes:
           actions: ["api:read","api:write"]
           effect: allow
           subjects: ["<.+>"]
-          conditions: 
+          conditions:
             roles:
               type: "RolesCondition"
-              options: 
+              options:
                 values: ["admin", "system"]
 
         policy_user:
@@ -212,7 +214,7 @@ microkubes:
         slots: 100
 
     systemKey: "/run/secrets/system"
-    
+
     image:
       repository: microkubes/microservice-registration
       tag: v1.0.1-beta
@@ -233,23 +235,23 @@ microkubes:
       paths: ["/users"]
       weight: 10
       slots: 100
-      
+
     security:
       keysDir: "/run/secrets"
       ignorePatterns: ["/users/verify"]
       jwt:
         name: JWTSecurity
         description: JWT security middleware
-      
+
       saml:
         certFile: "/run/secrets/service.cert"
         keyFile: "/run/secrets/service.key"
-      
+
       oauth2:
         description: OAuth2 security middleware
 
       acl:
-        policy_allow_admin: 
+        policy_allow_admin:
           id: users-allow-admin-access
           description: Allows access to everything to an admin user
           resources: ["<.+>"]
@@ -315,7 +317,7 @@ microkubes:
       saml:
         certFile: "/run/secrets/service.cert"
         keyFile: "/run/secrets/service.key"
-      
+
       oauth2:
         description: OAuth2 security middleware
       acl:
@@ -334,12 +336,12 @@ microkubes:
           actions: ["api:read","api:write"]
           effect: allow
           subjects: ["<.+>"]
-          conditions: 
+          conditions:
               roles:
                 type: RolesCondition
                 options:
                   values: ["admin"]
-                  
+
         policy_allow_user:
           id: profile-allow-user-access
           description: Allows user to access its profile

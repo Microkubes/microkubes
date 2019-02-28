@@ -23,6 +23,8 @@ data:
       "gatewayUrl": "http://{{ .Release.Name }}-{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}",
       "gatewayAdminUrl": "http://{{ .Release.Name }}-{{ .Values.kong.adminServiceName }}:{{ .Values.kong.adminServicePort }}",
       "systemKey": {{ .Values.microkubes.identityprovider.systemKey | quote }},
+      "serviceKey": {{ .Values.microkubes.identityprovider.serviceKey | quote }},
+      "serviceCert": {{ .Values.microkubes.identityprovider.serviceCert | quote }},
       "services": {
         "microservice-user": "http://{{ .Release.Name }}-{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}/users"
       },
