@@ -38,7 +38,7 @@ spec:
             - containerPort: 8080
           volumeMounts:
             - name: microkubes-secrets
-              mountPath: /run/secrets
+              mountPath: /run/secrets/microkubes
             - name: service-config
               mountPath: /etc/config
       volumes:
