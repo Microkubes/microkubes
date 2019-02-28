@@ -70,8 +70,8 @@ microkubes:
       slots: 100
 
     systemKey: /run/secrets/system
-    serviceKey: /run/secrets/service.key
-    serviceCert: /run/secrets/service.cert
+    serviceKey: /run/secrets/microkubes/service.key
+    serviceCert: /run/secrets/microkubes/service.cert
 
     database:
       name: "identity-provider"
