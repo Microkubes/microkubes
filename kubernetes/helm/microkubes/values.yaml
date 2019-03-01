@@ -237,15 +237,15 @@ microkubes:
       slots: 100
 
     security:
-      keysDir: "/run/secrets"
+      keysDir: "/run/secrets/microkubes"
       ignorePatterns: ["/users/verify"]
       jwt:
         name: JWTSecurity
         description: JWT security middleware
 
       saml:
-        certFile: "/run/secrets/service.cert"
-        keyFile: "/run/secrets/service.key"
+        certFile: "/run/secrets/microkubes/service.cert"
+        keyFile: "/run/secrets/microkubes/service.key"
 
       oauth2:
         description: OAuth2 security middleware
