@@ -23,8 +23,8 @@ microkubes:
     serviceConfigPath: /etc/config/config.json
     security:
       keys:
-        default: /run/secrets/default
-        system: /run/secrets/system
+        default: /run/secrets/microkubes/default
+        system: /run/secrets/microkubes/system
       signingMethod: RS256
       issuer: oauth2-auth-server
 
@@ -69,7 +69,7 @@ microkubes:
       weight: 10
       slots: 100
 
-    systemKey: /run/secrets/system
+    systemKey: /run/secrets/microkubes/system
     serviceKey: /run/secrets/microkubes/service.key
     serviceCert: /run/secrets/microkubes/service.cert
 
@@ -99,8 +99,8 @@ microkubes:
       expiryTime: "86400000"
 
     keys:
-      default: "/run/secrets/default"
-      system: "/run/secrets/system"
+      default: "/run/secrets/microkubes/default"
+      system: "/run/secrets/microkubes/system"
 
     microservice:
         port: 8080
@@ -127,14 +127,14 @@ microkubes:
       slots: 100
     serviceConfigPath: /etc/config/config.json
     security:
-      keysDir: "/run/secrets"
+      keysDir: "/run/secrets/microkubes"
 
       jwt:
         description: JWT security middleware
 
       saml:
-        certFile: "/run/secrets/service.cert"
-        keyFile: "/run/secrets/service.key"
+        certFile: "/run/secrets/microkubes/service.cert"
+        keyFile: "/run/secrets/microkubes/service.key"
 
       oauth2:
         description: OAuth2 security middleware
@@ -213,7 +213,7 @@ microkubes:
         weight: 10
         slots: 100
 
-    systemKey: "/run/secrets/system"
+    systemKey: "/run/secrets/microkubes/system"
 
     image:
       repository: microkubes/microservice-registration
@@ -311,12 +311,12 @@ microkubes:
       weight: 10
       slots: 100
     security:
-      keysDir: "/run/secrets"
+      keysDir: "/run/secrets/microkubes"
       jwt:
         description: JWT security middleware
       saml:
-        certFile: "/run/secrets/service.cert"
-        keyFile: "/run/secrets/service.key"
+        certFile: "/run/secrets/microkubes/service.cert"
+        keyFile: "/run/secrets/microkubes/service.key"
 
       oauth2:
         description: OAuth2 security middleware
