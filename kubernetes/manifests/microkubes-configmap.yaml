@@ -1,0 +1,476 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: microkubes-configmap
+  namespace: microkubes
+  labels:
+    app: microkubes
+    platform: microkubes
+data:
+  jwt-issuer-config.json: |
+    {
+      "jwt":{
+        "issuer": "Microkubes JWT Authority",
+        "signingMethod": "RS256",
+        "expiryTime": 86400000
+      },
+      "keys": {
+        "default": "/run/secrets/microkubes/default",
+        "system":  "/run/secrets/microkubes/system"
+      },
+      "microservice": {
+        "name": "jwt-issuer",
+        "port": 8080,
+        "paths": ["/jwt"],
+        "virtual_host": "jwt-issuer.service.consul",
+        "weight": 10,
+        "slots": 100
+      },
+      "services": {
+        "user-microservice": "http://kong:8000/users"
+      }
+    }
+  apps-management-config.json: |
+    {
+      "service": {
+        "name": "apps-management-microservice",
+        "port": 8080,
+        "paths": [
+          "/apps"
+        ],
+        "virtual_host": "microservice-apps-management.service.consul",
+        "weight": 10,
+        "slots": 100
+      },
+      "gatewayUrl": "http://kong:8000",
+      "security": {
+        "keysDir": "/run/secrets/microkubes",
+        "jwt": {
+          "description": "JWT security middleware",
+          "tokenUrl": "http://kong:8000/jwt/signin"
+        },
+        "saml": {
+          "certFile": "/run/secrets/microkubes/service.cert",
+          "keyFile": "/run/secrets/microkubes/service.key",
+          "identityProviderUrl": "http://kong:8000/saml/idp",
+          "userServiceUrl": "http://kong:8000/users",
+          "registrationServiceUrl": "http://kong:8000/users/register",
+          "rootURL": "http://localhost:8000/apps"
+        },
+        "oauth2": {
+          "description": "OAuth2 security middleware",
+          "tokenUrl": "https://kong:8000/oauth2/token",
+          "authorizeUrl": "https://kong:8000/oauth2/authorize"
+        },
+        "acl": {
+          "policies": [
+            {
+              "id": "read-swagger",
+              "description": "Allows to service swagger.",
+              "resources": [
+                "/swagger<.+>"
+              ],
+              "actions": [
+                "api:read"
+              ],
+              "effect": "allow",
+              "subjects": [
+                "<.+>"
+              ]
+            },
+            {
+              "id": "apps-allow-admin-access",
+              "description": "Allows access to everything to an admin user",
+              "resources": [
+                "<.+>"
+              ],
+              "actions": [
+                "api:read",
+                "api:write"
+              ],
+              "effect": "allow",
+              "subjects": [
+                "<.+>"
+              ],
+              "conditions": {
+                "roles": {
+                  "type": "RolesCondition",
+                  "options": {
+                    "values": [
+                      "admin",
+                      "system"
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "id": "apps-allow-user-access",
+              "description": "Allows user to create and read apps",
+              "resources": [
+                "/apps",
+                "/apps/my",
+                "/apps/<.+>",
+                "/apps/<.+>/regenerate-secret"
+              ],
+              "actions": [
+                "api:read",
+                "api:write"
+              ],
+              "effect": "allow",
+              "subjects": [
+                "<.+>"
+              ]
+            }
+          ]
+        }
+      },
+      "database": {
+        "dbName": "mongodb",
+        "dbInfo": {
+          "host": "mongo:27017",
+          "database": "apps-management",
+          "user": "restapi",
+          "pass": "restapi"
+        }
+      }
+    }
+  auth-server-config.json: |
+    {
+      "serverName": "Microkubes Authorization Server",
+      "security": {
+        "keys": {
+          "default": "/run/secrets/microkubes/default",
+          "system": "/run/secrets/microkubes/system"
+        },
+        "signingMethod": "RS256",
+        "issuer": "oauth2-auth-server"
+      },
+      "microservice": {
+        "name": "oauth2-auth-server",
+        "port": 8080,
+        "paths": [
+          "/oauth2",
+          "/auth"
+        ],
+        "virtual_host": "authorization-server.service.consul",
+        "weight": 10,
+        "slots": 10
+      },
+      "services": {
+        "userServiceURL": "http://kong:8000/users",
+        "appsServiceURL": "http://kong:8000/apps"
+      },
+      "database": {
+        "host": "mongo:27017",
+        "database": "oauth2",
+        "user": "authserver",
+        "pass": "authserver"
+      },
+      "session": {
+        "name": "OAuth2Server",
+        "authKey": "dGVzdC1hdXRoLWtleQo=",
+        "encryptKey": "t/xzB8eZ5ypUiIGbuOq5PhZAKpU7LS239ucRXDq7Lw8="
+      },
+      "clientAuthorizationTTL": 300000,
+      "accessTokenTTL": 2592000000,
+      "accessTokenSigningMethod": "RS256",
+      "authCodeLength": 10,
+      "refreshTokenLength": 27
+    }
+  identity-provider-config.json: |
+    {
+      "microservice":	{
+        "name": "identity-provider-microservice",
+        "port": 8080,
+        "paths": ["/saml"],
+        "virtual_host": "identity-provider.service.consul",
+        "weight": 10,
+        "slots": 100
+      },
+      "gatewayUrl": "http://localhost:8000",
+      "gatewayAdminUrl": "http://kong-admin:8001",
+      "systemKey": "/run/secrets/microkubes/system",
+      "serviceKey": "/run/secrets/microkubes/service.key",
+      "serviceCert": "/run/secrets/microkubes/service.cert",
+      "services": {
+        "microservice-user": "http://kong:8000/users"
+      },
+      "client": {
+        "redirect-from-login": "http://localhost:8000/saml/idp/login"
+      },
+      "database":{
+        "dbName": "mongodb",
+        "dbInfo":{
+          "host": "mongo:27017",
+          "database": "identity-provider",
+          "user": "restapi",
+          "pass": "restapi"
+        }
+      }
+    }
+  mail-config.json: |
+    {
+      "verificationURL": "http://kong:8000/users/verify",
+      "mail": {
+        "host": "fakesmtp",
+        "port": "1025",
+        "user": "fake@email.com",
+        "password": "password",
+        "email": "dev@microkubes.org"
+      },
+      "rabbitmq": {
+        "username": "guest",
+        "password": "guest",
+        "host": "rabbitmq",
+        "port": "5672"
+      }
+    }
+  registration-config.json: |
+    {
+      "microservice": {
+        "name": "registration-microservice",
+        "port": 8080,
+        "paths": ["/users/register"],
+        "virtual_host": "microservice-registration.service.consul",
+        "weight": 10,
+        "slots": 100
+      },
+      "gatewayUrl": "http://kong:8000",
+      "gatewayAdminUrl": "http://kong-admin:8001",
+      "systemKey": "/run/secrets/microkubes/system",
+      "services": {
+        "user-microservice": "http://kong:8000/users",
+        "microservice-user-profile": "http://kong:8000/profiles"
+      },
+      "mail": {
+        "host": "fakesmtp",
+        "port": "1025",
+        "user": "fake@email.com",
+        "password": "password",
+        "email": "dev@microkubes.org"
+      },
+      "rabbitmq": {
+        "username": "guest",
+        "password": "guest",
+        "host": "rabbitmq",
+        "port": "5672"
+      }
+    }
+  user-config.json: |
+    {
+      "service": {
+        "name": "microservice-user",
+        "port": 8080,
+        "paths": [
+          "/users"
+        ],
+        "virtual_host": "microservice-user.service.consul",
+        "weight": 10,
+        "slots": 100
+      },
+      "gatewayUrl": "http://kong:8000",
+      "gatewayAdminUrl": "http://kong-admin:8001",
+      "security": {
+        "keysDir": "/run/secrets/microkubes",
+        "ignorePatterns": [
+          "/users/verify"
+        ],
+        "jwt": {
+          "name": "JWTSecurity",
+          "description": "JWT security middleware",
+          "tokenUrl": "http://kong:8000/jwt"
+        },
+        "saml": {
+          "certFile": "/run/secrets/microkubes/service.cert",
+          "keyFile": "/run/secrets/microkubes/service.key",
+          "identityProviderUrl": "http://kong:8000/saml/idp",
+          "userServiceUrl": "http://kong:8000/users",
+          "registrationServiceUrl": "http://kong:8000/users/register",
+          "rootURL": "http://localhost:8000/users"
+        },
+        "oauth2": {
+          "description": "OAuth2 security middleware",
+          "tokenUrl": "https://kong:8000/oauth2/token",
+          "authorizeUrl": "https://kong:8000/oauth2/authorize"
+        },
+        "acl": {
+          "policies": [
+            {
+              "id": "users-allow-admin-access",
+              "description": "Allows access to everything to an admin user",
+              "resources": [
+                "<.+>"
+              ],
+              "actions": [
+                "api:read",
+                "api:write"
+              ],
+              "effect": "allow",
+              "subjects": [
+                "<.+>"
+              ],
+              "conditions": {
+                "roles": {
+                  "type": "RolesCondition",
+                  "options": {
+                    "values": [
+                      "admin",
+                      "system"
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "id": "users-allow-read-access",
+              "description": "Allows access to user's own profile",
+              "resources": [
+                "/users/me"
+              ],
+              "actions": [
+                "api:read"
+              ],
+              "effect": "allow",
+              "subjects": [
+                "<.+>"
+              ],
+              "conditions": {
+                "roles": {
+                  "type": "RolesCondition",
+                  "options": {
+                    "values": [
+                      "user"
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "id": "read-swagger",
+              "description": "Allows to service swagger.",
+              "resources": [
+                "/swagger<.+>"
+              ],
+              "actions": [
+                "api:read"
+              ],
+              "effect": "allow",
+              "subjects": [
+                "<.+>"
+              ]
+            }
+          ]
+        }
+      },
+      "database": {
+        "dbName": "mongodb",
+        "dbInfo": {
+          "host": "mongo:27017",
+          "database": "users",
+          "user": "restapi",
+          "pass": "restapi"
+        }
+      }
+    }
+  user-profile-config.json: |
+    {
+      "service": {
+        "name": "user-profile-microservice",
+        "port": 8080,
+        "paths": [
+          "/profiles"
+        ],
+        "virtual_host": "microservice-user-profile.service.consul",
+        "weight": 10,
+        "slots": 100
+      },
+      "gatewayUrl": "http://kong:8000",
+      "security": {
+        "keysDir": "/run/secrets/microkubes",
+        "jwt": {
+          "description": "JWT security middleware",
+          "tokenUrl": "http://kong:8000/jwt/signin"
+        },
+        "saml": {
+          "certFile": "/run/secrets/microkubes/service.cert",
+          "keyFile": "/run/secrets/microkubes/service.key",
+          "identityProviderUrl": "http://kong:8000/saml/idp",
+          "userServiceUrl": "http://kong:8000/users",
+          "registrationServiceUrl": "http://kong:8000/users/register",
+          "rootURL": "http://localhost:8000/profiles"
+        },
+        "oauth2": {
+          "description": "OAuth2 security middleware",
+          "tokenUrl": "https://kong:8000/oauth2/token",
+          "authorizeUrl": "https://kong:8000/oauth2/authorize"
+        },
+        "acl": {
+          "policies": [
+            {
+              "id": "read-swagger",
+              "description": "Allows to service swagger.",
+              "resources": [
+                "/swagger<.+>"
+              ],
+              "actions": [
+                "api:read"
+              ],
+              "effect": "allow",
+              "subjects": [
+                "<.+>"
+              ]
+            },
+            {
+              "id": "profile-allow-admin-access",
+              "description": "Allows access to everything to an admin user",
+              "resources": [
+                "<.+>"
+              ],
+              "actions": [
+                "api:read",
+                "api:write"
+              ],
+              "effect": "allow",
+              "subjects": [
+                "<.+>"
+              ],
+              "conditions": {
+                "roles": {
+                  "type": "RolesCondition",
+                  "options": {
+                    "values": [
+                      "admin"
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "id": "profile-allow-user-access",
+              "description": "Allows user to access its profile",
+              "resources": [
+                "/profiles/me"
+              ],
+              "actions": [
+                "api:read",
+                "api:write"
+              ],
+              "effect": "allow",
+              "subjects": [
+                "<.+>"
+              ]
+            }
+          ]
+        }
+      },
+      "database": {
+        "dbName": "mongodb",
+        "dbInfo": {
+          "host": "mongo:27017",
+          "database": "user-profiles",
+          "user": "restapi",
+          "pass": "restapi"
+        }
+      }
+    }

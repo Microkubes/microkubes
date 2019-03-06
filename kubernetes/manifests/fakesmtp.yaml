@@ -6,6 +6,7 @@ metadata:
   labels:
     platform: microkubes
 spec:
+  type: NodePort
   ports:
   - name: fakesmtp-smtp
     port: 1025

@@ -24,18 +24,26 @@ spec:
           imagePullPolicy: Always
           env:
             - name: SERVICE_CONFIG_FILE
-              value: /config.json
+              value: /etc/config/config.json
             - name: API_GATEWAY_URL
               value: "http://kong-admin:8001"
           ports:
             - containerPort: 8080
           volumeMounts:
             - name: microkubes-secrets
-              mountPath: /run/secrets
+              mountPath: /run/secrets/microkubes
+            - name: service-config
+              mountPath: /etc/config
       volumes:
         - name: microkubes-secrets
           secret:
             secretName: microkubes-secrets
+        - name: service-config
+          configMap:
+            name: microkubes-configmap
+            items:
+              - key: apps-management-config.json
+                path: config.json
 
 ---
 apiVersion: extensions/v1beta1
@@ -64,18 +72,26 @@ spec:
           imagePullPolicy: Always
           env:
             - name: SERVICE_CONFIG_FILE
-              value: /config.json
+              value: /etc/config/config.json
             - name: API_GATEWAY_URL
               value: "http://kong-admin:8001"
           ports:
             - containerPort: 8080
           volumeMounts:
             - name: microkubes-secrets
-              mountPath: /run/secrets
+              mountPath: /run/secrets/microkubes
+            - name: service-config
+              mountPath: /etc/config
       volumes:
         - name: microkubes-secrets
           secret:
             secretName: microkubes-secrets
+        - name: service-config
+          configMap:
+            name: microkubes-configmap
+            items:
+              - key: user-config.json
+                path: config.json
 
 ---
 apiVersion: extensions/v1beta1
@@ -104,18 +120,26 @@ spec:
           imagePullPolicy: Always
           env:
             - name: SERVICE_CONFIG_FILE
-              value: /config.json
+              value: /etc/config/config.json
             - name: API_GATEWAY_URL
               value: "http://kong-admin:8001"
           ports:
             - containerPort: 8080
           volumeMounts:
             - name: microkubes-secrets
-              mountPath: /run/secrets
+              mountPath: /run/secrets/microkubes
+            - name: service-config
+              mountPath: /etc/config
       volumes:
         - name: microkubes-secrets
           secret:
             secretName: microkubes-secrets
+        - name: service-config
+          configMap:
+            name: microkubes-configmap
+            items:
+              - key: identity-provider-config.json
+                path: config.json
 
 ---
 apiVersion: extensions/v1beta1
@@ -144,18 +168,26 @@ spec:
           imagePullPolicy: Always
           env:
             - name: SERVICE_CONFIG_FILE
-              value: /config.json
+              value: /etc/config/config.json
             - name: API_GATEWAY_URL
               value: "http://kong-admin:8001"
           ports:
             - containerPort: 8080
           volumeMounts:
             - name: microkubes-secrets
-              mountPath: /run/secrets
+              mountPath: /run/secrets/microkubes
+            - name: service-config
+              mountPath: /etc/config
       volumes:
         - name: microkubes-secrets
           secret:
             secretName: microkubes-secrets
+        - name: service-config
+          configMap:
+            name: microkubes-configmap
+            items:
+              - key: user-profile-config.json
+                path: config.json
 
 ---
 apiVersion: extensions/v1beta1
@@ -184,18 +216,26 @@ spec:
           imagePullPolicy: Always
           env:
             - name: SERVICE_CONFIG_FILE
-              value: /config.json
+              value: /etc/config/config.json
             - name: API_GATEWAY_URL
               value: "http://kong-admin:8001"
           ports:
             - containerPort: 8080
           volumeMounts:
             - name: microkubes-secrets
-              mountPath: /run/secrets
+              mountPath: /run/secrets/microkubes
+            - name: service-config
+              mountPath: /etc/config
       volumes:
         - name: microkubes-secrets
           secret:
             secretName: microkubes-secrets
+        - name: service-config
+          configMap:
+            name: microkubes-configmap
+            items:
+              - key: registration-config.json
+                path: config.json
 
 ---
 apiVersion: extensions/v1beta1
@@ -224,7 +264,7 @@ spec:
           imagePullPolicy: Always
           env:
             - name: SERVICE_CONFIG_FILE
-              value: /config.json
+              value: /etc/config/config.json
             - name: ALLOW_UNENCRYPTED_CONNECTION
               value: "true"
             - name: API_GATEWAY_URL
@@ -233,11 +273,19 @@ spec:
             - containerPort: 8080
           volumeMounts:
             - name: microkubes-secrets
-              mountPath: /run/secrets
+              mountPath: /run/secrets/microkubes
+            - name: service-config
+              mountPath: /etc/config
       volumes:
         - name: microkubes-secrets
           secret:
             secretName: microkubes-secrets
+        - name: service-config
+          configMap:
+            name: microkubes-configmap
+            items:
+              - key: mail-config.json
+                path: config.json
 
 ---
 apiVersion: extensions/v1beta1
@@ -266,18 +314,26 @@ spec:
           imagePullPolicy: Always
           env:
             - name: SERVICE_CONFIG_FILE
-              value: /config.json
+              value: /etc/config/config.json
             - name: API_GATEWAY_URL
               value: "http://kong-admin:8001"
           ports:
             - containerPort: 8080
           volumeMounts:
             - name: microkubes-secrets
-              mountPath: /run/secrets
+              mountPath: /run/secrets/microkubes
+            - name: service-config
+              mountPath: /etc/config
       volumes:
         - name: microkubes-secrets
           secret:
             secretName: microkubes-secrets
+        - name: service-config
+          configMap:
+            name: microkubes-configmap
+            items:
+              - key: jwt-issuer-config.json
+                path: config.json
 
 ---
 apiVersion: extensions/v1beta1
@@ -306,15 +362,23 @@ spec:
           imagePullPolicy: Always
           env:
             - name: SERVICE_CONFIG_FILE
-              value: /config.json
+              value: /etc/config/config.json
             - name: API_GATEWAY_URL
               value: "http://kong-admin:8001"
           ports:
             - containerPort: 8080
           volumeMounts:
             - name: microkubes-secrets
-              mountPath: /run/secrets
+              mountPath: /run/secrets/microkubes
+            - name: service-config
+              mountPath: /etc/config
       volumes:
         - name: microkubes-secrets
           secret:
             secretName: microkubes-secrets
+        - name: service-config
+          configMap:
+            name: microkubes-configmap
+            items:
+              - key: auth-server-config.json
+                path: config.json
