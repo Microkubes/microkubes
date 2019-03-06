@@ -55,6 +55,13 @@ kubectl -n microkubes create secret generic mongo-init-db \
         --from-file=./kubernetes/manifests/mongo/create_microkubes_db_objects.sh
 ```
 
+6. Create microkubes configmap
+
+```bash
+kubectl -n microkubes create -f kubernetes/manifests/microkubes-configmap.yaml
+```
+
+
 ### Deploy Microkubes
 
 Run the following commands:
