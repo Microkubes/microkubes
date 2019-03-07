@@ -184,7 +184,7 @@ services:
       - microservice_identity_provider_config.json
 
   microservice-apps-management:
-    image: microkubes/microservice-apps-management:v1.0.1-beta
+    image: microkubes/microservice-apps-management:v1.0.2-beta
     environment:
       - API_GATEWAY_URL=http://kong:8001
       - MONGO_URL=mongo:27017
