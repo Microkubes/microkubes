@@ -177,7 +177,7 @@ microkubes:
 
     image:
       repository: microkubes/microservice-apps-management
-      tag: v1.0.1-beta
+      tag: v1.0.2-beta
       pullPolicy: Always
 
     podAnnotations:
