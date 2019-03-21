@@ -9,16 +9,12 @@ For more information and how to set up your first microservice with Microkubes, 
 
 These instructions will let you deploy the Microkubes on Kubernetes
 
-### Prerequisites Details
-
-* Kubernetes 1.9
-
 ### Preparing
 
 1. Run a single-node Kubernetes cluster via Minikube tool
 
 ```bash
-minikube --memory 8192 --cpus 4 start --kubernetes-version=v1.9.0
+minikube --memory 8192 --cpus 2 start
 ```
 
 2. Create keys for authorization servers:
