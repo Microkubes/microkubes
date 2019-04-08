@@ -509,7 +509,7 @@ kubeconsulregister:
 
   args:
     logToStdErr: true
-    configmap: microkubes/kube-consul-register
+    configmap: kube-consul-register
 
   configMap:
     args:

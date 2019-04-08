@@ -33,4 +33,4 @@ spec:
             memory: 300Mi
         args:
         - -logtostderr={{ .Values.kubeconsulregister.args.logToStdErr }}
-        - -configmap={{ .Values.kubeconsulregister.args.configmap }}
+        - -configmap={{ .Release.Namespace }}/{{ .Values.kubeconsulregister.args.configmap }}
