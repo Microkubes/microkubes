@@ -123,6 +123,8 @@ services:
 
   microservice-mail:
     image: microkubes/microservice-mail:v1.0.0-beta
+    environment:
+      - ALLOW_UNENCRYPTED_CONNECTION=true
     deploy:
       restart_policy:
         condition: on-failure
