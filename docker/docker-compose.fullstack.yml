@@ -240,7 +240,7 @@ services:
       - microservice_user_profile_config.json
 
   microservice-user:
-    image: microkubes/microservice-user:v1.0.1-beta
+    image: microkubes/microservice-user:v1.1.0-beta
     environment:
       - API_GATEWAY_URL=http://kong:8001
       - MONGO_URL=mongo:27017
