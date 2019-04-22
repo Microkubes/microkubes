@@ -222,7 +222,7 @@ services:
       - microservice_registration_config.json
 
   microservice-user-profile:
-    image: microkubes/microservice-user-profile:v1.0.1-beta
+    image: microkubes/microservice-user-profile:v1.0.2-beta
     environment:
       - API_GATEWAY_URL=http://kong:8001
       - MONGO_URL=mongo:27017

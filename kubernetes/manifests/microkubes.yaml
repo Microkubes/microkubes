@@ -164,7 +164,7 @@ spec:
     spec:
       containers:
         - name: microservice-user-profile
-          image: microkubes/microservice-user-profile:v1.0.1-beta
+          image: microkubes/microservice-user-profile:v1.0.2-beta
           imagePullPolicy: Always
           env:
             - name: SERVICE_CONFIG_FILE
