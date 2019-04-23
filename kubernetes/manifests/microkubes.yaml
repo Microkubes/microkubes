@@ -68,7 +68,7 @@ spec:
     spec:
       containers:
         - name: microservice-user
-          image: microkubes/microservice-user:v1.0.1-beta
+          image: microkubes/microservice-user:v1.1.0-beta
           imagePullPolicy: Always
           env:
             - name: SERVICE_CONFIG_FILE

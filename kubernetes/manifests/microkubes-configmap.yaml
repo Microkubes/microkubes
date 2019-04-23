@@ -274,7 +274,8 @@ data:
       "security": {
         "keysDir": "/run/secrets/microkubes",
         "ignorePatterns": [
-          "/users/verify"
+          "/users/verify",
+          "/users/password/forgot"
         ],
         "jwt": {
           "name": "JWTSecurity",
@@ -371,6 +372,12 @@ data:
           "user": "restapi",
           "pass": "restapi"
         }
+      },
+      "rabbitmq": {
+        "username": "guest",
+        "password": "guest",
+        "host": "rabbitmq",
+        "port": "5672"
       }
     }
   user-profile-config.json: |
