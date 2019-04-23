@@ -372,6 +372,12 @@ data:
           "user": "restapi",
           "pass": "restapi"
         }
+      },
+      "rabbitmq": {
+        "username": "guest",
+        "password": "guest",
+        "host": "rabbitmq",
+        "port": "5672"
       }
     }
   user-profile-config.json: |
