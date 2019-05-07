@@ -1,5 +1,21 @@
 {
-	"verificationURL": "http://kong:8000/users/verify",
+	"templatesBaseLocation": "./public/template/",
+	"templates": {
+		"userVerification": {
+			"filename" : "userVerification.html",
+			"subject": "Verify your account",
+			"data": {
+				"url": "http://kong:8000/users/verify"
+			}
+		},
+		"forgotPassword": {
+			"filename" : "forgotPassword.html",
+			"subject": "Update your password",
+			"data": {
+				"url": "http://kong:8000/users/updatePassword"
+			}
+		}
+	},
 	"mail": {
 		"host": "fakesmtp",
 		"port": "1025",
