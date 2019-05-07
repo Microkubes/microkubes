@@ -122,7 +122,7 @@ services:
         mode: 0740
 
   microservice-mail:
-    image: microkubes/microservice-mail:v1.0.0-beta
+    image: microkubes/microservice-mail:v1.1.0-beta
     environment:
       - ALLOW_UNENCRYPTED_CONNECTION=true
     deploy:
@@ -204,7 +204,7 @@ services:
       - microservice_apps_management_config.json
 
   microservice-registration:
-    image: microkubes/microservice-registration:v1.0.1-beta
+    image: microkubes/microservice-registration:v1.0.2-beta
     environment:
       - API_GATEWAY_URL=http://kong:8001
       - MONGO_URL=mongo:27017
@@ -240,7 +240,7 @@ services:
       - microservice_user_profile_config.json
 
   microservice-user:
-    image: microkubes/microservice-user:v1.1.0-beta
+    image: microkubes/microservice-user:v1.1.1-beta
     environment:
       - API_GATEWAY_URL=http://kong:8001
       - MONGO_URL=mongo:27017
