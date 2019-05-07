@@ -12,7 +12,23 @@ metadata:
 data:
   config.json: |
     {
-      "verificationURL": "http://{{ .Release.Name }}-{{ .Values.kong.name }}:{{ .Values.kong.servicePort }}/users/verify",
+      "templatesBaseLocation": "{{ .Values.mailtemplates.baseLocation }}",
+      "templates": {
+        "userVerification": {
+          "filename" : "{{ .Values.mailtemplates.userVerification.filename }}",
+          "subject": "{{ .Values.mailtemplates.userVerification.subject }}",
+          "data": {
+            "url": "{{ .Values.mailtemplates.userVerification.data.url }}"
+          }
+        },
+        "forgotPassword": {
+          "filename" : "{{ .Values.mailtemplates.forgotPassword.filename }}",
+          "subject": "{{ .Values.mailtemplates.forgotPassword.subject }}",
+          "data": {
+            "url": "{{ .Values.mailtemplates.forgotPassword.data.url }}"
+          }
+        }
+      },
       "mail": {
         "host": "{{ template "mailconfig.host" . }}",
         "port": "{{ .Values.mailconfig.port }}",
