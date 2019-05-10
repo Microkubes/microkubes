@@ -193,7 +193,7 @@ microkubes:
 
     image:
       repository: microkubes/microservice-mail
-      tag: v1.0.0-beta
+      tag: v1.1.0-beta
       pullPolicy: Always
 
     podAnnotations:
@@ -292,7 +292,7 @@ microkubes:
 
     image:
       repository: microkubes/microservice-user
-      tag: v1.1.0-beta
+      tag: v1.1.1-beta
       pullPolicy: Always
 
     podAnnotations:
