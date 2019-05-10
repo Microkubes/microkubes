@@ -23,7 +23,7 @@
 		"password": "password",
 		"email": "dev@microkubes.org"
 	},
-	"rabbitmq": {
+	"amqpConfig": {
 		"username": "guest",
 		"password": "guest",
 		"host": "rabbitmq",
