@@ -79,6 +79,14 @@ spec:
         - name: mongo-init-db
           secret:
             secretName: mongo-init-db
+      initContainers:
+        - command: ["chown", "-R", "999:999", "/data/mongodb"]
+          image: alpine:3.6
+          imagePullPolicy: IfNotPresent
+          name: take-data-dir-ownership
+          volumeMounts:
+          - mountPath: /data/mongodb
+            name: mongo-data
   volumeClaimTemplates:
     - metadata:
         name: mongo-data
